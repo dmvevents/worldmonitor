@@ -347,6 +347,27 @@ describe('premium gateway API key enforcement', () => {
     }
   });
 
+  it('serves the freed national-debt and sanctions-pressure routes to an anonymous wms_ session', async () => {
+    // Both seeds are already public through /api/bootstrap?tier=slow&public=1,
+    // so the gateway must not re-gate the RPCs behind Pro auth or a tier.
+    const freedPaths = [
+      '/api/economic/v1/get-national-debt',
+      '/api/sanctions/v1/list-sanctions-pressure',
+    ];
+    const handler = createDomainGateway(freedPaths.map((path) => ({
+      method: 'GET',
+      path,
+      handler: async () => new Response(JSON.stringify({ ok: true }), { status: 200 }),
+    })));
+
+    for (const path of freedPaths) {
+      const res = await handler(new Request(`https://worldmonitor.app${path}`, {
+        headers: { Origin: 'https://worldmonitor.app', 'X-WorldMonitor-Key': SESSION_TOKEN },
+      }));
+      assert.equal(res.status, 200, `wms_ session must reach ${path} (got ${res.status})`);
+    }
+  });
+
   it('strips client-supplied x-user-id before an anonymous session reaches handlers', async () => {
     const handler = createDomainGateway([
       {
