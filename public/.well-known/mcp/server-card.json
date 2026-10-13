@@ -680,7 +680,7 @@
     },
     {
       "name": "get_us_import_duty",
-      "description": "Current US duty on one product from one country: live HTS rates plus Section 301 and 232 duties in force. Rates come from the live USITC Harmonized Tariff Schedule for each 8-digit line under hs_code; the additional duties are the chapter 99 Section 301 and 232 duties. Each additional duty has a status: APPLIES, CONDITIONAL (condition says what decides it), EXEMPT or SCHEDULED. estimatedRate adds only APPLIES duties to the base rate; estimateComplete is false when a specific duty, a condition or an unresolved preference program leaves it open. IEEPA duties are not collected and not reported; anti-dumping and countervailing duties are not included. additionalDutiesLoaded false means only base rates were available.",
+      "description": "Current US duty on one product from one country: live HTS rates plus any Section 301 and 232 duties in force. Rates come from the live USITC Harmonized Tariff Schedule for each 8-digit line under hs_code; the additional duties are the chapter 99 Section 301 and 232 duties. Each additional duty has a status: APPLIES, CONDITIONAL (condition says what decides it), EXEMPT or SCHEDULED. estimatedRate adds only APPLIES duties to the base rate; estimateComplete is false when a specific duty, a condition or an unresolved preference program leaves it open. IEEPA duties are not collected and not reported; anti-dumping and countervailing duties are not included. additionalDutiesLoaded false means only base rates were available.",
       "_meta": {
         "worldmonitor/access": "subscription"
       }

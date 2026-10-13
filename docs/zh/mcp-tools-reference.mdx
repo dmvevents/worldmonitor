@@ -624,7 +624,7 @@ curl -s https://worldmonitor.app/mcp \
 
 ### `get_us_import_duty`
 
-美国当前对来自某国的某一产品征收的关税：实时 HTS 税率加上现行 301 条款和 232 条款关税。对 `hs_code` 下的每个 8 位税目，返回 USITC 协调关税表（HTS）的实时税率和 `basis`（`MFN`、带 `preferenceProgram` 的 `PREFERENTIAL`，或 `COLUMN_2`）。同时返回现行有效的第 99 章 301 条款和 232 条款关税，每项带有 `status`：
+美国当前对来自某国的某一产品征收的关税：实时 HTS 税率，加上现行有效的 301 条款和 232 条款关税（如适用）。对 `hs_code` 下的每个 8 位税目，返回 USITC 协调关税表（HTS）的实时税率和 `basis`（`MFN`、带 `preferenceProgram` 的 `PREFERENTIAL`，或 `COLUMN_2`）。同时返回现行有效的第 99 章 301 条款和 232 条款关税，每项带有 `status`：
 
 - `APPLIES`
 - `CONDITIONAL`，并以 `condition` 说明取决于什么
