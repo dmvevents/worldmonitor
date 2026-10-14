@@ -102,6 +102,16 @@ export const SOURCE_TYPES: Record<string, SourceType> = {
   'This Week in Startups': 'tech', 'The Twenty Minute VC': 'tech',
   'Hard Fork (NYT)': 'tech', 'Pivot (Vox)': 'tech', 'Stratechery': 'tech',
   'Benedict Evans': 'tech', 'How I Built This': 'tech', 'Masters of Scale': 'tech',
+
+  // Trinidad & Tobago variant — public news + official sources
+  'Trinidad Express': 'mainstream', 'Express Local News': 'mainstream', 'Express Business': 'market',
+  'TT Guardian': 'mainstream', 'Newsday': 'mainstream', 'CNC3': 'mainstream', 'TTT': 'mainstream',
+  'TT Parliament': 'gov', 'Office of the Prime Minister': 'gov', 'TTPS': 'gov',
+  'Ministry of Education TT': 'gov', 'TATT': 'gov', 'EBC': 'gov', 'Central Bank of T&T': 'gov',
+  'iGovTT': 'gov', 'Ministry of National Security TT': 'gov', 'TT Government Notices': 'gov',
+  'Ministry of Energy TT': 'gov', 'NGC': 'gov', 'ODPM': 'gov', 'NHC Atlantic': 'gov',
+  'CARICOM Today': 'gov', 'Caribbean News Global': 'mainstream', 'Barbados Today': 'mainstream',
+  'Jamaica Observer': 'mainstream', 'Guyana Chronicle': 'mainstream',
 };
 
 export function getSourceType(sourceName: string): SourceType {
@@ -993,6 +1003,91 @@ const ENERGY_FEEDS: Record<string, Feed[]> = {
 };
 
 // Variant-aware exports
+// ─────────────────────────────────────────────────────────────────────────────
+// Trinidad & Tobago variant (VITE_VARIANT=tt).
+// Scope rule: public news and official sources only, aggregate/topic level.
+// Direct RSS is used where a site publishes one (probed 2026-10-14); sites that
+// block or don't publish RSS (Guardian TT, CNC3, Newsday, TTPS, Met Office,
+// OPR, Energy Chamber) are covered via Google News site-scoped queries, the
+// same pattern the other variants use. Mirror: server/worldmonitor/news/v1/_feeds.ts
+// ─────────────────────────────────────────────────────────────────────────────
+const TT_FEEDS: Record<string, Feed[]> = {
+  'tt-news': [
+    { name: 'Trinidad Express', url: rss('https://trinidadexpress.com/search/?f=rss&t=article&l=25&s=start_time&sd=desc') },
+    { name: 'Express Local News', url: rss('https://trinidadexpress.com/search/?f=rss&t=article&c[]=news/local&l=25&s=start_time&sd=desc') },
+    { name: 'TT Guardian', url: rss('https://news.google.com/rss/search?q=site:guardian.co.tt+when:1d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Newsday', url: rss('https://news.google.com/rss/search?q=site:newsday.co.tt+when:1d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'CNC3', url: rss('https://news.google.com/rss/search?q=site:cnc3.co.tt+when:1d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'TTT', url: rss('https://www.ttt.live/feed/') },
+    { name: 'T&T Headlines', url: rss('https://news.google.com/rss/search?q=("Trinidad+and+Tobago"+OR+Trinidad+OR+Tobago)+when:1d&hl=en-US&gl=US&ceid=US:en') },
+  ],
+  'tt-gov': [
+    { name: 'TT Parliament', url: rss('https://www.ttparliament.org/feed/') },
+    { name: 'Office of the Prime Minister', url: rss('https://news.google.com/rss/search?q=site:opm.gov.tt+when:7d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'TTPS', url: rss('https://news.google.com/rss/search?q=site:ttps.gov.tt+when:7d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Ministry of Education TT', url: rss('https://www.moe.gov.tt/feed/') },
+    { name: 'TATT', url: rss('https://tatt.org.tt/feed/') },
+    { name: 'EBC', url: rss('https://ebctt.com/feed/') },
+    { name: 'Central Bank of T&T', url: rss('https://www.central-bank.org.tt/feed/') },
+    { name: 'iGovTT', url: rss('https://igovtt.tt/feed/') },
+    { name: 'Ministry of National Security TT', url: rss('https://news.google.com/rss/search?q=("Ministry+of+National+Security"+OR+"Ministry+of+Homeland+Security")+Trinidad+when:3d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'TT Government Notices', url: rss('https://news.google.com/rss/search?q=site:gov.tt+when:3d&hl=en-US&gl=US&ceid=US:en') },
+  ],
+  'tt-energy': [
+    { name: 'Ministry of Energy TT', url: rss('https://www.energy.gov.tt/feed/') },
+    { name: 'NGC', url: rss('https://ngc.co.tt/feed/') },
+    { name: 'Energy Chamber TT', url: rss('https://news.google.com/rss/search?q=("Energy+Chamber"+Trinidad+OR+site:energynow.tt+OR+site:energy.tt)+when:7d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'T&T LNG & Gas', url: rss('https://news.google.com/rss/search?q=(Trinidad+OR+Tobago)+(LNG+OR+"Atlantic+LNG"+OR+bpTT+OR+"Shell+Trinidad"+OR+"Dragon+gas"+OR+Manatee+OR+"Heritage+Petroleum"+OR+Paria+OR+"Point+Lisas"+OR+petrochemical+OR+ammonia+OR+methanol)+when:2d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Express Business', url: rss('https://trinidadexpress.com/search/?f=rss&t=article&c[]=business&l=25&s=start_time&sd=desc') },
+    { name: 'Caribbean Energy', url: rss('https://news.google.com/rss/search?q=(Guyana+OR+Suriname+OR+Venezuela+OR+Caribbean)+(oil+OR+gas+OR+LNG+OR+Exxon+OR+Staatsolie+OR+PDVSA)+when:1d&hl=en-US&gl=US&ceid=US:en') },
+  ],
+  'tt-education': [
+    { name: 'Ministry of Education TT', url: rss('https://www.moe.gov.tt/feed/') },
+    { name: 'TT Education News', url: rss('https://news.google.com/rss/search?q=(Trinidad+OR+Tobago)+("Ministry+of+Education"+OR+SEA+OR+CSEC+OR+CAPE+OR+school+OR+TTUTA+OR+teachers)+when:2d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Student Laptop Programme', url: rss('https://news.google.com/rss/search?q=(Trinidad+OR+Tobago)+(laptop+OR+laptops+OR+devices+OR+"digital+divide"+OR+"e-learning")+(students+OR+school+OR+"Ministry+of+Education")+when:7d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'UWI & Tertiary', url: rss('https://news.google.com/rss/search?q=(UWI+OR+"University+of+the+West+Indies"+OR+UTT+OR+COSTAATT+OR+GATE)+Trinidad+when:3d&hl=en-US&gl=US&ceid=US:en') },
+  ],
+  'tt-telecoms': [
+    { name: 'TATT', url: rss('https://tatt.org.tt/feed/') },
+    { name: 'TT Telecoms', url: rss('https://news.google.com/rss/search?q=(TSTT+OR+bmobile+OR+"Digicel+Trinidad"+OR+"Digicel+T%26T"+OR+"Flow+Trinidad"+OR+Amplia+OR+TATT+OR+spectrum+Trinidad)+when:3d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Caribbean Telecoms', url: rss('https://news.google.com/rss/search?q=(Digicel+OR+"Liberty+Latin+America"+OR+"Cable+%26+Wireless"+OR+CANTO+OR+"submarine+cable"+Caribbean)+when:3d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Caribbean Tech & Digital', url: rss('https://news.google.com/rss/search?q=(Caribbean+OR+Trinidad)+(fintech+OR+digital+OR+cybersecurity+OR+"data+centre"+OR+5G+OR+Starlink)+when:3d&hl=en-US&gl=US&ceid=US:en') },
+  ],
+  'tt-public-it': [
+    { name: 'iGovTT', url: rss('https://igovtt.tt/feed/') },
+    { name: 'Ministry of Digital Transformation', url: rss('https://news.google.com/rss/search?q=("Ministry+of+Digital+Transformation"+OR+"Digital+Transformation"+OR+TTBizLink+OR+"e-services"+OR+"digital+ID")+Trinidad+when:7d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Office of Procurement Regulation', url: rss('https://news.google.com/rss/search?q=("Office+of+Procurement+Regulation"+OR+OPR+OR+procurement+OR+tender+OR+"contract+award")+Trinidad+when:3d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Public Sector IT TT', url: rss('https://news.google.com/rss/search?q=(Trinidad+OR+Tobago)+("public+sector"+OR+ministry+OR+government)+(IT+OR+software+OR+"data+breach"+OR+cyberattack+OR+"system+outage"+OR+digitisation)+when:3d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Auditor General & PAC', url: rss('https://news.google.com/rss/search?q=("Auditor+General"+OR+"Public+Accounts+Committee"+OR+"Joint+Select+Committee")+Trinidad+when:7d&hl=en-US&gl=US&ceid=US:en') },
+  ],
+  'tt-safety': [
+    { name: 'TTPS', url: rss('https://news.google.com/rss/search?q=site:ttps.gov.tt+when:7d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'TT Public Safety', url: rss('https://news.google.com/rss/search?q=(Trinidad+OR+Tobago)+(TTPS+OR+"State+of+Emergency"+OR+homicide+OR+"murder+toll"+OR+"Police+Service"+OR+"Defence+Force"+OR+"Coast+Guard"+OR+kidnapping)+when:1d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'ODPM', url: rss('https://news.google.com/rss/search?q=(ODPM+OR+"Office+of+Disaster+Preparedness")+Trinidad+when:7d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Judiciary & Courts TT', url: rss('https://news.google.com/rss/search?q=(Judiciary+OR+"High+Court"+OR+"Court+of+Appeal"+OR+"Privy+Council"+OR+DPP)+Trinidad+when:2d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Caribbean Security', url: rss('https://news.google.com/rss/search?q=(Caribbean+OR+CARICOM)+(crime+OR+"gun+trafficking"+OR+"drug+trafficking"+OR+IMPACS+OR+"regional+security")+when:2d&hl=en-US&gl=US&ceid=US:en') },
+  ],
+  'tt-weather': [
+    { name: 'NHC Atlantic', url: rss('https://www.nhc.noaa.gov/index-at.xml') },
+    { name: 'TT Met Office', url: rss('https://news.google.com/rss/search?q=("Trinidad+and+Tobago+Meteorological+Service"+OR+TTMS+OR+"Met+Office"+OR+"adverse+weather+alert"+OR+"riverine+flood+alert")+Trinidad+when:2d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Caribbean Hurricane Watch', url: rss('https://news.google.com/rss/search?q=(hurricane+OR+"tropical+storm"+OR+"tropical+wave"+OR+"tropical+depression")+(Caribbean+OR+"Lesser+Antilles"+OR+Windward+OR+Trinidad+OR+Tobago+OR+Grenada+OR+Barbados)+when:2d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'T&TEC Outages', url: rss('https://news.google.com/rss/search?q=("T%26TEC"+OR+TTEC+OR+"power+outage"+OR+blackout+OR+"electricity+supply")+Trinidad+when:2d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'WASA & Water', url: rss('https://news.google.com/rss/search?q=(WASA+OR+"Water+and+Sewerage+Authority"+OR+"water+supply"+OR+"water+outage")+Trinidad+when:3d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Earthquakes & Flooding TT', url: rss('https://news.google.com/rss/search?q=(Trinidad+OR+Tobago)+(earthquake+OR+flooding+OR+landslide+OR+"flash+flood"+OR+"UWI+Seismic")+when:3d&hl=en-US&gl=US&ceid=US:en') },
+  ],
+  caribbean: [
+    { name: 'CARICOM Today', url: rss('https://today.caricom.org/feed/') },
+    { name: 'Caribbean News Global', url: rss('https://caribbeannewsglobal.com/feed/') },
+    { name: 'Barbados Today', url: rss('https://barbadostoday.bb/feed/') },
+    { name: 'Jamaica Observer', url: rss('https://www.jamaicaobserver.com/feed/') },
+    { name: 'Guyana Chronicle', url: rss('https://guyanachronicle.com/feed/') },
+    { name: 'Guyana Press', url: rss('https://news.google.com/rss/search?q=(site:stabroeknews.com+OR+site:kaieteurnewsonline.com+OR+site:newsroom.gy+OR+site:demerarawaves.com)+when:2d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Venezuela-Guyana Watch', url: rss('https://news.google.com/rss/search?q=(Venezuela+OR+Essequibo+OR+Maduro)+(Guyana+OR+Trinidad+OR+Caribbean+OR+sanctions+OR+"Dragon+gas"+OR+migrants)+when:1d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'CARICOM & OECS', url: rss('https://news.google.com/rss/search?q=(CARICOM+OR+OECS+OR+"Caribbean+Community"+OR+"Caribbean+Court+of+Justice"+OR+"CARICOM+Heads")+when:3d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Caribbean Geopolitics', url: rss('https://news.google.com/rss/search?q=Caribbean+(China+OR+"United+States"+OR+Cuba+OR+Haiti+OR+SOUTHCOM+OR+Venezuela+OR+Colombia)+when:2d&hl=en-US&gl=US&ceid=US:en') },
+  ],
+};
+
 export const FEEDS = SITE_VARIANT === 'tech'
   ? TECH_FEEDS
   : SITE_VARIANT === 'finance'
@@ -1003,7 +1098,9 @@ export const FEEDS = SITE_VARIANT === 'tech'
         ? COMMODITY_FEEDS
         : SITE_VARIANT === 'energy'
           ? ENERGY_FEEDS
-          : FULL_FEEDS;
+          : SITE_VARIANT === 'tt'
+            ? TT_FEEDS
+            : FULL_FEEDS;
 
 // Canonical category→feeds map: the union of every variant's feed set.
 // `FEEDS` (above) is just the active variant's PRESET; users freely customize
@@ -1019,6 +1116,7 @@ export const CANONICAL_FEEDS: Record<string, Feed[]> = mergeCanonicalFeeds([
   COMMODITY_FEEDS,
   ENERGY_FEEDS,
   HAPPY_FEEDS,
+  TT_FEEDS,
 ]);
 
 export const SOURCE_REGION_MAP: Record<string, { labelKey: string; feedKeys: string[] }> = {
@@ -1052,6 +1150,11 @@ export const SOURCE_REGION_MAP: Record<string, { labelKey: string; feedKeys: str
   dealsCorpFin: { labelKey: 'header.sourceRegionDeals', feedKeys: ['institutional', 'derivatives'] },
   finRegulation: { labelKey: 'header.sourceRegionFinRegulation', feedKeys: ['fin-regulation'] },
   gulfMena: { labelKey: 'header.sourceRegionGulfMena', feedKeys: ['gccNews'] },
+
+  // Trinidad & Tobago variant regions
+  tt: { labelKey: 'header.sourceRegionTT', feedKeys: ['tt-news', 'tt-gov'] },
+  ttLenses: { labelKey: 'header.sourceRegionTTLenses', feedKeys: ['tt-energy', 'tt-education', 'tt-telecoms', 'tt-public-it', 'tt-safety', 'tt-weather'] },
+  caribbean: { labelKey: 'header.sourceRegionCaribbean', feedKeys: ['caribbean'] },
 };
 
 export const INTEL_SOURCES: Feed[] = [

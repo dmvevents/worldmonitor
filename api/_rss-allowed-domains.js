@@ -340,5 +340,22 @@ export default [
   "balkaninsight.com",
   "www.war.gov",
   "www.thenationalnews.com",
-  "trumpstruth.org"
+  "trumpstruth.org",
+  // Trinidad & Tobago variant (tt) feed hosts
+  "trinidadexpress.com",
+  "www.ttt.live",
+  "www.ttparliament.org",
+  "www.moe.gov.tt",
+  "tatt.org.tt",
+  "ebctt.com",
+  "www.central-bank.org.tt",
+  "www.energy.gov.tt",
+  "ngc.co.tt",
+  "igovtt.tt",
+  "www.nhc.noaa.gov",
+  "today.caricom.org",
+  "caribbeannewsglobal.com",
+  "barbadostoday.bb",
+  "www.jamaicaobserver.com",
+  "guyanachronicle.com"
 ];
