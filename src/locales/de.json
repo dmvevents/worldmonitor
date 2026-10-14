@@ -349,7 +349,8 @@
       "africa": "Afrika",
       "latam": "Lateinamerika",
       "oceania": "Ozeanien",
-      "caribbean": "Caribbean"
+      "caribbean": "Caribbean",
+      "trinidad": "Trinidad & Tobago"
     },
     "tips": {
       "map": "Geben Sie einen Ländernamen ein, um dorthin auf der Karte zu fliegen",
@@ -879,7 +880,8 @@
         "asia": "Asien",
         "africa": "Afrika",
         "oceania": "Ozeanien",
-        "caribbean": "Caribbean"
+        "caribbean": "Caribbean",
+        "trinidad": "Trinidad & Tobago"
       },
       "zoomIn": "Vergrößern",
       "zoomOut": "Herauszoomen",
@@ -1735,7 +1737,8 @@
       "hlsUrl": "HLS-Stream-URL (optional)",
       "invalidHlsUrl": "Geben Sie eine gültige HLS-Stream-URL ein (.m3u8)",
       "playLiveFeed": "Live-Feed abspielen",
-      "readyStatus": "Bereit, wenn Sie es sind"
+      "readyStatus": "Bereit, wenn Sie es sind",
+      "regionCaribbean": "Caribbean"
     },
     "securityAdvisories": {
       "loading": "Reisehinweise werden geladen...",

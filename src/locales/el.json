@@ -349,7 +349,8 @@
       "africa": "Αφρική",
       "latam": "Λατινική Αμερική",
       "oceania": "Ωκεανία",
-      "caribbean": "Caribbean"
+      "caribbean": "Caribbean",
+      "trinidad": "Trinidad & Tobago"
     },
     "tips": {
       "map": "Πληκτρολογήστε ένα όνομα χώρας για να μεταβείτε εκεί στον χάρτη",
@@ -1063,7 +1064,8 @@
         "latam": "Λατινική Αμερική",
         "africa": "Αφρική",
         "oceania": "Ωκεανία",
-        "caribbean": "Caribbean"
+        "caribbean": "Caribbean",
+        "trinidad": "Trinidad & Tobago"
       },
       "layers": {
         "startupHubs": "Startup Hubs",
@@ -1788,7 +1790,8 @@
       "hlsUrl": "URL ροής HLS (προαιρετικό)",
       "invalidHlsUrl": "Εισάγετε ένα έγκυρο URL ροής HLS (.m3u8)",
       "playLiveFeed": "Αναπαραγωγή ζωντανής ροής",
-      "readyStatus": "Έτοιμο όταν είστε"
+      "readyStatus": "Έτοιμο όταν είστε",
+      "regionCaribbean": "Caribbean"
     },
     "map": {
       "showMap": "Εμφάνιση χάρτη",

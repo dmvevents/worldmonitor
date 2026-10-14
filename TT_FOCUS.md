@@ -20,7 +20,8 @@ No API keys are needed for the news panels: the Vite dev server runs the sebuf A
 | RSS proxy allowlists | `shared/rss-allowed-domains.json`, `api/_rss-allowed-domains.js`, `scripts/shared/…`, `vite.config.ts` |
 | Panels / layers | `src/config/panels.ts` → `TT_PANELS`, `TT_MAP_LAYERS`, `TT_MOBILE_MAP_LAYERS`, `PANEL_CATEGORY_MAP.tt*` |
 | Layer order | `src/config/map-layer-definitions.ts` → `VARIANT_LAYER_ORDER.tt` |
-| Map view | new `caribbean` preset (deck.gl / globe / SVG / URL state / region selectors); `src/config/map-view.ts` makes it the tt default |
+| Map view | new `trinidad` preset (both islands framed, zoom 8.2) is the tt default via `src/config/map-view.ts`; `caribbean` (zoom 5, Venezuela/Guyana/Lesser Antilles) is one click away in the region selector. Both exist in deck.gl / globe / SVG / URL state / CMD+K (`Map: Trinidad & Tobago`, `Map: Caribbean`) |
+| Live TV | `src/components/LiveNewsPanel.ts`: Caribbean channel region (TTT Live Online, CNC3, TV6 News, Parliament of T&T, Tobago Channel 5, Tobago Updates, IETV, NCN Guyana, TVJ, CVM, ABS Antigua, teleSUR English); tt default set = local broadcasters + teleSUR + Sky + Al Jazeera |
 | Variant detection & meta | `src/config/variant.ts`, `src/config/variant-meta.ts`, `src/config/variants/tt.ts` (`TT_TIMEZONE`, `TT_COUNTRY_CODE`) |
 | Timezone | `America/Port_of_Spain` → `TT` in `src/utils/user-location.ts`; Port of Spain first in the World Clock for tt |
 | Daily digest | `scripts/tt-daily-digest.mts` (+ `scripts/tt-daily-digest.launchd.plist.example`) |
@@ -29,9 +30,11 @@ No API keys are needed for the news panels: the Vite dev server runs the sebuf A
 
 `tt-news`, `tt-gov`, `tt-energy`, `tt-education` (incl. student laptop programme), `tt-telecoms` (TSTT, Digicel, TATT), `tt-public-it` (procurement, iGovTT, digital transformation), `tt-safety` (aggregate public-safety news only), `tt-weather` (NHC Atlantic, Met Office, T&TEC/WASA outages), `caribbean` (Venezuela, Guyana, CARICOM).
 
-Direct RSS (verified 2026-10-14): Trinidad Express (BLOX search RSS), TTT, Parliament, Ministry of Education, TATT, EBC, Central Bank, Ministry of Energy, NGC, iGovTT, NHC Atlantic, CARICOM Today, Barbados Today, Caribbean News Global, Jamaica Observer, Guyana Chronicle.
+Direct RSS (verified 2026-10-14): Trinidad Express and TV6 (BLOX search RSS), TTT, Power 102, Tobago Updates, Parliament, Tobago House of Assembly, Ministry of Education, TATT, EBC, Central Bank, Ministry of Energy, NGC, iGovTT, NHC Atlantic, CARICOM Today, Barbados Today, Caribbean News Global, Jamaica Observer, Guyana Chronicle, Guyana Times, Demerara Waves, WIC News, Searchlight and iWitness News (SVG), NOW Grenada, St Lucia Times, Dominica News Online, Antigua Observer.
 
-No usable RSS (blocked, 404, or empty) → Google News `site:` queries instead: Guardian TT, CNC3, Newsday, TTPS, Office of the Prime Minister, Met Office, OPR, Energy Chamber, Stabroek/Kaieteur. Loop TT's domain no longer resolves and is omitted. A `site:gov.tt` catch-all was tried and removed: Google indexes spam pages on compromised gov.tt subdomains.
+No usable RSS (blocked, 404, or empty) → Google News `site:` queries instead: Guardian TT, CNC3, Newsday, TTPS, Office of the Prime Minister, Met Office, OPR, Energy Chamber, Stabroek/Kaieteur. Also no feed: i95.5FM, Tobago Today, Wired868 (403), CMC, Nation News (403), ODPM, CSO.
+
+Live TV is YouTube-based: the dev middleware resolves `youtube.com/@handle/live`, so a channel is playable only while the broadcaster is actually streaming (TTT, Parliament and Tobago Updates stream sittings and newscasts; teleSUR English is near 24/7). No IPTV m3u8 streams were added because none of the T&T broadcasters publish a public HLS URL. Loop TT's domain no longer resolves and is omitted. A `site:gov.tt` catch-all was tried and removed: Google indexes spam pages on compromised gov.tt subdomains.
 
 Trinidad Express rate-limits bursts (HTTP 429) if the same host fetches its three feeds repeatedly within minutes; the dashboard's per-feed cache keeps this from mattering in normal use.
 

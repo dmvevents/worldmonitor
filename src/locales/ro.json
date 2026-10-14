@@ -349,7 +349,8 @@
       "africa": "Africa",
       "latam": "America Latină",
       "oceania": "Oceania",
-      "caribbean": "Caribbean"
+      "caribbean": "Caribbean",
+      "trinidad": "Trinidad & Tobago"
     },
     "tips": {
       "map": "Introduceți un nume de țară pentru a zbura acolo pe hartă",
@@ -1063,7 +1064,8 @@
         "latam": "America Latină",
         "africa": "Africa",
         "oceania": "Oceania",
-        "caribbean": "Caribbean"
+        "caribbean": "Caribbean",
+        "trinidad": "Trinidad & Tobago"
       },
       "layers": {
         "startupHubs": "Hub-uri startup-uri",
@@ -1789,7 +1791,8 @@
       "hlsUrl": "URL flux HLS (opțional)",
       "invalidHlsUrl": "Introduceți un URL valid de flux HLS (.m3u8)",
       "playLiveFeed": "Redă fluxul live",
-      "readyStatus": "Gata când ești și tu"
+      "readyStatus": "Gata când ești și tu",
+      "regionCaribbean": "Caribbean"
     },
     "map": {
       "showMap": "Arată harta",

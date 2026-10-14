@@ -112,6 +112,10 @@ export const SOURCE_TYPES: Record<string, SourceType> = {
   'Ministry of Energy TT': 'gov', 'NGC': 'gov', 'ODPM': 'gov', 'NHC Atlantic': 'gov',
   'CARICOM Today': 'gov', 'Caribbean News Global': 'mainstream', 'Barbados Today': 'mainstream',
   'Jamaica Observer': 'mainstream', 'Guyana Chronicle': 'mainstream',
+  'TV6 News': 'mainstream', 'Power 102': 'mainstream', 'Tobago Updates': 'mainstream', 'Tobago House of Assembly': 'gov',
+  'Guyana Times': 'mainstream', 'Demerara Waves': 'mainstream', 'WIC News': 'mainstream', 'Searchlight SVG': 'mainstream',
+  'iWitness News SVG': 'mainstream', 'NOW Grenada': 'mainstream', 'St Lucia Times': 'mainstream',
+  'Dominica News Online': 'mainstream', 'Antigua Observer': 'mainstream',
 };
 
 export function getSourceType(sourceName: string): SourceType {
@@ -1019,6 +1023,10 @@ const TT_FEEDS: Record<string, Feed[]> = {
     { name: 'Newsday', url: rss('https://news.google.com/rss/search?q=site:newsday.co.tt+when:1d&hl=en-US&gl=US&ceid=US:en') },
     { name: 'CNC3', url: rss('https://news.google.com/rss/search?q=site:cnc3.co.tt+when:1d&hl=en-US&gl=US&ceid=US:en') },
     { name: 'TTT', url: rss('https://www.ttt.live/feed/') },
+    { name: 'TV6 News', url: rss('https://www.tv6tnt.com/search/?f=rss&t=article&l=25&s=start_time&sd=desc') },
+    { name: 'Power 102', url: rss('https://power102fm.com/feed/') },
+    { name: 'Tobago Updates', url: rss('https://tobagoupdates.com/feed/') },
+    { name: 'Tobago Headlines', url: rss('https://news.google.com/rss/search?q=Tobago+when:1d&hl=en-US&gl=US&ceid=US:en') },
     { name: 'T&T Headlines', url: rss('https://news.google.com/rss/search?q=("Trinidad+and+Tobago"+OR+Trinidad+OR+Tobago)+when:1d&hl=en-US&gl=US&ceid=US:en') },
   ],
   'tt-gov': [
@@ -1030,6 +1038,7 @@ const TT_FEEDS: Record<string, Feed[]> = {
     { name: 'EBC', url: rss('https://ebctt.com/feed/') },
     { name: 'Central Bank of T&T', url: rss('https://www.central-bank.org.tt/feed/') },
     { name: 'iGovTT', url: rss('https://igovtt.tt/feed/') },
+    { name: 'Tobago House of Assembly', url: rss('https://www.tha.gov.tt/feed/') },
     { name: 'Ministry of National Security TT', url: rss('https://news.google.com/rss/search?q=("Ministry+of+National+Security"+OR+"Ministry+of+Homeland+Security")+Trinidad+when:3d&hl=en-US&gl=US&ceid=US:en') },
   ],
   'tt-energy': [
@@ -1080,6 +1089,15 @@ const TT_FEEDS: Record<string, Feed[]> = {
     { name: 'Barbados Today', url: rss('https://barbadostoday.bb/feed/') },
     { name: 'Jamaica Observer', url: rss('https://www.jamaicaobserver.com/feed/') },
     { name: 'Guyana Chronicle', url: rss('https://guyanachronicle.com/feed/') },
+    { name: 'Guyana Times', url: rss('https://guyanatimesgy.com/feed/') },
+    { name: 'Demerara Waves', url: rss('https://demerarawaves.com/feed/') },
+    { name: 'WIC News', url: rss('https://wicnews.com/feed') },
+    { name: 'Searchlight SVG', url: rss('https://www.searchlight.vc/feed/') },
+    { name: 'iWitness News SVG', url: rss('https://www.iwnsvg.com/feed/') },
+    { name: 'NOW Grenada', url: rss('https://nowgrenada.com/feed/') },
+    { name: 'St Lucia Times', url: rss('https://stluciatimes.com/feed/') },
+    { name: 'Dominica News Online', url: rss('https://dominicanewsonline.com/news/feed/') },
+    { name: 'Antigua Observer', url: rss('https://antiguaobserver.com/feed/') },
     { name: 'Guyana Press', url: rss('https://news.google.com/rss/search?q=(site:stabroeknews.com+OR+site:kaieteurnewsonline.com+OR+site:newsroom.gy+OR+site:demerarawaves.com)+when:2d&hl=en-US&gl=US&ceid=US:en') },
     { name: 'Venezuela-Guyana Watch', url: rss('https://news.google.com/rss/search?q=(Venezuela+OR+Essequibo+OR+Maduro)+(Guyana+OR+Trinidad+OR+Caribbean+OR+sanctions+OR+"Dragon+gas"+OR+migrants)+when:1d&hl=en-US&gl=US&ceid=US:en') },
     { name: 'CARICOM & OECS', url: rss('https://news.google.com/rss/search?q=(CARICOM+OR+OECS+OR+"Caribbean+Community"+OR+"Caribbean+Court+of+Justice"+OR+"CARICOM+Heads")+when:3d&hl=en-US&gl=US&ceid=US:en') },

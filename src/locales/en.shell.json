@@ -413,7 +413,8 @@
         "latam": "Latin America",
         "africa": "Africa",
         "oceania": "Oceania",
-        "caribbean": "Caribbean"
+        "caribbean": "Caribbean",
+        "trinidad": "Trinidad & Tobago"
       },
       "layerHelp": {
         "title": "Map Layers Guide"

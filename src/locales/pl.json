@@ -349,7 +349,8 @@
       "africa": "Afryka",
       "latam": "Ameryka Łacińska",
       "oceania": "Oceania",
-      "caribbean": "Caribbean"
+      "caribbean": "Caribbean",
+      "trinidad": "Trinidad & Tobago"
     },
     "tips": {
       "map": "Wpisz nazwę kraju, aby przenieść się tam na mapie",
@@ -848,7 +849,8 @@
         "asia": "Azja",
         "africa": "Afryka",
         "oceania": "Oceania",
-        "caribbean": "Caribbean"
+        "caribbean": "Caribbean",
+        "trinidad": "Trinidad & Tobago"
       },
       "zoomIn": "Powiększ",
       "zoomOut": "Pomniejsz",
@@ -1673,7 +1675,8 @@
       "hlsUrl": "URL strumienia HLS (opcjonalnie)",
       "invalidHlsUrl": "Wprowadź prawidłowy URL strumienia HLS (.m3u8)",
       "playLiveFeed": "Odtwórz transmisję na żywo",
-      "readyStatus": "Gotowe, gdy Ty jesteś gotowy"
+      "readyStatus": "Gotowe, gdy Ty jesteś gotowy",
+      "regionCaribbean": "Caribbean"
     },
     "securityAdvisories": {
       "loading": "Ładowanie ostrzeżeń podróżnych...",

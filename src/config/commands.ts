@@ -41,7 +41,8 @@ export const COMMANDS: Command[] = [
   { id: 'nav:africa', keywords: ['africa'], label: 'Map: Africa', icon: '\u{1F30D}', category: 'navigate' },
   { id: 'nav:latam', keywords: ['latam', 'latin america', 'south america'], label: 'Map: Latin America', icon: '\u{1F30E}', category: 'navigate' },
   { id: 'nav:oceania', keywords: ['oceania', 'australia', 'pacific islands'], label: 'Map: Oceania', icon: '\u{1F30F}', category: 'navigate' },
-  { id: 'nav:caribbean', keywords: ['caribbean', 'trinidad', 'tobago', 'port of spain', 'west indies'], label: 'Map: Caribbean', icon: '\u{1F1F9}\u{1F1F9}', category: 'navigate' },
+  { id: 'nav:caribbean', keywords: ['caribbean', 'west indies', 'antilles', 'venezuela', 'guyana'], label: 'Map: Caribbean', icon: '\u{1F30E}', category: 'navigate' },
+  { id: 'nav:trinidad', keywords: ['trinidad', 'tobago', 'port of spain', 'san fernando', 'scarborough', 't&t'], label: 'Map: Trinidad & Tobago', icon: '\u{1F1F9}\u{1F1F9}', category: 'navigate' },
 
   // Layer presets (toggle groups)
   { id: 'layers:military', keywords: ['military', 'military layers', 'show military'], label: 'Show military layers', icon: '\u{1F396}\uFE0F', category: 'layers' },

@@ -22,7 +22,7 @@ export type MissionPresetId =
   | 'tech-ai-watch'
   | 'good-news-explorer';
 
-export type MissionMapView = 'global' | 'america' | 'mena' | 'eu' | 'asia' | 'latam' | 'africa' | 'oceania' | 'caribbean';
+export type MissionMapView = 'global' | 'america' | 'mena' | 'eu' | 'asia' | 'latam' | 'africa' | 'oceania' | 'caribbean' | 'trinidad';
 export type MissionTimeRange = '1h' | '6h' | '24h' | '48h' | '7d' | 'all';
 
 export interface MissionPreset {

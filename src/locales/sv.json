@@ -130,7 +130,8 @@
       "africa": "Afrika",
       "latam": "Latinamerika",
       "oceania": "Oceanien",
-      "caribbean": "Caribbean"
+      "caribbean": "Caribbean",
+      "trinidad": "Trinidad & Tobago"
     },
     "tips": {
       "map": "Skriv ett landsnamn för att flyga dit på kartan",
@@ -511,7 +512,8 @@
         "asia": "Asien",
         "africa": "Afrika",
         "oceania": "Oceanien",
-        "caribbean": "Caribbean"
+        "caribbean": "Caribbean",
+        "trinidad": "Trinidad & Tobago"
       },
       "zoomIn": "Zooma in",
       "zoomOut": "Zooma ut",
@@ -1452,7 +1454,8 @@
       "hlsUrl": "HLS-ström-URL (valfritt)",
       "invalidHlsUrl": "Ange en giltig HLS-ström-URL (.m3u8)",
       "playLiveFeed": "Spela liveflöde",
-      "readyStatus": "Redo när du är det"
+      "readyStatus": "Redo när du är det",
+      "regionCaribbean": "Caribbean"
     },
     "securityAdvisories": {
       "loading": "Hämtar resevarningar...",

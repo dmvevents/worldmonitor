@@ -1,6 +1,6 @@
 import { isDesktopRuntime, toApiUrl } from '@/services/runtime';
 
-type MapView = 'global' | 'america' | 'mena' | 'eu' | 'asia' | 'latam' | 'africa' | 'oceania' | 'caribbean';
+type MapView = 'global' | 'america' | 'mena' | 'eu' | 'asia' | 'latam' | 'africa' | 'oceania' | 'caribbean' | 'trinidad';
 
 const CARIBBEAN_TIMEZONES = new Set([
   'America/Port_of_Spain', 'America/Barbados', 'America/Grenada', 'America/St_Vincent',
@@ -16,6 +16,7 @@ const ASIA_EAST_TIMEZONES = new Set([
 
 function timezoneToRegion(tz: string): MapView | null {
   if (ASIA_EAST_TIMEZONES.has(tz)) return 'asia';
+  if (tz === 'America/Port_of_Spain') return 'trinidad';
   if (CARIBBEAN_TIMEZONES.has(tz)) return 'caribbean';
   const prefix = tz.split('/')[0];
   switch (prefix) {
@@ -39,6 +40,7 @@ function timezoneToRegion(tz: string): MapView | null {
 
 function coordsToRegion(lat: number, lon: number): MapView {
   // Caribbean basin (Lesser Antilles → Greater Antilles, incl. T&T and the Guyana coast) before the wider LatAm/America boxes
+  if (lat > 9.9 && lat < 11.5 && lon > -62.1 && lon < -60.4) return 'trinidad';
   if (lat > 8 && lat < 24 && lon > -86 && lon < -57) return 'caribbean';
   if (lat > 15 && lon > 60 && lon < 150) return 'asia';
   if (lat > 10 && lat < 45 && lon > 25 && lon < 65) return 'mena';

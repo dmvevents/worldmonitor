@@ -349,7 +349,8 @@
       "africa": "非洲",
       "latam": "拉丁美洲",
       "oceania": "大洋洲",
-      "caribbean": "Caribbean"
+      "caribbean": "Caribbean",
+      "trinidad": "Trinidad & Tobago"
     },
     "tips": {
       "map": "输入国家名称以在地图上飞往该位置",
@@ -1063,7 +1064,8 @@
         "latam": "拉丁美洲",
         "africa": "非洲",
         "oceania": "大洋洲",
-        "caribbean": "Caribbean"
+        "caribbean": "Caribbean",
+        "trinidad": "Trinidad & Tobago"
       },
       "layers": {
         "startupHubs": "创业中心",
@@ -1788,7 +1790,8 @@
       "hlsUrl": "HLS流地址（可选）",
       "invalidHlsUrl": "请输入有效的HLS流地址（.m3u8）",
       "playLiveFeed": "播放直播源",
-      "readyStatus": "准备就绪，随时可播"
+      "readyStatus": "准备就绪，随时可播",
+      "regionCaribbean": "Caribbean"
     },
     "map": {
       "showMap": "显示地图",

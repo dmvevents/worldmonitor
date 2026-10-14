@@ -349,7 +349,8 @@
       "africa": "Châu Phi",
       "latam": "Mỹ Latinh",
       "oceania": "Châu Đại Dương",
-      "caribbean": "Caribbean"
+      "caribbean": "Caribbean",
+      "trinidad": "Trinidad & Tobago"
     },
     "tips": {
       "map": "Nhập tên quốc gia để bay đến vị trí đó trên bản đồ",
@@ -1063,7 +1064,8 @@
         "latam": "Mỹ Latinh",
         "africa": "Châu Phi",
         "oceania": "Châu Đại Dương",
-        "caribbean": "Caribbean"
+        "caribbean": "Caribbean",
+        "trinidad": "Trinidad & Tobago"
       },
       "layers": {
         "startupHubs": "Trung tâm Khởi nghiệp",
@@ -1788,7 +1790,8 @@
       "hlsUrl": "URL luồng HLS (tùy chọn)",
       "invalidHlsUrl": "Nhập URL luồng HLS hợp lệ (.m3u8)",
       "playLiveFeed": "Phát luồng trực tiếp",
-      "readyStatus": "Sẵn sàng khi bạn sẵn sàng"
+      "readyStatus": "Sẵn sàng khi bạn sẵn sàng",
+      "regionCaribbean": "Caribbean"
     },
     "map": {
       "showMap": "Hiển thị bản đồ",

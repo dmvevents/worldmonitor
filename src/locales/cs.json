@@ -349,7 +349,8 @@
       "africa": "Afrika",
       "latam": "Latinská Amerika",
       "oceania": "Oceánie",
-      "caribbean": "Caribbean"
+      "caribbean": "Caribbean",
+      "trinidad": "Trinidad & Tobago"
     },
     "tips": {
       "map": "Zadejte název země pro přelet na mapě",
@@ -1051,7 +1052,8 @@
         "latam": "Latinská Amerika",
         "africa": "Afrika",
         "oceania": "Oceánie",
-        "caribbean": "Caribbean"
+        "caribbean": "Caribbean",
+        "trinidad": "Trinidad & Tobago"
       },
       "layers": {
         "startupHubs": "Startup centra",
@@ -1769,7 +1771,8 @@
       "hlsUrl": "URL HLS streamu (volitelné)",
       "invalidHlsUrl": "Zadejte platnou URL HLS streamu (.m3u8)",
       "playLiveFeed": "Přehrát živý přenos",
-      "readyStatus": "Připraveno, až budete"
+      "readyStatus": "Připraveno, až budete",
+      "regionCaribbean": "Caribbean"
     },
     "map": {
       "showMap": "Zobrazit mapu",

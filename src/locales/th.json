@@ -349,7 +349,8 @@
       "africa": "แอฟริกา",
       "latam": "ละตินอเมริกา",
       "oceania": "โอเชียเนีย",
-      "caribbean": "Caribbean"
+      "caribbean": "Caribbean",
+      "trinidad": "Trinidad & Tobago"
     },
     "tips": {
       "map": "พิมพ์ชื่อประเทศเพื่อบินไปยังตำแหน่งบนแผนที่",
@@ -1063,7 +1064,8 @@
         "latam": "ละตินอเมริกา",
         "africa": "แอฟริกา",
         "oceania": "โอเชียเนีย",
-        "caribbean": "Caribbean"
+        "caribbean": "Caribbean",
+        "trinidad": "Trinidad & Tobago"
       },
       "layers": {
         "startupHubs": "ศูนย์กลางสตาร์ทอัพ",
@@ -1788,7 +1790,8 @@
       "hlsUrl": "URL สตรีม HLS (ไม่บังคับ)",
       "invalidHlsUrl": "กรุณากรอก URL สตรีม HLS (.m3u8) ที่ถูกต้อง",
       "playLiveFeed": "เล่นฟีดสด",
-      "readyStatus": "พร้อมเมื่อคุณพร้อม"
+      "readyStatus": "พร้อมเมื่อคุณพร้อม",
+      "regionCaribbean": "Caribbean"
     },
     "map": {
       "showMap": "แสดงแผนที่",

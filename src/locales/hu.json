@@ -417,7 +417,8 @@
       "africa": "Afrika",
       "latam": "Latin-Amerika",
       "oceania": "Óceánia",
-      "caribbean": "Caribbean"
+      "caribbean": "Caribbean",
+      "trinidad": "Trinidad & Tobago"
     },
     "tips": {
       "map": "Írj be egy országnevet a térképen való repüléshez",
@@ -1203,7 +1204,8 @@
         "latam": "Latin-Amerika",
         "africa": "Afrika",
         "oceania": "Óceánia",
-        "caribbean": "Caribbean"
+        "caribbean": "Caribbean",
+        "trinidad": "Trinidad & Tobago"
       },
       "layers": {
         "startupHubs": "Startup központok",
@@ -2012,7 +2014,8 @@
       "hlsUrl": "HLS Stream URL (opcionális)",
       "invalidHlsUrl": "Adjon meg érvényes HLS stream URL-t (.m3u8)",
       "playLiveFeed": "Élő adás lejátszása",
-      "readyStatus": "Készen áll, amikor Ön is"
+      "readyStatus": "Készen áll, amikor Ön is",
+      "regionCaribbean": "Caribbean"
     },
     "map": {
       "showMap": "Térkép megjelenítése",

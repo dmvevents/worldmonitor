@@ -349,7 +349,8 @@
       "africa": "アフリカ",
       "latam": "ラテンアメリカ",
       "oceania": "オセアニア",
-      "caribbean": "Caribbean"
+      "caribbean": "Caribbean",
+      "trinidad": "Trinidad & Tobago"
     },
     "tips": {
       "map": "国名を入力して地図上でその場所に移動",
@@ -1063,7 +1064,8 @@
         "latam": "中南米",
         "africa": "アフリカ",
         "oceania": "オセアニア",
-        "caribbean": "Caribbean"
+        "caribbean": "Caribbean",
+        "trinidad": "Trinidad & Tobago"
       },
       "layers": {
         "startupHubs": "スタートアップハブ",
@@ -1788,7 +1790,8 @@
       "hlsUrl": "HLSストリームURL（任意）",
       "invalidHlsUrl": "有効なHLSストリームURL（.m3u8）を入力してください",
       "playLiveFeed": "ライブフィードを再生",
-      "readyStatus": "準備ができたら再生できます"
+      "readyStatus": "準備ができたら再生できます",
+      "regionCaribbean": "Caribbean"
     },
     "map": {
       "showMap": "地図を表示",

@@ -427,7 +427,8 @@
       "africa": "Afrika",
       "latam": "Latinška Amerika",
       "oceania": "Oceanija",
-      "caribbean": "Caribbean"
+      "caribbean": "Caribbean",
+      "trinidad": "Trinidad & Tobago"
     },
     "tips": {
       "map": "Upišite naziv zemlje za letenje tamo na karti",
@@ -1327,7 +1328,8 @@
         "latam": "Latinska Amerika",
         "africa": "Afrika",
         "oceania": "Oceanija",
-        "caribbean": "Caribbean"
+        "caribbean": "Caribbean",
+        "trinidad": "Trinidad & Tobago"
       },
       "layers": {
         "startupHubs": "Startup Hub-ovi",
@@ -2178,7 +2180,8 @@
       "hlsUrl": "HLS Stream URL (neobavezno)",
       "invalidHlsUrl": "Unesite validan HLS stream URL (.m3u8)",
       "playLiveFeed": "Pokreni prijenos uživo",
-      "readyStatus": "Spremno kad ste vi spremni"
+      "readyStatus": "Spremno kad ste vi spremni",
+      "regionCaribbean": "Caribbean"
     },
     "map": {
       "showMap": "Prikaži mapu",

@@ -349,7 +349,8 @@
       "africa": "아프리카",
       "latam": "라틴 아메리카",
       "oceania": "오세아니아",
-      "caribbean": "Caribbean"
+      "caribbean": "Caribbean",
+      "trinidad": "Trinidad & Tobago"
     },
     "tips": {
       "map": "국가 이름을 입력하여 지도에서 해당 위치로 이동",
@@ -1063,7 +1064,8 @@
         "latam": "중남미",
         "africa": "아프리카",
         "oceania": "오세아니아",
-        "caribbean": "Caribbean"
+        "caribbean": "Caribbean",
+        "trinidad": "Trinidad & Tobago"
       },
       "layers": {
         "startupHubs": "스타트업 허브",
@@ -1788,7 +1790,8 @@
       "hlsUrl": "HLS 스트림 URL (선택사항)",
       "invalidHlsUrl": "유효한 HLS 스트림 URL (.m3u8)을 입력하세요",
       "playLiveFeed": "라이브 피드 재생",
-      "readyStatus": "준비되면 시작"
+      "readyStatus": "준비되면 시작",
+      "regionCaribbean": "Caribbean"
     },
     "map": {
       "showMap": "지도 표시",

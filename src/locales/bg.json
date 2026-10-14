@@ -349,7 +349,8 @@
       "africa": "Африка",
       "latam": "Латинска Америка",
       "oceania": "Океания",
-      "caribbean": "Caribbean"
+      "caribbean": "Caribbean",
+      "trinidad": "Trinidad & Tobago"
     },
     "tips": {
       "map": "Въведете име на държава, за да летите там на карта",
@@ -1063,7 +1064,8 @@
         "latam": "Латинска Америка",
         "africa": "Африка",
         "oceania": "Океания",
-        "caribbean": "Caribbean"
+        "caribbean": "Caribbean",
+        "trinidad": "Trinidad & Tobago"
       },
       "layers": {
         "startupHubs": "Стартъп центрове",
@@ -1788,7 +1790,8 @@
       "hlsUrl": "URL на HLS поток (незадължително)",
       "invalidHlsUrl": "Въведете валиден URL на HLS поток (.m3u8)",
       "playLiveFeed": "Пусни живото предаване",
-      "readyStatus": "Готово, когато сте готови"
+      "readyStatus": "Готово, когато сте готови",
+      "regionCaribbean": "Caribbean"
     },
     "map": {
       "showMap": "Показване на карта",

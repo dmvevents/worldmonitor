@@ -349,7 +349,8 @@
       "africa": "África",
       "latam": "América Latina",
       "oceania": "Oceanía",
-      "caribbean": "Caribbean"
+      "caribbean": "Caribbean",
+      "trinidad": "Trinidad & Tobago"
     },
     "tips": {
       "map": "Escribe el nombre de un país para volar allí en el mapa",
@@ -879,7 +880,8 @@
         "asia": "Asia",
         "africa": "África",
         "oceania": "Oceanía",
-        "caribbean": "Caribbean"
+        "caribbean": "Caribbean",
+        "trinidad": "Trinidad & Tobago"
       },
       "zoomIn": "Dar un golpe de zoom",
       "zoomOut": "Alejar",
@@ -1736,7 +1738,8 @@
       "hlsUrl": "URL de transmisión HLS (opcional)",
       "invalidHlsUrl": "Introduzca una URL de transmisión HLS válida (.m3u8)",
       "playLiveFeed": "Reproducir transmisión en vivo",
-      "readyStatus": "Listo cuando quieras"
+      "readyStatus": "Listo cuando quieras",
+      "regionCaribbean": "Caribbean"
     },
     "securityAdvisories": {
       "loading": "Cargando alertas de viaje...",

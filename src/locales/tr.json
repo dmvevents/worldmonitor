@@ -349,7 +349,8 @@
       "africa": "Afrika",
       "latam": "Latin Amerika",
       "oceania": "Okyanusya",
-      "caribbean": "Caribbean"
+      "caribbean": "Caribbean",
+      "trinidad": "Trinidad & Tobago"
     },
     "tips": {
       "map": "Haritada o konuma uçmak için bir ülke adı yazın",
@@ -1063,7 +1064,8 @@
         "latam": "Latin Amerika",
         "africa": "Afrika",
         "oceania": "Okyanusya",
-        "caribbean": "Caribbean"
+        "caribbean": "Caribbean",
+        "trinidad": "Trinidad & Tobago"
       },
       "layers": {
         "startupHubs": "Girisim Merkezleri",
@@ -1788,7 +1790,8 @@
       "hlsUrl": "HLS Akış URL (isteğe bağlı)",
       "invalidHlsUrl": "Geçerli bir HLS akış URL'si girin (.m3u8)",
       "playLiveFeed": "Canlı yayını oynat",
-      "readyStatus": "Hazır olduğunuzda hazır"
+      "readyStatus": "Hazır olduğunuzda hazır",
+      "regionCaribbean": "Caribbean"
     },
     "map": {
       "showMap": "Haritayı Göster",

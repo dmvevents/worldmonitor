@@ -357,5 +357,18 @@ export default [
   "caribbeannewsglobal.com",
   "barbadostoday.bb",
   "www.jamaicaobserver.com",
-  "guyanachronicle.com"
+  "guyanachronicle.com",
+  "www.tv6tnt.com",
+  "power102fm.com",
+  "tobagoupdates.com",
+  "www.tha.gov.tt",
+  "guyanatimesgy.com",
+  "demerarawaves.com",
+  "wicnews.com",
+  "www.searchlight.vc",
+  "www.iwnsvg.com",
+  "nowgrenada.com",
+  "stluciatimes.com",
+  "dominicanewsonline.com",
+  "antiguaobserver.com"
 ];
