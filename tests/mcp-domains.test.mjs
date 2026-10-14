@@ -50,6 +50,14 @@ describe('MCP tool categories (U3)', () => {
     assert.deepEqual(empty, [], `categories with no tools: ${empty.join(', ')}`);
   });
 
+  it('gives every data category a summary phrase, so a new domain cannot stay out of the generated copy', () => {
+    // `meta` is the one category that is server plumbing, not a data domain.
+    const silent = MCP_TOOL_CATEGORIES
+      .filter((category) => category.id !== 'meta' && !(category.summaryPhrase ?? '').trim())
+      .map((category) => category.id);
+    assert.deepEqual(silent, [], `data categories without a summaryPhrase: ${silent.join(', ')}`);
+  });
+
   it('files the tariff tools under trade-tariffs and the server utilities under meta', () => {
     for (const name of ['get_tariff_averages', 'get_bilateral_tariff', 'get_us_import_duty', 'get_tariff_trends']) {
       assert.equal(TOOL_CATEGORY_BY_NAME[name], 'trade-tariffs', name);
