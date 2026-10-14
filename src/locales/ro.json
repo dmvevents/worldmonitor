@@ -1114,7 +1114,9 @@
         "speciesRecovery": "Recuperarea speciilor",
         "renewableInstallations": "Energie curată",
         "radiationSpike": "Vârf de radiații",
-        "radiationElevated": "Radiații ridicate"
+        "radiationElevated": "Radiații ridicate",
+        "ebcConstituencies": "EBC Constituencies",
+        "hurricanes": "Hurricane Tracks (NHC)"
       },
       "tooltip": {
         "earthquake": "Cutremur",

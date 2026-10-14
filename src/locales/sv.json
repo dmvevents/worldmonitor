@@ -593,7 +593,9 @@
         "speciesRecovery": "Artåterhämtning",
         "renewableInstallations": "Ren energi",
         "radiationSpike": "Strålningsökning",
-        "radiationElevated": "Förhöjd strålning"
+        "radiationElevated": "Förhöjd strålning",
+        "ebcConstituencies": "EBC Constituencies",
+        "hurricanes": "Hurricane Tracks (NHC)"
       },
       "layersTitle": "Lager",
       "layerSearch": "Sök lager...",

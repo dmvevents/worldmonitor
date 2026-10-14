@@ -1114,7 +1114,9 @@
         "speciesRecovery": "物种恢复",
         "renewableInstallations": "清洁能源",
         "radiationSpike": "辐射峰值",
-        "radiationElevated": "辐射升高"
+        "radiationElevated": "辐射升高",
+        "ebcConstituencies": "EBC Constituencies",
+        "hurricanes": "Hurricane Tracks (NHC)"
       },
       "tooltip": {
         "earthquake": "地震",

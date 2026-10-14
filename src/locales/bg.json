@@ -1114,7 +1114,9 @@
         "speciesRecovery": "Възстановяване на видове",
         "renewableInstallations": "Чиста енергия",
         "radiationSpike": "Пик на радиация",
-        "radiationElevated": "Повишена радиация"
+        "radiationElevated": "Повишена радиация",
+        "ebcConstituencies": "EBC Constituencies",
+        "hurricanes": "Hurricane Tracks (NHC)"
       },
       "tooltip": {
         "earthquake": "Земетресение",

@@ -1102,7 +1102,9 @@
         "speciesRecovery": "Obnova druhů",
         "renewableInstallations": "Čistá energie",
         "radiationSpike": "Skokový nárůst radiace",
-        "radiationElevated": "Zvýšená radiace"
+        "radiationElevated": "Zvýšená radiace",
+        "ebcConstituencies": "EBC Constituencies",
+        "hurricanes": "Hurricane Tracks (NHC)"
       },
       "tooltip": {
         "earthquake": "Zemětřesení",

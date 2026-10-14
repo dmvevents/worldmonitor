@@ -705,6 +705,11 @@ export interface MapLayers {
   /** Live tanker positions (AIS ship type 80-89) inside chokepoint bboxes.
    *  Refreshed every 60s via getVesselSnapshot. Energy Atlas parity-push. */
   liveTankers?: boolean;
+  // Trinidad & Tobago variant layers (optional for the same reason).
+  /** EBC parliamentary constituency boundaries (static GeoJSON artifact). */
+  ebcConstituencies?: boolean;
+  /** NHC active Atlantic tropical cyclones: positions, forecast track and cone. */
+  hurricanes?: boolean;
 }
 
 export interface AIDataCenter {

@@ -370,5 +370,6 @@ export default [
   "nowgrenada.com",
   "stluciatimes.com",
   "dominicanewsonline.com",
-  "antiguaobserver.com"
+  "antiguaobserver.com",
+  "mapservices.weather.noaa.gov"
 ];

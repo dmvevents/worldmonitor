@@ -121,6 +121,9 @@ export const LAYER_REGISTRY: Record<keyof MapLayers, LayerDefinition> = {
   storageFacilities:        def('storageFacilities',        '&#127959;', 'storageFacilities',        'Storage Facilities', ['flat'], undefined, true),
   fuelShortages:            def('fuelShortages',            '&#9881;',   'fuelShortages',            'Fuel Shortages', ['flat'], undefined, true),
   liveTankers:              def('liveTankers',              '&#128674;', 'liveTankers',              'Live Tanker Positions', ['flat'], undefined, true),
+  // Trinidad & Tobago variant
+  ebcConstituencies:        def('ebcConstituencies',        '&#128499;', 'ebcConstituencies',        'EBC Constituencies', ['flat'], undefined, true),
+  hurricanes:               def('hurricanes',               '&#127786;', 'hurricanes',               'Hurricane Tracks (NHC)', ['flat'], undefined, true),
 };
 
 export const V1_LAYER_EXPLANATION_KEYS = [
@@ -332,6 +335,7 @@ const VARIANT_LAYER_ORDER: Record<MapVariant, Array<keyof MapLayers>> = {
   ],
   tt: [
     // Trinidad & Tobago / southern Caribbean — mirror of TT_MAP_LAYERS in panels.ts
+    'ebcConstituencies', 'hurricanes',
     'hotspots', 'conflicts', 'protests', 'ucdpEvents',
     'weather', 'natural', 'climate', 'fires',
     'cables', 'pipelines', 'storageFacilities', 'commodityPorts', 'waterways', 'tradeRoutes', 'ais', 'liveTankers',

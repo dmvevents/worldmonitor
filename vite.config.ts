@@ -764,6 +764,7 @@ const RSS_PROXY_ALLOWED_DOMAINS = new Set([
   // Trinidad & Tobago variant (tt) feed hosts
   'trinidadexpress.com', 'www.ttt.live', 'www.ttparliament.org', 'www.moe.gov.tt', 'tatt.org.tt', 'ebctt.com', 'www.central-bank.org.tt', 'www.energy.gov.tt', 'ngc.co.tt', 'igovtt.tt', 'www.nhc.noaa.gov', 'today.caricom.org', 'caribbeannewsglobal.com', 'barbadostoday.bb', 'www.jamaicaobserver.com', 'guyanachronicle.com',
   'www.tv6tnt.com', 'power102fm.com', 'tobagoupdates.com', 'www.tha.gov.tt', 'guyanatimesgy.com', 'demerarawaves.com', 'wicnews.com', 'www.searchlight.vc', 'www.iwnsvg.com', 'nowgrenada.com', 'stluciatimes.com', 'dominicanewsonline.com', 'antiguaobserver.com',
+  'mapservices.weather.noaa.gov',
 ]);
 
 function rssProxyPlugin(): Plugin {

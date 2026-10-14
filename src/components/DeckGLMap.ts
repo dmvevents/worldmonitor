@@ -69,6 +69,7 @@ import {
   type StoragePublicBadge,
 } from '@/shared/storage-evidence';
 import { getCachedStorageFacilityRegistry } from '@/shared/storage-facility-registry-store';
+import { getEbcConstituencies, getNhcStorms, subscribeTtGeoLayers, type NhcStorm } from '@/services/tt-geo-layers';
 import { getCachedFuelShortageRegistry } from '@/shared/fuel-shortage-registry-store';
 // getCountryCentroid is imported lower in the file alongside other
 // country-geometry helpers; don't re-import it here.
@@ -564,6 +565,7 @@ export class DeckGLMap {
   private aptGroupsLoaded = false;
   private _unsubscribeAuthState: (() => void) | null = null;
   private _unsubscribeEntitlement: (() => void) | null = null;
+  private _unsubscribeTtGeoLayers: (() => void) | null = null;
   private aptGroupsLayerFailed = false;
   private satelliteImageryLayerFailed = false;
   private iranEvents: IranEvent[] = [];
@@ -823,6 +825,8 @@ export class DeckGLMap {
 
   constructor(container: HTMLElement, initialState: DeckMapState, options: DeckGLMapOptions = {}) {
     this.container = container;
+    // tt variant layers load lazily on first build; re-render when their data lands.
+    this._unsubscribeTtGeoLayers = subscribeTtGeoLayers(() => { if (!this.destroyed) this.updateLayers(); });
     this.chrome = options.chrome ?? true;
     this.state = {
       ...initialState,
@@ -1849,6 +1853,18 @@ export class DeckGLMap {
       this.layerCache.delete('storage-facilities-layer');
     }
 
+    // Trinidad & Tobago variant: EBC constituency boundaries (static GeoJSON)
+    // and NHC Atlantic tropical cyclones (positions + forecast track/cone).
+    if (mapLayers.ebcConstituencies) {
+      const ebcLayer = this.createEbcConstituenciesLayer();
+      if (ebcLayer) layers.push(ebcLayer);
+    } else {
+      this.layerCache.delete('ebc-constituencies-layer');
+    }
+    if (mapLayers.hurricanes) {
+      layers.push(...this.createHurricaneLayers());
+    }
+
     // Fuel shortage pins. One pin per active shortage placed at the country
     // centroid. Color by severity; click opens the FuelShortagePanel drawer
     // via event. Available on any variant with `mapLayers.fuelShortages: true`
@@ -2447,6 +2463,95 @@ export class DeckGLMap {
    * Chiren (6.5 TWh) without blowing out small sites to invisibility.
    * Color = derived publicBadge, same deriver as the server handler.
    */
+  /**
+   * EBC parliamentary constituency boundaries (tt variant). Data is the
+   * boundary-only artifact in public/data (see scripts/tt-ebc-export.sh);
+   * fill distinguishes Trinidad from Tobago, outline stays constant so the
+   * layer reads as cartographic context rather than a choropleth.
+   */
+  private createEbcConstituenciesLayer(): GeoJsonLayer | null {
+    const data = getEbcConstituencies();
+    if (!data) return null;
+    const cacheKey = 'ebc-constituencies-layer';
+    const cached = this.layerCache.get(cacheKey) as (GeoJsonLayer & { props: { data?: unknown } }) | undefined;
+    if (cached && cached.props.data === data) return cached;
+    const layer = new GeoJsonLayer({
+      id: cacheKey,
+      data,
+      filled: true,
+      stroked: true,
+      getFillColor: (feature: { properties?: Record<string, unknown> }) =>
+        (feature.properties?.island === 'Tobago'
+          ? [245, 158, 11, 45]
+          : [20, 184, 166, 45]) as [number, number, number, number],
+      getLineColor: [255, 255, 255, 170] as [number, number, number, number],
+      getLineWidth: 1,
+      lineWidthMinPixels: 1,
+      lineWidthMaxPixels: 2,
+      pickable: true,
+      autoHighlight: true,
+      highlightColor: [255, 255, 255, 90] as [number, number, number, number],
+    });
+    this.layerCache.set(cacheKey, layer);
+    return layer;
+  }
+
+  /**
+   * NHC active Atlantic tropical cyclones (tt variant): forecast cone
+   * polygons, forecast track lines and current-position dots sized by
+   * intensity. Empty when no Atlantic system is active; refreshed by the
+   * store every 30 minutes.
+   */
+  private createHurricaneLayers(): Array<GeoJsonLayer | ScatterplotLayer> {
+    const data = getNhcStorms();
+    if (!data) return [];
+    const out: Array<GeoJsonLayer | ScatterplotLayer> = [];
+    if (data.cones.features.length > 0) {
+      out.push(new GeoJsonLayer({
+        id: 'nhc-forecast-cone-layer',
+        data: data.cones,
+        filled: true,
+        stroked: true,
+        getFillColor: [239, 68, 68, 40] as [number, number, number, number],
+        getLineColor: [239, 68, 68, 160] as [number, number, number, number],
+        getLineWidth: 1,
+        lineWidthMinPixels: 1,
+        pickable: false,
+      }));
+    }
+    if (data.tracks.features.length > 0) {
+      out.push(new GeoJsonLayer({
+        id: 'nhc-forecast-track-layer',
+        data: data.tracks,
+        filled: false,
+        stroked: true,
+        getLineColor: [255, 255, 255, 220] as [number, number, number, number],
+        getLineWidth: 2,
+        lineWidthMinPixels: 2,
+        lineWidthMaxPixels: 4,
+        pickable: true,
+      }));
+    }
+    if (data.storms.length > 0) {
+      out.push(new ScatterplotLayer<NhcStorm>({
+        id: 'nhc-storm-positions-layer',
+        data: data.storms,
+        getPosition: (s) => [s.lon, s.lat],
+        getRadius: (s) => 20000 + Math.max(0, s.intensityKt ?? 0) * 600,
+        radiusMinPixels: 6,
+        radiusMaxPixels: 28,
+        getFillColor: (s) => ((s.intensityKt ?? 0) >= 64
+          ? [220, 38, 38, 220]
+          : (s.intensityKt ?? 0) >= 34 ? [249, 115, 22, 220] : [250, 204, 21, 220]) as [number, number, number, number],
+        getLineColor: [255, 255, 255, 230] as [number, number, number, number],
+        lineWidthMinPixels: 1,
+        stroked: true,
+        pickable: true,
+      }));
+    }
+    return out;
+  }
+
   private createEnergyStorageLayer(): ScatterplotLayer | null {
     const cacheKey = 'storage-facilities-layer';
 
@@ -4674,6 +4779,17 @@ export class DeckGLMap {
     switch (layerId) {
       case 'hotspots-layer':
         return { html: `<div class="deckgl-tooltip"><strong>${text(obj.name)}</strong><br/>${text(obj.subtext)}</div>` };
+      case 'ebc-constituencies-layer': {
+        const p = (obj.properties ?? {}) as Record<string, unknown>;
+        const status = [p.validation_status, p.provenance].filter(Boolean).map(text).join(' · ');
+        return { html: `<div class="deckgl-tooltip"><strong>${text(p.name)}</strong><br/>${text(p.island)} · EBC ${text(p.election_year)} configuration${status ? `<br/>${status}` : ''}</div>` };
+      }
+      case 'nhc-storm-positions-layer':
+        return { html: `<div class="deckgl-tooltip"><strong>${text(obj.classification)} ${text(obj.name)}</strong><br/>${obj.intensityKt != null ? `${text(obj.intensityKt)} kt` : ''}${obj.pressureMb != null ? ` · ${text(obj.pressureMb)} mb` : ''}${obj.movementDir != null ? ` · moving ${text(obj.movementDir)}° at ${text(obj.movementSpeedKt ?? '?')} kt` : ''}<br/>NHC ${text(obj.lastUpdate)}</div>` };
+      case 'nhc-forecast-track-layer': {
+        const p = (obj.properties ?? {}) as Record<string, unknown>;
+        return { html: `<div class="deckgl-tooltip"><strong>${text(p.stormtype)} ${text(p.stormname)}</strong><br/>NHC forecast track · advisory ${text(p.advisnum)}<br/>${text(p.advdate)}</div>` };
+      }
       case 'earthquakes-layer':
         return { html: `<div class="deckgl-tooltip"><strong>M${(obj.magnitude || 0).toFixed(1)} ${t('components.deckgl.tooltip.earthquake')}</strong><br/>${text(obj.place)}</div>` };
       case 'military-vessels-layer':
@@ -7749,6 +7865,8 @@ export class DeckGLMap {
 
   public destroy(): void {
     this.destroyed = true;
+    this._unsubscribeTtGeoLayers?.();
+    this._unsubscribeTtGeoLayers = null;
     this.stopTradeAnimation();
     this.activeFlightTrails.clear();
     this.clearTrailsBtn = null;

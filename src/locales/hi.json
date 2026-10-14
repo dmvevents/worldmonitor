@@ -1254,7 +1254,9 @@
         "kindness": "दयालुता के कार्य",
         "happiness": "विश्व खुशी",
         "speciesRecovery": "प्रजाति पुनर्प्राप्ति",
-        "renewableInstallations": "स्वच्छ ऊर्जा"
+        "renewableInstallations": "स्वच्छ ऊर्जा",
+        "ebcConstituencies": "EBC Constituencies",
+        "hurricanes": "Hurricane Tracks (NHC)"
       },
       "tooltip": {
         "earthquake": "भूकंप",

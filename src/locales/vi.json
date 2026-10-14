@@ -1114,7 +1114,9 @@
         "speciesRecovery": "Phục hồi loài",
         "renewableInstallations": "Năng lượng sạch",
         "radiationSpike": "Đột tăng bức xạ",
-        "radiationElevated": "Bức xạ tăng cao"
+        "radiationElevated": "Bức xạ tăng cao",
+        "ebcConstituencies": "EBC Constituencies",
+        "hurricanes": "Hurricane Tracks (NHC)"
       },
       "tooltip": {
         "earthquake": "Động đất",

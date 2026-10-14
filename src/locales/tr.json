@@ -1114,7 +1114,9 @@
         "speciesRecovery": "Tür Kurtarma",
         "renewableInstallations": "Temiz Enerji",
         "radiationSpike": "Radyasyon artışı",
-        "radiationElevated": "Yükseltilmiş radyasyon"
+        "radiationElevated": "Yükseltilmiş radyasyon",
+        "ebcConstituencies": "EBC Constituencies",
+        "hurricanes": "Hurricane Tracks (NHC)"
       },
       "tooltip": {
         "earthquake": "Deprem",

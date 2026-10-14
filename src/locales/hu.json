@@ -1254,7 +1254,9 @@
         "kindness": "Kedvességi cselekmények",
         "happiness": "Világboldogság",
         "speciesRecovery": "Fajmegmentés",
-        "renewableInstallations": "Tiszta energia"
+        "renewableInstallations": "Tiszta energia",
+        "ebcConstituencies": "EBC Constituencies",
+        "hurricanes": "Hurricane Tracks (NHC)"
       },
       "tooltip": {
         "earthquake": "Földrengés",

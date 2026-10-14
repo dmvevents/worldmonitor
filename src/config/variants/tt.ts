@@ -64,11 +64,13 @@ export const DEFAULT_MAP_LAYERS: MapLayers = {
   speciesRecovery: false, renewableInstallations: false, tradeRoutes: false, iranAttacks: false,
   gpsJamming: false, satellites: false, ciiChoropleth: false, resilienceScore: false, dayNight: false,
   miningSites: false, processingPlants: false, webcams: false, diseaseOutbreaks: false,
+  ebcConstituencies: true, hurricanes: true,
 };
 
 export const MOBILE_DEFAULT_MAP_LAYERS: MapLayers = {
   ...DEFAULT_MAP_LAYERS,
   cables: false, pipelines: false, storageFacilities: false, commodityPorts: false, waterways: false,
+  ebcConstituencies: false,
 };
 
 export const VARIANT_CONFIG: VariantConfig = {

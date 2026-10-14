@@ -930,7 +930,9 @@
         "speciesRecovery": "Ochrona gatunków",
         "renewableInstallations": "Czysta energia",
         "radiationSpike": "Skok radioaktywności",
-        "radiationElevated": "Podwyższona radioaktywność"
+        "radiationElevated": "Podwyższona radioaktywność",
+        "ebcConstituencies": "EBC Constituencies",
+        "hurricanes": "Hurricane Tracks (NHC)"
       },
       "layersTitle": "Warstwy",
       "layerSearch": "Szukaj warstw...",

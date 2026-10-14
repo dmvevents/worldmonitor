@@ -1,17 +1,18 @@
 {
   "_generated": "scripts/docs-stats.mjs — do not edit by hand; run `npm run docs:stats`",
-  "layerDefinitions": 56,
+  "layerDefinitions": 58,
   "variantLayers": {
     "full": 37,
     "tech": 13,
     "finance": 17,
     "happy": 6,
     "commodity": 18,
-    "energy": 18
+    "energy": 18,
+    "tt": 27
   },
-  "variantCount": 6,
+  "variantCount": 7,
   "componentTopLevelTsFiles": 160,
-  "serviceTopLevelEntries": 197,
+  "serviceTopLevelEntries": 198,
   "apiEndpointEntries": 88,
   "panelClasses": 104,
   "protoFiles": 279,
@@ -72,7 +73,7 @@
   "workflowCount": 20,
   "freshnessSources": 35,
   "freshnessRequiredForRisk": 2,
-  "feedDefinitions": 567,
+  "feedDefinitions": 636,
   "airportCount": 111,
   "stockExchangeCount": 29,
   "centralBankInstitutionCount": 14,

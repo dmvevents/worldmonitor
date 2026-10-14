@@ -1187,6 +1187,8 @@ const TT_MAP_LAYERS: MapLayers = {
   webcams: false,
   diseaseOutbreaks: false,
   liveTankers: false,
+  ebcConstituencies: true,
+  hurricanes: true,
 };
 
 const TT_MOBILE_MAP_LAYERS: MapLayers = {
@@ -1246,6 +1248,8 @@ const TT_MOBILE_MAP_LAYERS: MapLayers = {
   webcams: false,
   diseaseOutbreaks: false,
   liveTankers: false,
+  ebcConstituencies: false,
+  hurricanes: true,
 };
 
 // ============================================

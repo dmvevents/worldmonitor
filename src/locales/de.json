@@ -961,7 +961,9 @@
         "speciesRecovery": "Artenerholung",
         "renewableInstallations": "Saubere Energie",
         "radiationSpike": "Strahlungsspitze",
-        "radiationElevated": "Erhöhte Strahlung"
+        "radiationElevated": "Erhöhte Strahlung",
+        "ebcConstituencies": "EBC Constituencies",
+        "hurricanes": "Hurricane Tracks (NHC)"
       },
       "layersTitle": "Schichten",
       "layerSearch": "Schichten suchen...",

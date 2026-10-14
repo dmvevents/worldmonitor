@@ -1378,7 +1378,9 @@
         "kindness": "Čini Ljubaznosti",
         "happiness": "Svjetsko Blagostanje",
         "speciesRecovery": "Oporavak vrsta",
-        "renewableInstallations": "Čista energija"
+        "renewableInstallations": "Čista energija",
+        "ebcConstituencies": "EBC Constituencies",
+        "hurricanes": "Hurricane Tracks (NHC)"
       },
       "tooltip": {
         "earthquake": "Zemljotres",

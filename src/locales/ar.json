@@ -1071,7 +1071,9 @@
         "speciesRecovery": "تعافي الأنواع",
         "renewableInstallations": "طاقة نظيفة",
         "radiationSpike": "ارتفاع حاد في الإشعاع",
-        "radiationElevated": "إشعاع مرتفع"
+        "radiationElevated": "إشعاع مرتفع",
+        "ebcConstituencies": "EBC Constituencies",
+        "hurricanes": "Hurricane Tracks (NHC)"
       },
       "tooltip": {
         "earthquake": "زلزال",

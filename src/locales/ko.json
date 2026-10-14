@@ -1114,7 +1114,9 @@
         "speciesRecovery": "종 복원",
         "renewableInstallations": "클린 에너지",
         "radiationSpike": "방사능 급증",
-        "radiationElevated": "상승된 방사능"
+        "radiationElevated": "상승된 방사능",
+        "ebcConstituencies": "EBC Constituencies",
+        "hurricanes": "Hurricane Tracks (NHC)"
       },
       "tooltip": {
         "earthquake": "지진",

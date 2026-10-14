@@ -1114,7 +1114,9 @@
         "speciesRecovery": "Ανάκαμψη ειδών",
         "renewableInstallations": "Καθαρή ενέργεια",
         "radiationSpike": "Αιχμή ραδιενέργειας",
-        "radiationElevated": "Αυξημένη ραδιενέργεια"
+        "radiationElevated": "Αυξημένη ραδιενέργεια",
+        "ebcConstituencies": "EBC Constituencies",
+        "hurricanes": "Hurricane Tracks (NHC)"
       },
       "tooltip": {
         "earthquake": "Σεισμός",

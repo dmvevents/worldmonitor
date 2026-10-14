@@ -593,7 +593,9 @@
         "speciesRecovery": "Recuperação de espécies",
         "renewableInstallations": "Energia limpa",
         "radiationSpike": "Pico de radiação",
-        "radiationElevated": "Radiação elevada"
+        "radiationElevated": "Radiação elevada",
+        "ebcConstituencies": "EBC Constituencies",
+        "hurricanes": "Hurricane Tracks (NHC)"
       },
       "layersTitle": "Camadas",
       "layerSearch": "Pesquisar camadas...",

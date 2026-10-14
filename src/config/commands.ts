@@ -62,6 +62,8 @@ export const COMMANDS: Command[] = [
   { id: 'layer:cables', keywords: ['cables', 'undersea', 'submarine cables'], label: 'Toggle undersea cables', icon: '\u{1F310}', category: 'layers' },
   { id: 'layer:pipelines', keywords: ['pipelines', 'oil', 'gas pipelines'], label: 'Toggle pipelines', icon: '\u{1F6E2}\uFE0F', category: 'layers' },
   { id: 'layer:storageFacilities', keywords: ['storage layer', 'storage map', 'spr map', 'lng map', 'ugs map', 'tank farm map', 'storage markers'], label: 'Toggle storage facility markers', icon: '\u{1F3ED}', category: 'layers' },
+  { id: 'layer:ebcConstituencies', keywords: ['constituencies', 'ebc', 'electoral boundaries', 'constituency map', 'trinidad constituencies'], label: 'Toggle EBC constituency boundaries', icon: '\u{1F5FA}\uFE0F', category: 'layers' },
+  { id: 'layer:hurricanes', keywords: ['hurricane', 'hurricanes', 'tropical storm', 'nhc', 'forecast cone', 'cyclone track'], label: 'Toggle hurricane tracks (NHC)', icon: '\u{1F32A}\uFE0F', category: 'layers' },
   { id: 'layer:fuelShortages', keywords: ['shortage pins', 'fuel shortage map', 'shortage markers', 'shortage layer'], label: 'Toggle fuel shortage pins', icon: '\u26FD', category: 'layers' },
   { id: 'layer:nuclear', keywords: ['nuclear', 'reactors'], label: 'Toggle nuclear facilities', icon: '\u2622\uFE0F', category: 'layers' },
   { id: 'layer:bases', keywords: ['bases', 'military bases'], label: 'Toggle military bases', icon: '\u{1F3DB}\uFE0F', category: 'layers' },

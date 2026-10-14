@@ -40,7 +40,7 @@ World Monitor is a real-time OSINT dashboard built with **Vanilla TypeScript** (
 
 ### Variant System
 
-The codebase produces 6 app variants from the same source, each targeting a different audience or use case:
+The codebase produces 7 app variants from the same source, each targeting a different audience or use case:
 
 | Variant | Command | Focus |
 |---|---|---|

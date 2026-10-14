@@ -1071,7 +1071,9 @@
         "speciesRecovery": "Rétablissement des espèces",
         "renewableInstallations": "Énergie propre",
         "radiationSpike": "Pic de radiation",
-        "radiationElevated": "Radiation élevée"
+        "radiationElevated": "Radiation élevée",
+        "ebcConstituencies": "EBC Constituencies",
+        "hurricanes": "Hurricane Tracks (NHC)"
       },
       "tooltip": {
         "earthquake": "Tremblement de terre",
