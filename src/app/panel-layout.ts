@@ -676,6 +676,8 @@ export class PanelLayoutManager implements AppModule {
     const isGlobeMode = getStoredMapModePreference() === 'globe';
     const bootShellFootprint = import.meta.env.DEV ? captureBootShellFootprint(this.ctx.container) : null;
 
+    // Mobile region sheet highlights the variant's opening view (tt opens on 'trinidad', others on 'global').
+    const initialRegion = getDefaultMapView(SITE_VARIANT, 'global');
     markLcpDebug('wm:layout:render-start');
     document.documentElement.classList.add('wm-layout-hydrated');
     setTrustedHtml(this.ctx.container, trustedHtml(`
@@ -866,9 +868,9 @@ export class PanelLayoutManager implements AppModule {
         { value: 'caribbean', label: t('components.deckgl.views.caribbean') },
         { value: 'trinidad', label: t('components.deckgl.views.trinidad') },
       ].map(r =>
-        `<button class="region-sheet-option ${r.value === 'global' ? 'active' : ''}" data-region="${r.value}">
+        `<button class="region-sheet-option ${r.value === initialRegion ? 'active' : ''}" data-region="${r.value}">
           <span>${r.label}</span>
-          <span class="region-sheet-check">${r.value === 'global' ? '✓' : ''}</span>
+          <span class="region-sheet-check">${r.value === initialRegion ? '✓' : ''}</span>
         </button>`
       ).join('')}
       </div>

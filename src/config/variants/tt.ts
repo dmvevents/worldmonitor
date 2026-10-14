@@ -28,7 +28,7 @@ export const DEFAULT_PANELS: Record<string, PanelConfig> = {
   'tt-news': { name: 'T&T News', enabled: true, priority: 1 },
   'tt-gov': { name: 'T&T Government & Official', enabled: true, priority: 1 },
   caribbean: { name: 'Caribbean & Geopolitics', enabled: true, priority: 1 },
-  // Topic lenses relevant to Anton's work
+  // Topic lenses
   'tt-energy': { name: 'Energy & LNG', enabled: true, priority: 1 },
   'tt-education': { name: 'Education & Student Laptops', enabled: true, priority: 1 },
   'tt-telecoms': { name: 'Telecoms (TSTT, Digicel, TATT)', enabled: true, priority: 1 },

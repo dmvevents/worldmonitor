@@ -2499,8 +2499,9 @@ export class DeckGLMap {
   /**
    * NHC active Atlantic tropical cyclones (tt variant): forecast cone
    * polygons, forecast track lines and current-position dots sized by
-   * intensity. Empty when no Atlantic system is active; refreshed by the
-   * store every 30 minutes.
+   * intensity. Empty when no Atlantic system is active. The store re-pulls
+   * NHC after its 30-minute TTL (on redraw, or via its own timer when idle)
+   * and clears expired geometry if a refresh fails.
    */
   private createHurricaneLayers(): Array<GeoJsonLayer | ScatterplotLayer> {
     const data = getNhcStorms();

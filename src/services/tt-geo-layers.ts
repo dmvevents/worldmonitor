@@ -48,6 +48,7 @@ const NHC_SLOT_STRIDE = 26;
 const NHC_TRACK_OFFSET = 7;
 const NHC_CONE_OFFSET = 8;
 const NHC_TTL_MS = 30 * 60 * 1000;
+const RETRY_BACKOFF_MS = 5 * 60 * 1000;
 const FETCH_TIMEOUT_MS = 15_000;
 
 const EMPTY_FC: GeoJSON.FeatureCollection = { type: 'FeatureCollection', features: [] };
@@ -77,10 +78,11 @@ async function fetchJson(url: string): Promise<unknown> {
 
 let ebcData: GeoJSON.FeatureCollection | null = null;
 let ebcPromise: Promise<void> | null = null;
+let ebcFailedAt = 0;
 
 /** Returns the constituency GeoJSON if loaded; kicks off the load otherwise. */
 export function getEbcConstituencies(): GeoJSON.FeatureCollection | null {
-  if (!ebcData && !ebcPromise) {
+  if (!ebcData && !ebcPromise && Date.now() - ebcFailedAt > RETRY_BACKOFF_MS) {
     ebcPromise = fetchJson(EBC_URL)
       .then((d) => {
         const fc = d as GeoJSON.FeatureCollection;
@@ -91,7 +93,8 @@ export function getEbcConstituencies(): GeoJSON.FeatureCollection | null {
       })
       .catch((err) => {
         console.warn('[tt-geo-layers] EBC constituencies unavailable:', err instanceof Error ? err.message : err);
-        ebcPromise = null; // allow a retry on the next render
+        ebcFailedAt = Date.now(); // back off; a 404 must not refetch on every redraw
+        ebcPromise = null;
       });
   }
   return ebcData;
@@ -120,11 +123,18 @@ function slotIndex(binNumber: string): number | null {
   return m ? Number.parseInt(m[1]!, 10) : null;
 }
 
-async function fetchStormGeometry(layerId: number): Promise<GeoJSON.Feature[]> {
+async function fetchStormGeometry(layerId: number, stormName: string): Promise<GeoJSON.Feature[]> {
   const url = `${NHC_MAPSERVER}/${layerId}/query?where=1%3D1&outFields=*&f=geojson`;
   try {
     const fc = (await fetchJson(rssProxyUrl(url))) as GeoJSON.FeatureCollection;
-    return Array.isArray(fc?.features) ? fc.features : [];
+    if (!Array.isArray(fc?.features)) return [];
+    // Guard against NOAA renumbering the per-slot layers: only keep geometry
+    // whose stormname matches the storm we resolved from CurrentStorms.json.
+    const want = stormName.trim().toLowerCase();
+    return fc.features.filter((feat) => {
+      const name = String((feat.properties as Record<string, unknown> | null)?.stormname ?? '').trim().toLowerCase();
+      return name === '' || name === want;
+    });
   } catch (err) {
     console.warn(`[tt-geo-layers] NHC layer ${layerId} unavailable:`, err instanceof Error ? err.message : err);
     return [];
@@ -160,9 +170,10 @@ async function loadNhc(): Promise<void> {
       advisoryUrl: s.publicAdvisory?.url ?? null,
     });
     const base = (slot - 1) * NHC_SLOT_STRIDE;
+    const stormName = String(s.name ?? '');
     const [track, cone] = await Promise.all([
-      fetchStormGeometry(base + NHC_TRACK_OFFSET),
-      fetchStormGeometry(base + NHC_CONE_OFFSET),
+      fetchStormGeometry(base + NHC_TRACK_OFFSET, stormName),
+      fetchStormGeometry(base + NHC_CONE_OFFSET, stormName),
     ]);
     trackFeatures.push(...track);
     coneFeatures.push(...cone);
@@ -177,6 +188,18 @@ async function loadNhc(): Promise<void> {
   notify();
 }
 
+let nhcTimer: ReturnType<typeof setTimeout> | null = null;
+
+function scheduleNhcRefresh(): void {
+  if (nhcTimer) clearTimeout(nhcTimer);
+  // Keep the layer current on an idle map: re-pull after the TTL even if
+  // nothing else triggers a redraw. No-op once every subscriber is gone.
+  nhcTimer = setTimeout(() => {
+    nhcTimer = null;
+    if (listeners.size > 0) getNhcStorms();
+  }, NHC_TTL_MS + 1_000);
+}
+
 /** Returns NHC storm data if loaded and fresh; (re)loads otherwise. */
 export function getNhcStorms(): NhcStormData | null {
   const stale = !nhcData || Date.now() - nhcData.fetchedAt > NHC_TTL_MS;
@@ -184,15 +207,19 @@ export function getNhcStorms(): NhcStormData | null {
     nhcPromise = loadNhc()
       .catch((err) => {
         console.warn('[tt-geo-layers] NHC CurrentStorms unavailable:', err instanceof Error ? err.message : err);
-        // Record the attempt so a dead endpoint is not hammered on every render.
-        nhcData = nhcData ?? { fetchedAt: Date.now(), storms: [], tracks: EMPTY_FC, cones: EMPTY_FC };
+        // Never leave an expired cone on screen as if current: drop the old
+        // geometry and stamp the attempt so a dead endpoint is retried after
+        // the TTL rather than on every redraw.
+        nhcData = { fetchedAt: Date.now(), storms: [], tracks: EMPTY_FC, cones: EMPTY_FC };
+        notify();
       })
-      .finally(() => { nhcPromise = null; });
+      .finally(() => { nhcPromise = null; scheduleNhcRefresh(); });
   }
   return nhcData;
 }
 
 /** Test-only: reset module state. */
 export function __resetTtGeoLayersForTests(): void {
-  ebcData = null; ebcPromise = null; nhcData = null; nhcPromise = null; listeners.clear();
+  ebcData = null; ebcPromise = null; ebcFailedAt = 0; nhcData = null; nhcPromise = null; listeners.clear();
+  if (nhcTimer) { clearTimeout(nhcTimer); nhcTimer = null; }
 }

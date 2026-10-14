@@ -1,4 +1,5 @@
 import { isDesktopRuntime, toApiUrl } from '@/services/runtime';
+import { SITE_VARIANT } from '@/config/variant';
 
 type MapView = 'global' | 'america' | 'mena' | 'eu' | 'asia' | 'latam' | 'africa' | 'oceania' | 'caribbean' | 'trinidad';
 
@@ -16,8 +17,12 @@ const ASIA_EAST_TIMEZONES = new Set([
 
 function timezoneToRegion(tz: string): MapView | null {
   if (ASIA_EAST_TIMEZONES.has(tz)) return 'asia';
-  if (tz === 'America/Port_of_Spain') return 'trinidad';
-  if (CARIBBEAN_TIMEZONES.has(tz)) return 'caribbean';
+  // The Caribbean frames exist only on the tt variant; other variants keep
+  // their original america/latam resolution (and the prediction regional sort).
+  if (SITE_VARIANT === 'tt') {
+    if (tz === 'America/Port_of_Spain') return 'trinidad';
+    if (CARIBBEAN_TIMEZONES.has(tz)) return 'caribbean';
+  }
   const prefix = tz.split('/')[0];
   switch (prefix) {
     case 'America':
@@ -40,8 +45,10 @@ function timezoneToRegion(tz: string): MapView | null {
 
 function coordsToRegion(lat: number, lon: number): MapView {
   // Caribbean basin (Lesser Antilles → Greater Antilles, incl. T&T and the Guyana coast) before the wider LatAm/America boxes
-  if (lat > 9.9 && lat < 11.5 && lon > -62.1 && lon < -60.4) return 'trinidad';
-  if (lat > 8 && lat < 24 && lon > -86 && lon < -57) return 'caribbean';
+  if (SITE_VARIANT === 'tt') {
+    if (lat > 9.9 && lat < 11.5 && lon > -62.1 && lon < -60.4) return 'trinidad';
+    if (lat > 8 && lat < 24 && lon > -86 && lon < -57) return 'caribbean';
+  }
   if (lat > 15 && lon > 60 && lon < 150) return 'asia';
   if (lat > 10 && lat < 45 && lon > 25 && lon < 65) return 'mena';
   if (lat > -40 && lat < 40 && lon > -25 && lon < 55) return 'africa';

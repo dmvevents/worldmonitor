@@ -14,7 +14,7 @@
  *   ./node_modules/.bin/tsx scripts/tt-daily-digest.mts --hours 48 --per-category 15 --out /tmp/tt
  *   ./node_modules/.bin/tsx scripts/tt-daily-digest.mts --stdout        # print instead of writing
  *
- * Optional local LLM summary (no cloud key needed): set OLLAMA_URL (default
+ * Optional local LLM summary (no cloud key needed): set OLLAMA_URL or OLLAMA_API_URL (default
  * http://localhost:11434) and OLLAMA_MODEL (default llama3.1). If Ollama is not
  * reachable the digest is written without the summary and says so.
  *
@@ -172,6 +172,19 @@ function normTitle(t: string): string {
   return t.toLowerCase().replace(/\s*[-–—|]\s*[^-–—|]{2,40}$/, '').replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim();
 }
 
+function safeLink(link: string): string | null {
+  try {
+    const u = new URL(link);
+    return u.protocol === 'http:' || u.protocol === 'https:' ? u.toString() : null;
+  } catch {
+    return null;
+  }
+}
+
+function mdText(s: string): string {
+  return s.replace(/[[\]]/g, '\\$&');
+}
+
 function fmtTT(ms: number | null): string {
   if (ms == null) return 'undated';
   return new Intl.DateTimeFormat('en-GB', { timeZone: TT_TIMEZONE, dateStyle: 'medium', timeStyle: 'short' }).format(new Date(ms));
@@ -184,7 +197,7 @@ function ttDateStamp(now: Date): string {
 }
 
 async function ollamaSummary(bulletLines: string[]): Promise<string | null> {
-  const base = (process.env.OLLAMA_URL || 'http://localhost:11434').replace(/\/$/, '');
+  const base = (process.env.OLLAMA_URL || process.env.OLLAMA_API_URL || 'http://localhost:11434').replace(/\/$/, '');
   const model = process.env.OLLAMA_MODEL || 'llama3.1';
   try {
     const ping = await fetch(`${base}/api/tags`, { signal: AbortSignal.timeout(2_000) });
@@ -261,7 +274,8 @@ async function main(): Promise<void> {
     if (items.length === 0) lines.push('_No items in window._');
     for (const it of items) {
       total++;
-      const line = `- ${it.link ? `[${it.title}](${it.link})` : it.title} — ${it.source}, ${fmtTT(it.publishedMs)}`;
+      const link = it.link ? safeLink(it.link) : null;
+      const line = `- ${link ? `[${mdText(it.title)}](${link.replace(/\)/g, '%29')})` : mdText(it.title)} — ${it.source}, ${fmtTT(it.publishedMs)}`;
       lines.push(line);
       allBullets.push(`[${CATEGORY_TITLES[category] ?? category}] ${it.title} (${it.source})`);
     }
