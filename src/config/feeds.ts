@@ -108,7 +108,7 @@ export const SOURCE_TYPES: Record<string, SourceType> = {
   'TT Guardian': 'mainstream', 'Newsday': 'mainstream', 'CNC3': 'mainstream', 'TTT': 'mainstream',
   'TT Parliament': 'gov', 'Office of the Prime Minister': 'gov', 'TTPS': 'gov',
   'Ministry of Education TT': 'gov', 'TATT': 'gov', 'EBC': 'gov', 'Central Bank of T&T': 'gov',
-  'iGovTT': 'gov', 'Ministry of National Security TT': 'gov', 'TT Government Notices': 'gov',
+  'iGovTT': 'gov', 'Ministry of National Security TT': 'gov',
   'Ministry of Energy TT': 'gov', 'NGC': 'gov', 'ODPM': 'gov', 'NHC Atlantic': 'gov',
   'CARICOM Today': 'gov', 'Caribbean News Global': 'mainstream', 'Barbados Today': 'mainstream',
   'Jamaica Observer': 'mainstream', 'Guyana Chronicle': 'mainstream',
@@ -1031,7 +1031,6 @@ const TT_FEEDS: Record<string, Feed[]> = {
     { name: 'Central Bank of T&T', url: rss('https://www.central-bank.org.tt/feed/') },
     { name: 'iGovTT', url: rss('https://igovtt.tt/feed/') },
     { name: 'Ministry of National Security TT', url: rss('https://news.google.com/rss/search?q=("Ministry+of+National+Security"+OR+"Ministry+of+Homeland+Security")+Trinidad+when:3d&hl=en-US&gl=US&ceid=US:en') },
-    { name: 'TT Government Notices', url: rss('https://news.google.com/rss/search?q=site:gov.tt+when:3d&hl=en-US&gl=US&ceid=US:en') },
   ],
   'tt-energy': [
     { name: 'Ministry of Energy TT', url: rss('https://www.energy.gov.tt/feed/') },

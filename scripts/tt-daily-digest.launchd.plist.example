@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Daily Trinidad & Tobago digest — launchd user agent (macOS).
+  Install:
+    cp scripts/tt-daily-digest.launchd.plist.example ~/Library/LaunchAgents/app.worldmonitor.tt-digest.plist
+    # edit the two /Users/antonalexander paths below if the repo lives elsewhere
+    launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/app.worldmonitor.tt-digest.plist
+  Runs 07:00 local time every day; output lands in ~/Documents/tt-digest/.
+  LaunchAgents do not inherit shell env: set OLLAMA_URL/OLLAMA_MODEL here if you want the LLM summary.
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>app.worldmonitor.tt-digest</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/antonalexander/Github/worldmonitor/node_modules/.bin/tsx</string>
+    <string>/Users/antonalexander/Github/worldmonitor/scripts/tt-daily-digest.mts</string>
+  </array>
+  <key>WorkingDirectory</key><string>/Users/antonalexander/Github/worldmonitor</string>
+  <key>StartCalendarInterval</key>
+  <dict><key>Hour</key><integer>7</integer><key>Minute</key><integer>0</integer></dict>
+  <key>StandardOutPath</key><string>/tmp/tt-digest.log</string>
+  <key>StandardErrorPath</key><string>/tmp/tt-digest.err.log</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key><string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+    <!-- <key>OLLAMA_URL</key><string>http://localhost:11434</string> -->
+    <!-- <key>OLLAMA_MODEL</key><string>llama3.1</string> -->
+  </dict>
+</dict>
+</plist>

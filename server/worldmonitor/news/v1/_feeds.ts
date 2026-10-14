@@ -502,7 +502,6 @@ export const VARIANT_FEEDS: Record<string, Record<string, ServerFeed[]>> = {
       { name: 'Central Bank of T&T', url: 'https://www.central-bank.org.tt/feed/' },
       { name: 'iGovTT', url: 'https://igovtt.tt/feed/' },
       { name: 'Ministry of National Security TT', url: gn('("Ministry of National Security" OR "Ministry of Homeland Security") Trinidad when:3d') },
-      { name: 'TT Government Notices', url: gn('site:gov.tt when:3d') },
     ],
     'tt-energy': [
       { name: 'Ministry of Energy TT', url: 'https://www.energy.gov.tt/feed/' },
