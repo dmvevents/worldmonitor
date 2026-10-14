@@ -84,7 +84,13 @@
     "panelCatMining": "Mining & Supply Chain",
     "panelCatCommodityEcon": "Economy & Trade",
     "panelCatHappyNews": "Good News",
-    "panelCatHappyPlanet": "Planet & Giving"
+    "panelCatHappyPlanet": "Planet & Giving",
+    "sourceRegionTT": "Trinidad & Tobago",
+    "sourceRegionTTLenses": "T&T Topic Lenses",
+    "sourceRegionCaribbean": "Caribbean",
+    "panelCatTTNews": "T&T & Caribbean News",
+    "panelCatTTLenses": "T&T Topic Lenses",
+    "panelCatTTContext": "Context & Tracking"
   },
   "panels": {
     "liveNews": "Live News",
@@ -406,7 +412,8 @@
         "asia": "Asia",
         "latam": "Latin America",
         "africa": "Africa",
-        "oceania": "Oceania"
+        "oceania": "Oceania",
+        "caribbean": "Caribbean"
       },
       "layerHelp": {
         "title": "Map Layers Guide"
