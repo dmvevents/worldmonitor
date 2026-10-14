@@ -191,15 +191,18 @@ export const OPTIONAL_LIVE_CHANNELS: LiveChannel[] = [
   // sittings, so they resolve to live when on air and otherwise show the channel's offline card.
   { id: 'ttt-live', name: 'TTT Live Online', handle: '@TTTLiveOnline' },               // UCf58CbplZsDbH9wPMYoOTFw
   { id: 'cnc3', name: 'CNC3', handle: '@CNC3Television' },                             // UChEuHwDYri-GtZJP6Tu1nTw
+  { id: 'cnc3-prime', name: 'CNC3 Prime', handle: '@CNC3TelevisionPrime' },            // UC4aMlN15zu2pX3fMB4HAsNA
   { id: 'tv6-news', name: 'TV6 News', handle: '@tv6news' },                            // UC7ukEQ5luwqMorgbxAGKo1Q
-  { id: 'tt-parliament', name: 'Parliament of T&T', handle: '@ttparliament' },         // UCw78vOFLUOatclKpu4og57Q
+  { id: 'tt-parliament', name: 'Parliament of T&T (ParlView)', handle: '@ParlView' },  // live sittings; @ttparliament is the archive channel
   { id: 'tobago-channel5', name: 'Tobago Channel 5', handle: '@TobagoChannel5' },      // UCj3EKt5lPhsFxc5E9zFDeBQ
   { id: 'tobago-updates', name: 'Tobago Updates', handle: '@TobagoUpdates' },          // UC4TYtHs29DONCkjRFcMXqgw
   { id: 'ietv', name: 'IETV', handle: '@IETVTT' },                                      // UCMZkLrnnBopfllH39j19xEw
   { id: 'ncn-guyana', name: 'NCN Guyana', handle: '@NCNGuyana' },                      // UCkA-XjVXNMtLNkgC03F1HBg
   { id: 'tvj', name: 'Television Jamaica', handle: '@TelevisionJamaica' },             // UC1Ga-Hv1-dLz9zoAz81d9tA
-  { id: 'cvm-tv', name: 'CVM TV', handle: '@CVMTV' },                                   // UCLozhxFWFDEUY-cxWDxE_6w
+  { id: 'cvm-tv', name: 'CVM TV News', handle: '@cvmtvnews' },                          // newscast channel; @CVMTV is the general channel
   { id: 'abs-antigua', name: 'ABS Antigua', handle: '@ABSTVAntigua' },                 // UCzjrwYEm05BM2Tdg1yVZ3yA
+  { id: 'cbc-barbados', name: 'CBC Barbados', handle: '@cbcbarbados246' },
+  { id: 'gbn-grenada', name: 'GBN Grenada', handle: '@grenadabroadcastingnetwork9673' },
   { id: 'telesur-english', name: 'teleSUR English', handle: '@telesurenglish' },       // UCmuTmpLY35O3csvhyA6vrkg
   // Oceania
   { id: 'abc-news-au', name: 'ABC News Australia', handle: '@abcnewsaustralia', fallbackVideoId: 'vOTiJkg1voo' },
@@ -213,7 +216,7 @@ const _REGION_ENTRIES: { key: string; labelKey: string; channelIds: string[] }[]
   { key: 'me', labelKey: 'components.liveNews.regionMiddleEast', channelIds: ['alarabiya', 'aljazeera', 'al-hadath', 'sky-news-arabia', 'trt-world', 'iran-intl', 'press-tv', 'cgtn-arabic', 'kan-11', 'i24-news', 'asharq-news', 'aljazeera-arabic', 'aljazeera-mubasher', 'alarabiya-business', 'al-qahera-news', 'dw-arabic', 'rt-arabic', 'rudaw'] },
   { key: 'africa', labelKey: 'components.liveNews.regionAfrica', channelIds: ['africanews', 'channels-tv', 'ktn-news', 'enca', 'sabc-news', 'arise-news'] },
   { key: 'oc', labelKey: 'components.liveNews.regionOceania', channelIds: ['abc-news-au'] },
-  { key: 'caribbean', labelKey: 'components.liveNews.regionCaribbean', channelIds: ['ttt-live', 'cnc3', 'tv6-news', 'tt-parliament', 'tobago-channel5', 'tobago-updates', 'ietv', 'ncn-guyana', 'tvj', 'cvm-tv', 'abs-antigua', 'telesur-english'] },
+  { key: 'caribbean', labelKey: 'components.liveNews.regionCaribbean', channelIds: ['ttt-live', 'cnc3', 'cnc3-prime', 'tv6-news', 'tt-parliament', 'tobago-channel5', 'tobago-updates', 'ietv', 'ncn-guyana', 'tvj', 'cvm-tv', 'abs-antigua', 'cbc-barbados', 'gbn-grenada', 'telesur-english'] },
 ];
 export const OPTIONAL_CHANNEL_REGIONS: { key: string; labelKey: string; channelIds: string[] }[] = [
   ..._REGION_ENTRIES,

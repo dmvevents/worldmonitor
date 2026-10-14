@@ -24,3 +24,14 @@ third-party origin from the mobile map's critical path (PR #4383, issue #4374).
 territory base-map **outlines** (e.g. Bahrain, Singapore, Hong Kong, Malta, Maldives).
 This is an accepted tradeoff: event overlays are positioned by lat/lon independently of
 the base polygons, and the omitted outlines are near-invisible at mobile zoom.
+
+## Trinidad & Tobago (tt variant)
+
+| File | Upstream source | Regenerate |
+|------|-----------------|------------|
+| `tt-ebc-constituencies.geojson` | Elections and Boundaries Commission of Trinidad and Tobago constituency boundaries (public government record, EBC Year 2024 Review of Constituency Boundaries), ingested and simplified by Anton's `tt-geopolitical-intelligence` platform (`GET /api/boundaries?simplify=0.001`) | `scripts/tt-ebc-export.sh` (platform API must be running on :8000) |
+
+Boundary-only, aggregate artifact: 41 constituencies with code, name, island,
+election year, validation status, provenance and source document. No election
+results or individual-level data. Consumed by the `ebcConstituencies` map layer.
+

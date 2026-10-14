@@ -34,6 +34,7 @@
     "dev:commodity": "cross-env VITE_VARIANT=commodity vite",
     "dev:energy": "cross-env VITE_VARIANT=energy vite",
     "dev:tt": "cross-env VITE_VARIANT=tt DEV_PORT=3100 vite",
+    "dev:tt:ollama": "cross-env VITE_VARIANT=tt DEV_PORT=3100 OLLAMA_API_URL=http://localhost:11434 OLLAMA_MODEL=llama3.1:8b vite",
     "postinstall": "cd blog-site && npm ci --prefer-offline",
     "build:blog": "cd blog-site && npm run build && rm -rf ../public/blog && mkdir -p ../public/blog && cp -r dist/* ../public/blog/",
     "build:crawlable-corpus": "tsx scripts/build-crawlable-corpus.mjs",

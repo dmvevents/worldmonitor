@@ -21,7 +21,8 @@ No API keys are needed for the news panels: the Vite dev server runs the sebuf A
 | Panels / layers | `src/config/panels.ts` → `TT_PANELS`, `TT_MAP_LAYERS`, `TT_MOBILE_MAP_LAYERS`, `PANEL_CATEGORY_MAP.tt*` |
 | Layer order | `src/config/map-layer-definitions.ts` → `VARIANT_LAYER_ORDER.tt` |
 | Map view | new `trinidad` preset (both islands framed, zoom 8.2) is the tt default via `src/config/map-view.ts`; `caribbean` (zoom 5, Venezuela/Guyana/Lesser Antilles) is one click away in the region selector. Both exist in deck.gl / globe / SVG / URL state / CMD+K (`Map: Trinidad & Tobago`, `Map: Caribbean`) |
-| Live TV | `src/components/LiveNewsPanel.ts`: Caribbean channel region (TTT Live Online, CNC3, TV6 News, Parliament of T&T, Tobago Channel 5, Tobago Updates, IETV, NCN Guyana, TVJ, CVM, ABS Antigua, teleSUR English); tt default set = local broadcasters + teleSUR + Sky + Al Jazeera |
+| Live TV | `src/components/LiveNewsPanel.ts`: Caribbean channel region (TTT Live Online, CNC3, CNC3 Prime, TV6 News, Parliament of T&T via ParlView, Tobago Channel 5, Tobago Updates, IETV, NCN Guyana, TVJ, CVM TV News, ABS Antigua, CBC Barbados, GBN Grenada, teleSUR English); tt default set = local broadcasters + teleSUR + Sky + Al Jazeera |
+| EBC boundaries | `public/data/tt-ebc-constituencies.geojson` (41 constituencies, boundary-only, from the tt-geopolitical-intelligence API via `scripts/tt-ebc-export.sh`) |
 | Variant detection & meta | `src/config/variant.ts`, `src/config/variant-meta.ts`, `src/config/variants/tt.ts` (`TT_TIMEZONE`, `TT_COUNTRY_CODE`) |
 | Timezone | `America/Port_of_Spain` → `TT` in `src/utils/user-location.ts`; Port of Spain first in the World Clock for tt |
 | Daily digest | `scripts/tt-daily-digest.mts` (+ `scripts/tt-daily-digest.launchd.plist.example`) |
@@ -50,6 +51,28 @@ Public news and official sources only, aggregate and topic level. No profiling o
 ```
 
 Headlines grouped by lens, timestamps in `America/Port_of_Spain`. If a local Ollama is reachable (`OLLAMA_URL`, `OLLAMA_MODEL`) an executive summary is prepended; otherwise the digest says so and stays unsummarised. No cloud key is used.
+
+## Local AI with Ollama (no cloud key)
+
+Ollama is installed on this Mac with llama3.1:8b, qwen3:8b and others. Start it and run the tt
+variant with the Ollama-enabled script:
+
+```bash
+ollama serve &                 # if not already running
+npm run dev:tt:ollama          # sets OLLAMA_API_URL=http://localhost:11434 OLLAMA_MODEL=llama3.1:8b
+```
+
+What this unlocks locally: AI country briefs (click Trinidad & Tobago on the map, or
+`/api/intelligence/v1/get-country-intel-brief?country_code=TT`) and the digest's executive summary
+(`OLLAMA_URL=http://localhost:11434 OLLAMA_MODEL=llama3.1:8b ./node_modules/.bin/tsx scripts/tt-daily-digest.mts`).
+Verified 2026-10-14: both return grounded output from the local model.
+
+What stays locked on the web build regardless of LLM: the AI Insights / summarize panel, WM Analyst
+chat, Deduct Situation and the regional briefs are Pro-gated server-side (`src/shared/premium-paths.ts`,
+`isCallerPremium`). They open only with a Clerk Pro session or a key listed in `WORLDMONITOR_VALID_KEYS`
+sent as `X-WorldMonitor-Key`, which the browser client only does on desktop. Treat llama3.1:8b output
+as a reading aid: on thin inputs it fills gaps with plausible-sounding specifics, so keep the source
+links next to any summary.
 
 ## Still needs a key (optional)
 
