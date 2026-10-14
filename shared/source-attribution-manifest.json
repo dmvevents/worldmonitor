@@ -3235,6 +3235,9 @@
       "status": "excluded",
       "references": [
         {
+          "path": "api/channel-oauth-bind.ts"
+        },
+        {
           "path": "api/discord/oauth/callback.ts"
         },
         {
@@ -8143,6 +8146,20 @@
       ]
     },
     {
+      "host": "rt-english.com",
+      "provider": "rt-english.com",
+      "kind": "feed",
+      "observed": true,
+      "license": "Provider terms for this feed publisher; verify before redistribution",
+      "attribution": "Credit rt-english.com and link to the original feed publisher.",
+      "status": "terms-review",
+      "references": [
+        {
+          "path": "src/config/feeds.ts"
+        }
+      ]
+    },
+    {
       "host": "rt-esp.rttv.com",
       "provider": "rt-esp.rttv.com",
       "kind": "feed",
@@ -8397,15 +8414,10 @@
       "host": "search.seznam.cz",
       "provider": "search.seznam.cz",
       "kind": "structured",
-      "observed": true,
+      "observed": false,
       "license": "Excluded: first-party, control-plane, UI, or rendering transport",
       "attribution": "Excluded from the external-provider count: not an ingested upstream dataset.",
-      "status": "excluded",
-      "references": [
-        {
-          "path": "scripts/seo-indexnow-submit.mjs"
-        }
-      ]
+      "status": "excluded"
     },
     {
       "host": "search.worldbank.org",
@@ -8439,15 +8451,10 @@
       "host": "searchadvisor.naver.com",
       "provider": "searchadvisor.naver.com",
       "kind": "structured",
-      "observed": true,
+      "observed": false,
       "license": "Excluded: first-party, control-plane, UI, or rendering transport",
       "attribution": "Excluded from the external-provider count: not an ingested upstream dataset.",
-      "status": "excluded",
-      "references": [
-        {
-          "path": "scripts/seo-indexnow-submit.mjs"
-        }
-      ]
+      "status": "excluded"
     },
     {
       "host": "searchconsole.googleapis.com",
@@ -8738,6 +8745,9 @@
       "attribution": "Excluded from the external-provider count: not an ingested upstream dataset.",
       "status": "excluded",
       "references": [
+        {
+          "path": "api/channel-oauth-bind.ts"
+        },
         {
           "path": "api/slack/oauth/callback.ts"
         },
@@ -10591,6 +10601,9 @@
           "path": "server/_shared/brief-url.ts"
         },
         {
+          "path": "server/_shared/channel-oauth-state.ts"
+        },
+        {
           "path": "server/_shared/intel-history-embed.ts"
         },
         {
@@ -10633,6 +10646,9 @@
       "references": [
         {
           "path": "src/shared/public-rpc-cache.ts"
+        },
+        {
+          "path": "src/utils/dom-utils.ts"
         }
       ]
     },
@@ -11154,15 +11170,10 @@
       "host": "www.bing.com",
       "provider": "www.bing.com",
       "kind": "structured",
-      "observed": true,
+      "observed": false,
       "license": "Excluded: first-party, control-plane, UI, or rendering transport",
       "attribution": "Excluded from the external-provider count: not an ingested upstream dataset.",
-      "status": "excluded",
-      "references": [
-        {
-          "path": "scripts/seo-indexnow-submit.mjs"
-        }
-      ]
+      "status": "excluded"
     },
     {
       "host": "www.brasilparalelo.com.br",
@@ -13602,15 +13613,10 @@
       "host": "www.rt.com",
       "provider": "www.rt.com",
       "kind": "feed",
-      "observed": true,
+      "observed": false,
       "license": "Provider terms for this feed publisher; verify before redistribution",
       "attribution": "Credit www.rt.com and link to the original feed publisher.",
-      "status": "terms-review",
-      "references": [
-        {
-          "path": "src/config/feeds.ts"
-        }
-      ]
+      "status": "excluded"
     },
     {
       "host": "www.saastr.com",
@@ -15056,15 +15062,10 @@
       "host": "yandex.com",
       "provider": "yandex.com",
       "kind": "structured",
-      "observed": true,
+      "observed": false,
       "license": "Excluded: first-party, control-plane, UI, or rendering transport",
       "attribution": "Excluded from the external-provider count: not an ingested upstream dataset.",
-      "status": "excluded",
-      "references": [
-        {
-          "path": "scripts/seo-indexnow-submit.mjs"
-        }
-      ]
+      "status": "excluded"
     },
     {
       "host": "yemenonline.info",
