@@ -210,7 +210,13 @@
     "panelCatCommodityEcon": "Економија & Трговија",
     "panelCatHappyNews": "Добри Вести",
     "panelCatHappyPlanet": "Планета & Давање",
-    "embed": "Embed"
+    "embed": "Embed",
+    "sourceRegionTT": "Trinidad & Tobago",
+    "sourceRegionTTLenses": "T&T Topic Lenses",
+    "sourceRegionCaribbean": "Caribbean",
+    "panelCatTTNews": "T&T & Caribbean News",
+    "panelCatTTLenses": "T&T Topic Lenses",
+    "panelCatTTContext": "Context & Tracking"
   },
   "panels": {
     "liveNews": "Живи новини",
@@ -342,7 +348,8 @@
       "america": "Америки",
       "africa": "Африка",
       "latam": "Латинска Америка",
-      "oceania": "Океания"
+      "oceania": "Океания",
+      "caribbean": "Caribbean"
     },
     "tips": {
       "map": "Въведете име на държава, за да летите там на карта",
@@ -1055,7 +1062,8 @@
         "asia": "Азия",
         "latam": "Латинска Америка",
         "africa": "Африка",
-        "oceania": "Океания"
+        "oceania": "Океания",
+        "caribbean": "Caribbean"
       },
       "layers": {
         "startupHubs": "Стартъп центрове",

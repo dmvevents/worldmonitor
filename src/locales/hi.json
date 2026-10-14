@@ -278,7 +278,13 @@
     "panelCatCommodityEcon": "अर्थव्यवस्था और व्यापार",
     "panelCatHappyNews": "अच्छी खबरें",
     "panelCatHappyPlanet": "प्लैनेट और दान",
-    "embed": "Embed"
+    "embed": "Embed",
+    "sourceRegionTT": "Trinidad & Tobago",
+    "sourceRegionTTLenses": "T&T Topic Lenses",
+    "sourceRegionCaribbean": "Caribbean",
+    "panelCatTTNews": "T&T & Caribbean News",
+    "panelCatTTLenses": "T&T Topic Lenses",
+    "panelCatTTContext": "Context & Tracking"
   },
   "panels": {
     "liveNews": "ताजा खबरें",
@@ -410,7 +416,8 @@
       "america": "अमेरिका",
       "africa": "अफ्रीका",
       "latam": "लैटिन अमेरिका",
-      "oceania": "ओशिनिया"
+      "oceania": "ओशिनिया",
+      "caribbean": "Caribbean"
     },
     "tips": {
       "map": "मानचित्र पर जाने के लिए देश का नाम टाइप करें",
@@ -1195,7 +1202,8 @@
         "asia": "एशिया",
         "latam": "लैटिन अमेरिका",
         "africa": "अफ्रीका",
-        "oceania": "ओशिनिया"
+        "oceania": "ओशिनिया",
+        "caribbean": "Caribbean"
       },
       "layers": {
         "startupHubs": "स्टार्टअप हब",

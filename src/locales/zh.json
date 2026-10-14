@@ -210,7 +210,13 @@
     "panelCatCommodityEcon": "经济与贸易",
     "panelCatHappyNews": "好消息",
     "panelCatHappyPlanet": "地球与慈善",
-    "embed": "Embed"
+    "embed": "Embed",
+    "sourceRegionTT": "Trinidad & Tobago",
+    "sourceRegionTTLenses": "T&T Topic Lenses",
+    "sourceRegionCaribbean": "Caribbean",
+    "panelCatTTNews": "T&T & Caribbean News",
+    "panelCatTTLenses": "T&T Topic Lenses",
+    "panelCatTTContext": "Context & Tracking"
   },
   "panels": {
     "liveNews": "实时新闻",
@@ -342,7 +348,8 @@
       "america": "美洲",
       "africa": "非洲",
       "latam": "拉丁美洲",
-      "oceania": "大洋洲"
+      "oceania": "大洋洲",
+      "caribbean": "Caribbean"
     },
     "tips": {
       "map": "输入国家名称以在地图上飞往该位置",
@@ -1055,7 +1062,8 @@
         "asia": "亚洲",
         "latam": "拉丁美洲",
         "africa": "非洲",
-        "oceania": "大洋洲"
+        "oceania": "大洋洲",
+        "caribbean": "Caribbean"
       },
       "layers": {
         "startupHubs": "创业中心",

@@ -41,6 +41,7 @@ export const COMMANDS: Command[] = [
   { id: 'nav:africa', keywords: ['africa'], label: 'Map: Africa', icon: '\u{1F30D}', category: 'navigate' },
   { id: 'nav:latam', keywords: ['latam', 'latin america', 'south america'], label: 'Map: Latin America', icon: '\u{1F30E}', category: 'navigate' },
   { id: 'nav:oceania', keywords: ['oceania', 'australia', 'pacific islands'], label: 'Map: Oceania', icon: '\u{1F30F}', category: 'navigate' },
+  { id: 'nav:caribbean', keywords: ['caribbean', 'trinidad', 'tobago', 'port of spain', 'west indies'], label: 'Map: Caribbean', icon: '\u{1F1F9}\u{1F1F9}', category: 'navigate' },
 
   // Layer presets (toggle groups)
   { id: 'layers:military', keywords: ['military', 'military layers', 'show military'], label: 'Show military layers', icon: '\u{1F396}\uFE0F', category: 'layers' },
@@ -115,6 +116,16 @@ export const COMMANDS: Command[] = [
   { id: 'panel:gov', keywords: ['government', 'gov', 'policy', 'legislation'], label: 'Panel: Government', icon: '\u{1F3DB}\uFE0F', category: 'panels' },
   { id: 'panel:policy', keywords: ['policy', 'ai policy', 'regulation', 'tech policy'], label: 'Panel: AI Policy & Regulation', icon: '\u{1F4DC}', category: 'panels' },
   { id: 'panel:thinktanks', keywords: ['think tanks', 'thinktanks', 'analysis'], label: 'Panel: Think Tanks', icon: '\u{1F9E0}', category: 'panels' },
+  // Trinidad & Tobago variant panels
+  { id: 'panel:tt-news', keywords: ['trinidad news', 'tobago news', 't&t news', 'express', 'newsday', 'guardian tt'], label: 'Panel: T&T News', icon: '\u{1F1F9}\u{1F1F9}', category: 'panels' },
+  { id: 'panel:tt-gov', keywords: ['trinidad government', 'parliament', 'ministry', 'official sources', 'ttps', 'tatt', 'ebc'], label: 'Panel: T&T Government & Official', icon: '\u{1F3DB}\uFE0F', category: 'panels' },
+  { id: 'panel:caribbean', keywords: ['caribbean', 'caricom', 'venezuela', 'guyana', 'essequibo', 'west indies'], label: 'Panel: Caribbean & Geopolitics', icon: '\u{1F30E}', category: 'panels' },
+  { id: 'panel:tt-energy', keywords: ['trinidad energy', 'lng', 'atlantic lng', 'ngc', 'point lisas', 'petrochemical'], label: 'Panel: Energy & LNG (T&T)', icon: '\u{1F525}', category: 'panels' },
+  { id: 'panel:tt-education', keywords: ['education', 'ministry of education', 'student laptops', 'laptop programme', 'schools', 'sea', 'csec'], label: 'Panel: Education & Student Laptops', icon: '\u{1F393}', category: 'panels' },
+  { id: 'panel:tt-telecoms', keywords: ['telecoms', 'tstt', 'digicel', 'tatt', 'bmobile', 'spectrum'], label: 'Panel: Telecoms (TSTT, Digicel, TATT)', icon: '\u{1F4F6}', category: 'panels' },
+  { id: 'panel:tt-public-it', keywords: ['public sector it', 'procurement', 'igovtt', 'digital transformation', 'tenders', 'e-government'], label: 'Panel: Public-Sector IT & Procurement', icon: '\u{1F5A5}\uFE0F', category: 'panels' },
+  { id: 'panel:tt-safety', keywords: ['crime', 'public safety', 'ttps', 'state of emergency', 'odpm', 'courts'], label: 'Panel: Crime & Public Safety', icon: '\u{1F6A8}', category: 'panels' },
+  { id: 'panel:tt-weather', keywords: ['weather', 'hurricane', 'tropical storm', 'met office', 'nhc', 'outages', 't&tec', 'wasa'], label: 'Panel: Weather, Hurricanes & Outages', icon: '\u{1F300}', category: 'panels' },
   { id: 'panel:polymarket', keywords: ['predictions', 'polymarket', 'forecasts'], label: 'Panel: Predictions', icon: '\u{1F52E}', category: 'panels' },
   { id: 'panel:commodities', keywords: ['commodities', 'gold', 'silver'], label: 'Panel: Commodities', icon: '\u{1F4E6}', category: 'panels' },
   { id: 'panel:markets', keywords: ['markets', 'stocks', 'indices'], label: 'Panel: Markets', icon: '\u{1F4C8}', category: 'panels' },

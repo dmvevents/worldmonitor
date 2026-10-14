@@ -253,6 +253,9 @@
     "sourceRegionDeals": "Deals & Corporate",
     "sourceRegionFinRegulation": "Financial Regulation",
     "sourceRegionGulfMena": "Gulf & MENA",
+    "sourceRegionTT": "Trinidad & Tobago",
+    "sourceRegionTTLenses": "T&T Topic Lenses",
+    "sourceRegionCaribbean": "Caribbean",
     "filterPanels": "Filter panels...",
     "resetLayout": "Reset Layout",
     "resetLayoutTooltip": "Restore default panel arrangement",
@@ -278,7 +281,10 @@
     "panelCatMining": "Mining & Supply Chain",
     "panelCatCommodityEcon": "Economy & Trade",
     "panelCatHappyNews": "Good News",
-    "panelCatHappyPlanet": "Planet & Giving"
+    "panelCatHappyPlanet": "Planet & Giving",
+    "panelCatTTNews": "T&T & Caribbean News",
+    "panelCatTTLenses": "T&T Topic Lenses",
+    "panelCatTTContext": "Context & Tracking"
   },
   "panels": {
     "liveNews": "Live News",
@@ -410,7 +416,8 @@
       "america": "Americas",
       "africa": "Africa",
       "latam": "Latin America",
-      "oceania": "Oceania"
+      "oceania": "Oceania",
+        "caribbean": "Caribbean"
     },
     "tips": {
       "map": "Type a country name to fly there on the map",
@@ -1195,7 +1202,8 @@
         "asia": "Asia",
         "latam": "Latin America",
         "africa": "Africa",
-        "oceania": "Oceania"
+        "oceania": "Oceania",
+        "caribbean": "Caribbean"
       },
       "layers": {
         "startupHubs": "Startup Hubs",

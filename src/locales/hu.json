@@ -278,7 +278,13 @@
     "panelCatCommodityEcon": "Gazdaság & Kereskedelem",
     "panelCatHappyNews": "Jó Hírek",
     "panelCatHappyPlanet": "Bolygó & Adományozás",
-    "embed": "Embed"
+    "embed": "Embed",
+    "sourceRegionTT": "Trinidad & Tobago",
+    "sourceRegionTTLenses": "T&T Topic Lenses",
+    "sourceRegionCaribbean": "Caribbean",
+    "panelCatTTNews": "T&T & Caribbean News",
+    "panelCatTTLenses": "T&T Topic Lenses",
+    "panelCatTTContext": "Context & Tracking"
   },
   "panels": {
     "liveNews": "Élő Hírek",
@@ -410,7 +416,8 @@
       "america": "Amerika",
       "africa": "Afrika",
       "latam": "Latin-Amerika",
-      "oceania": "Óceánia"
+      "oceania": "Óceánia",
+      "caribbean": "Caribbean"
     },
     "tips": {
       "map": "Írj be egy országnevet a térképen való repüléshez",
@@ -1195,7 +1202,8 @@
         "asia": "Ázsia",
         "latam": "Latin-Amerika",
         "africa": "Afrika",
-        "oceania": "Óceánia"
+        "oceania": "Óceánia",
+        "caribbean": "Caribbean"
       },
       "layers": {
         "startupHubs": "Startup központok",

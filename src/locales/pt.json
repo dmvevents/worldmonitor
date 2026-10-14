@@ -129,7 +129,8 @@
       "america": "Américas",
       "africa": "África",
       "latam": "América Latina",
-      "oceania": "Oceânia"
+      "oceania": "Oceânia",
+      "caribbean": "Caribbean"
     },
     "tips": {
       "map": "Digite o nome de um país para voar até lá no mapa",
@@ -509,7 +510,8 @@
         "mena": "MENA",
         "asia": "Ásia",
         "africa": "África",
-        "oceania": "Oceânia"
+        "oceania": "Oceânia",
+        "caribbean": "Caribbean"
       },
       "zoomIn": "Ampliar",
       "zoomOut": "Diminuir zoom",
@@ -2877,7 +2879,13 @@
     "panelCatCommodityEcon": "Economia & Comércio",
     "panelCatHappyNews": "Boas Notícias",
     "panelCatHappyPlanet": "Planeta & Doações",
-    "embed": "Embed"
+    "embed": "Embed",
+    "sourceRegionTT": "Trinidad & Tobago",
+    "sourceRegionTTLenses": "T&T Topic Lenses",
+    "sourceRegionCaribbean": "Caribbean",
+    "panelCatTTNews": "T&T & Caribbean News",
+    "panelCatTTLenses": "T&T Topic Lenses",
+    "panelCatTTContext": "Context & Tracking"
   },
   "countryBrief": {
     "identifying": "Identificando país...",

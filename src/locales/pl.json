@@ -210,7 +210,13 @@
     "panelCatCommodityEcon": "Gospodarka i Handel",
     "panelCatHappyNews": "Dobre Wiadomości",
     "panelCatHappyPlanet": "Planeta i Filantropia",
-    "embed": "Embed"
+    "embed": "Embed",
+    "sourceRegionTT": "Trinidad & Tobago",
+    "sourceRegionTTLenses": "T&T Topic Lenses",
+    "sourceRegionCaribbean": "Caribbean",
+    "panelCatTTNews": "T&T & Caribbean News",
+    "panelCatTTLenses": "T&T Topic Lenses",
+    "panelCatTTContext": "Context & Tracking"
   },
   "panels": {
     "liveNews": "Wiadomości na żywo",
@@ -342,7 +348,8 @@
       "america": "Ameryka",
       "africa": "Afryka",
       "latam": "Ameryka Łacińska",
-      "oceania": "Oceania"
+      "oceania": "Oceania",
+      "caribbean": "Caribbean"
     },
     "tips": {
       "map": "Wpisz nazwę kraju, aby przenieść się tam na mapie",
@@ -840,7 +847,8 @@
         "mena": "MENA",
         "asia": "Azja",
         "africa": "Afryka",
-        "oceania": "Oceania"
+        "oceania": "Oceania",
+        "caribbean": "Caribbean"
       },
       "zoomIn": "Powiększ",
       "zoomOut": "Pomniejsz",

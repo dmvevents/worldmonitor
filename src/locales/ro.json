@@ -210,7 +210,13 @@
     "panelCatCommodityEcon": "Economie și comerț",
     "panelCatHappyNews": "Știri bune",
     "panelCatHappyPlanet": "Planetă și donații",
-    "embed": "Embed"
+    "embed": "Embed",
+    "sourceRegionTT": "Trinidad & Tobago",
+    "sourceRegionTTLenses": "T&T Topic Lenses",
+    "sourceRegionCaribbean": "Caribbean",
+    "panelCatTTNews": "T&T & Caribbean News",
+    "panelCatTTLenses": "T&T Topic Lenses",
+    "panelCatTTContext": "Context & Tracking"
   },
   "panels": {
     "liveNews": "Știri Live",
@@ -342,7 +348,8 @@
       "america": "America",
       "africa": "Africa",
       "latam": "America Latină",
-      "oceania": "Oceania"
+      "oceania": "Oceania",
+      "caribbean": "Caribbean"
     },
     "tips": {
       "map": "Introduceți un nume de țară pentru a zbura acolo pe hartă",
@@ -1055,7 +1062,8 @@
         "asia": "Asia",
         "latam": "America Latină",
         "africa": "Africa",
-        "oceania": "Oceania"
+        "oceania": "Oceania",
+        "caribbean": "Caribbean"
       },
       "layers": {
         "startupHubs": "Hub-uri startup-uri",

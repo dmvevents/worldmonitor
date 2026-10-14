@@ -210,7 +210,13 @@
     "panelCatCommodityEcon": "Kinh tế & Thương mại",
     "panelCatHappyNews": "Tin tốt",
     "panelCatHappyPlanet": "Hành tinh & Trao tặng",
-    "embed": "Embed"
+    "embed": "Embed",
+    "sourceRegionTT": "Trinidad & Tobago",
+    "sourceRegionTTLenses": "T&T Topic Lenses",
+    "sourceRegionCaribbean": "Caribbean",
+    "panelCatTTNews": "T&T & Caribbean News",
+    "panelCatTTLenses": "T&T Topic Lenses",
+    "panelCatTTContext": "Context & Tracking"
   },
   "panels": {
     "liveNews": "Tin tức Trực tiếp",
@@ -342,7 +348,8 @@
       "america": "Châu Mỹ",
       "africa": "Châu Phi",
       "latam": "Mỹ Latinh",
-      "oceania": "Châu Đại Dương"
+      "oceania": "Châu Đại Dương",
+      "caribbean": "Caribbean"
     },
     "tips": {
       "map": "Nhập tên quốc gia để bay đến vị trí đó trên bản đồ",
@@ -1055,7 +1062,8 @@
         "asia": "Châu Á",
         "latam": "Mỹ Latinh",
         "africa": "Châu Phi",
-        "oceania": "Châu Đại Dương"
+        "oceania": "Châu Đại Dương",
+        "caribbean": "Caribbean"
       },
       "layers": {
         "startupHubs": "Trung tâm Khởi nghiệp",

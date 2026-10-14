@@ -210,7 +210,13 @@
     "panelCatCommodityEcon": "Экономика и торговля",
     "panelCatHappyNews": "Хорошие новости",
     "panelCatHappyPlanet": "Планета и благотворительность",
-    "embed": "Embed"
+    "embed": "Embed",
+    "sourceRegionTT": "Trinidad & Tobago",
+    "sourceRegionTTLenses": "T&T Topic Lenses",
+    "sourceRegionCaribbean": "Caribbean",
+    "panelCatTTNews": "T&T & Caribbean News",
+    "panelCatTTLenses": "T&T Topic Lenses",
+    "panelCatTTContext": "Context & Tracking"
   },
   "panels": {
     "liveNews": "Новости в реальном времени",
@@ -342,7 +348,8 @@
       "america": "Америка",
       "africa": "Африка",
       "latam": "Латинская Америка",
-      "oceania": "Океания"
+      "oceania": "Океания",
+      "caribbean": "Caribbean"
     },
     "tips": {
       "map": "Введите название страны, чтобы перелететь к ней на карте",
@@ -1055,7 +1062,8 @@
         "asia": "Азия",
         "latam": "Латинская Америка",
         "africa": "Африка",
-        "oceania": "Океания"
+        "oceania": "Океания",
+        "caribbean": "Caribbean"
       },
       "layers": {
         "startupHubs": "Хабы стартапов",

@@ -210,7 +210,13 @@
     "panelCatCommodityEcon": "Ekonomika a obchod",
     "panelCatHappyNews": "Dobré zprávy",
     "panelCatHappyPlanet": "Planeta a dárcovství",
-    "embed": "Embed"
+    "embed": "Embed",
+    "sourceRegionTT": "Trinidad & Tobago",
+    "sourceRegionTTLenses": "T&T Topic Lenses",
+    "sourceRegionCaribbean": "Caribbean",
+    "panelCatTTNews": "T&T & Caribbean News",
+    "panelCatTTLenses": "T&T Topic Lenses",
+    "panelCatTTContext": "Context & Tracking"
   },
   "panels": {
     "liveNews": "Živé zprávy",
@@ -342,7 +348,8 @@
       "america": "Amerika",
       "africa": "Afrika",
       "latam": "Latinská Amerika",
-      "oceania": "Oceánie"
+      "oceania": "Oceánie",
+      "caribbean": "Caribbean"
     },
     "tips": {
       "map": "Zadejte název země pro přelet na mapě",
@@ -1043,7 +1050,8 @@
         "asia": "Asie",
         "latam": "Latinská Amerika",
         "africa": "Afrika",
-        "oceania": "Oceánie"
+        "oceania": "Oceánie",
+        "caribbean": "Caribbean"
       },
       "layers": {
         "startupHubs": "Startup centra",

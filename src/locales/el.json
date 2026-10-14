@@ -210,7 +210,13 @@
     "panelCatCommodityEcon": "Οικονομία & Εμπόριο",
     "panelCatHappyNews": "Καλές Ειδήσεις",
     "panelCatHappyPlanet": "Πλανήτης & Δωρεές",
-    "embed": "Embed"
+    "embed": "Embed",
+    "sourceRegionTT": "Trinidad & Tobago",
+    "sourceRegionTTLenses": "T&T Topic Lenses",
+    "sourceRegionCaribbean": "Caribbean",
+    "panelCatTTNews": "T&T & Caribbean News",
+    "panelCatTTLenses": "T&T Topic Lenses",
+    "panelCatTTContext": "Context & Tracking"
   },
   "panels": {
     "liveNews": "Ζωντανές Ειδήσεις",
@@ -342,7 +348,8 @@
       "america": "Αμερική",
       "africa": "Αφρική",
       "latam": "Λατινική Αμερική",
-      "oceania": "Ωκεανία"
+      "oceania": "Ωκεανία",
+      "caribbean": "Caribbean"
     },
     "tips": {
       "map": "Πληκτρολογήστε ένα όνομα χώρας για να μεταβείτε εκεί στον χάρτη",
@@ -1055,7 +1062,8 @@
         "asia": "Ασία",
         "latam": "Λατινική Αμερική",
         "africa": "Αφρική",
-        "oceania": "Ωκεανία"
+        "oceania": "Ωκεανία",
+        "caribbean": "Caribbean"
       },
       "layers": {
         "startupHubs": "Startup Hubs",

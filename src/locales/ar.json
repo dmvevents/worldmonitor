@@ -210,7 +210,13 @@
     "panelCatCommodityEcon": "الاقتصاد والتجارة",
     "panelCatHappyNews": "أخبار إيجابية",
     "panelCatHappyPlanet": "الكوكب والعطاء",
-    "embed": "Embed"
+    "embed": "Embed",
+    "sourceRegionTT": "Trinidad & Tobago",
+    "sourceRegionTTLenses": "T&T Topic Lenses",
+    "sourceRegionCaribbean": "Caribbean",
+    "panelCatTTNews": "T&T & Caribbean News",
+    "panelCatTTLenses": "T&T Topic Lenses",
+    "panelCatTTContext": "Context & Tracking"
   },
   "panels": {
     "liveNews": "أخبار مباشرة",
@@ -342,7 +348,8 @@
       "america": "الأمريكتان",
       "africa": "أفريقيا",
       "latam": "أمريكا اللاتينية",
-      "oceania": "أوقيانوسيا"
+      "oceania": "أوقيانوسيا",
+      "caribbean": "Caribbean"
     },
     "tips": {
       "map": "اكتب اسم دولة للانتقال إليها على الخريطة",
@@ -1012,7 +1019,8 @@
         "asia": "آسيا",
         "latam": "أمريكا اللاتينية",
         "africa": "أفريقيا",
-        "oceania": "أوقيانوسيا"
+        "oceania": "أوقيانوسيا",
+        "caribbean": "Caribbean"
       },
       "layers": {
         "startupHubs": "مراكز الشركات الناشئة",

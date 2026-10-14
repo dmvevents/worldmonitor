@@ -210,7 +210,13 @@
     "panelCatCommodityEcon": "เศรษฐกิจและการค้า",
     "panelCatHappyNews": "ข่าวดี",
     "panelCatHappyPlanet": "โลกและการให้กำลังใจ",
-    "embed": "Embed"
+    "embed": "Embed",
+    "sourceRegionTT": "Trinidad & Tobago",
+    "sourceRegionTTLenses": "T&T Topic Lenses",
+    "sourceRegionCaribbean": "Caribbean",
+    "panelCatTTNews": "T&T & Caribbean News",
+    "panelCatTTLenses": "T&T Topic Lenses",
+    "panelCatTTContext": "Context & Tracking"
   },
   "panels": {
     "liveNews": "ข่าวสด",
@@ -342,7 +348,8 @@
       "america": "อเมริกา",
       "africa": "แอฟริกา",
       "latam": "ละตินอเมริกา",
-      "oceania": "โอเชียเนีย"
+      "oceania": "โอเชียเนีย",
+      "caribbean": "Caribbean"
     },
     "tips": {
       "map": "พิมพ์ชื่อประเทศเพื่อบินไปยังตำแหน่งบนแผนที่",
@@ -1055,7 +1062,8 @@
         "asia": "เอเชีย",
         "latam": "ละตินอเมริกา",
         "africa": "แอฟริกา",
-        "oceania": "โอเชียเนีย"
+        "oceania": "โอเชียเนีย",
+        "caribbean": "Caribbean"
       },
       "layers": {
         "startupHubs": "ศูนย์กลางสตาร์ทอัพ",

@@ -3,7 +3,7 @@ import type { MapLayers } from '@/types';
 import { isDesktopRuntime } from '@/services/runtime';
 
 export type MapRenderer = 'flat' | 'globe';
-export type MapVariant = 'full' | 'tech' | 'finance' | 'happy' | 'commodity' | 'energy';
+export type MapVariant = 'full' | 'tech' | 'finance' | 'happy' | 'commodity' | 'energy' | 'tt';
 
 const _desktop = isDesktopRuntime();
 
@@ -329,6 +329,14 @@ const VARIANT_LAYER_ORDER: Record<MapVariant, Array<keyof MapLayers>> = {
     // Energy-adjacent context
     'sanctions', 'fires', 'climate', 'weather', 'outages', 'natural',
     'resilienceScore', 'dayNight',
+  ],
+  tt: [
+    // Trinidad & Tobago / southern Caribbean — mirror of TT_MAP_LAYERS in panels.ts
+    'hotspots', 'conflicts', 'protests', 'ucdpEvents',
+    'weather', 'natural', 'climate', 'fires',
+    'cables', 'pipelines', 'storageFacilities', 'commodityPorts', 'waterways', 'tradeRoutes', 'ais', 'liveTankers',
+    'sanctions', 'outages', 'economic', 'displacement', 'diseaseOutbreaks',
+    'ciiChoropleth', 'resilienceScore', 'dayNight', 'webcams',
   ],
 };
 

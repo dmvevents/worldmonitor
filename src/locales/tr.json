@@ -210,7 +210,13 @@
     "panelCatCommodityEcon": "Ekonomi & Ticaret",
     "panelCatHappyNews": "İyi Haberler",
     "panelCatHappyPlanet": "Gezegen & Hayırseverlik",
-    "embed": "Embed"
+    "embed": "Embed",
+    "sourceRegionTT": "Trinidad & Tobago",
+    "sourceRegionTTLenses": "T&T Topic Lenses",
+    "sourceRegionCaribbean": "Caribbean",
+    "panelCatTTNews": "T&T & Caribbean News",
+    "panelCatTTLenses": "T&T Topic Lenses",
+    "panelCatTTContext": "Context & Tracking"
   },
   "panels": {
     "liveNews": "Canli Haberler",
@@ -342,7 +348,8 @@
       "america": "Amerika",
       "africa": "Afrika",
       "latam": "Latin Amerika",
-      "oceania": "Okyanusya"
+      "oceania": "Okyanusya",
+      "caribbean": "Caribbean"
     },
     "tips": {
       "map": "Haritada o konuma uçmak için bir ülke adı yazın",
@@ -1055,7 +1062,8 @@
         "asia": "Asya",
         "latam": "Latin Amerika",
         "africa": "Afrika",
-        "oceania": "Okyanusya"
+        "oceania": "Okyanusya",
+        "caribbean": "Caribbean"
       },
       "layers": {
         "startupHubs": "Girisim Merkezleri",

@@ -210,7 +210,13 @@
     "panelCatCommodityEcon": "경제 & 무역",
     "panelCatHappyNews": "좋은 소식",
     "panelCatHappyPlanet": "지구 & 기부",
-    "embed": "Embed"
+    "embed": "Embed",
+    "sourceRegionTT": "Trinidad & Tobago",
+    "sourceRegionTTLenses": "T&T Topic Lenses",
+    "sourceRegionCaribbean": "Caribbean",
+    "panelCatTTNews": "T&T & Caribbean News",
+    "panelCatTTLenses": "T&T Topic Lenses",
+    "panelCatTTContext": "Context & Tracking"
   },
   "panels": {
     "liveNews": "실시간 뉴스",
@@ -342,7 +348,8 @@
       "america": "아메리카",
       "africa": "아프리카",
       "latam": "라틴 아메리카",
-      "oceania": "오세아니아"
+      "oceania": "오세아니아",
+      "caribbean": "Caribbean"
     },
     "tips": {
       "map": "국가 이름을 입력하여 지도에서 해당 위치로 이동",
@@ -1055,7 +1062,8 @@
         "asia": "아시아",
         "latam": "중남미",
         "africa": "아프리카",
-        "oceania": "오세아니아"
+        "oceania": "오세아니아",
+        "caribbean": "Caribbean"
       },
       "layers": {
         "startupHubs": "스타트업 허브",

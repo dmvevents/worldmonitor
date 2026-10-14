@@ -37,6 +37,7 @@ import {
   enforceFreePanelLimit,
 } from '@/config';
 import { resolveNewsCategories, enabledNewsCategoryKeys } from '@/config/feed-resolution';
+import { getDefaultMapView } from '@/config/map-view';
 import { BETA_MODE } from '@/config/beta';
 import { t } from '@/services/i18n';
 import { getCurrentTheme } from '@/utils';
@@ -771,6 +772,7 @@ export class PanelLayoutManager implements AppModule {
               <option value="latam">${t('components.deckgl.views.latam')}</option>
               <option value="africa">${t('components.deckgl.views.africa')}</option>
               <option value="oceania">${t('components.deckgl.views.oceania')}</option>
+              <option value="caribbean">${t('components.deckgl.views.caribbean')}</option>
             </select>
           </div>
           <span id="missionPresetMount" class="mission-preset-mount"></span>
@@ -860,6 +862,7 @@ export class PanelLayoutManager implements AppModule {
         { value: 'latam', label: t('components.deckgl.views.latam') },
         { value: 'africa', label: t('components.deckgl.views.africa') },
         { value: 'oceania', label: t('components.deckgl.views.oceania') },
+        { value: 'caribbean', label: t('components.deckgl.views.caribbean') },
       ].map(r =>
         `<button class="region-sheet-option ${r.value === 'global' ? 'active' : ''}" data-region="${r.value}">
           <span>${r.label}</span>
@@ -872,7 +875,7 @@ export class PanelLayoutManager implements AppModule {
         <div class="map-section" id="mapSection">
           <div class="panel-header">
             <div class="panel-header-left">
-              <span class="panel-title">${SITE_VARIANT === 'tech' ? t('panels.techMap') : SITE_VARIANT === 'happy' ? 'Good News Map' : t('panels.map')}</span>
+              <span class="panel-title">${SITE_VARIANT === 'tech' ? t('panels.techMap') : SITE_VARIANT === 'happy' ? 'Good News Map' : SITE_VARIANT === 'tt' ? 'Trinidad & Tobago / Southern Caribbean' : t('panels.map')}</span>
             </div>
             <span class="header-clock" id="headerClock" translate="no"></span>
             <div class="map-header-actions">
@@ -2366,7 +2369,7 @@ export class PanelLayoutManager implements AppModule {
     this.ctx.map = new MapContainer(mapContainer, {
       zoom: this.ctx.isMobile ? 2.5 : 1.0,
       pan: { x: 0, y: 0 },
-      view: this.ctx.isMobile ? this.ctx.resolvedLocation : 'global',
+      view: getDefaultMapView(SITE_VARIANT, this.ctx.isMobile ? this.ctx.resolvedLocation : 'global'),
       layers: this.ctx.mapLayers,
       timeRange: '7d',
     }, preferGlobe);

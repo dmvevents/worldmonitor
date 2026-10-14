@@ -1092,11 +1092,167 @@ const ENERGY_MOBILE_MAP_LAYERS: MapLayers = {
   liveTankers: true,
 };
 
+// ─────────────────────────────────────────────────────────────────────────────
+// TRINIDAD & TOBAGO VARIANT (VITE_VARIANT=tt)
+// Public news + official sources, aggregate/topic level. News panel keys here
+// must match TT_FEEDS category keys in src/config/feeds.ts (a NewsPanel is
+// spawned for every CANONICAL_FEEDS key present in panelSettings).
+// Canonical description: src/config/variants/tt.ts
+// ─────────────────────────────────────────────────────────────────────────────
+const TT_PANELS: Record<string, PanelConfig> = {
+  map: { name: 'Trinidad & Tobago / Southern Caribbean', enabled: true, priority: 1 },
+  'live-news': { name: 'Live News', enabled: true, priority: 1 },
+  // T&T public news + official sources
+  'tt-news': { name: 'T&T News', enabled: true, priority: 1 },
+  'tt-gov': { name: 'T&T Government & Official', enabled: true, priority: 1 },
+  caribbean: { name: 'Caribbean & Geopolitics', enabled: true, priority: 1 },
+  // Topic lenses
+  'tt-energy': { name: 'Energy & LNG', enabled: true, priority: 1 },
+  'tt-education': { name: 'Education & Student Laptops', enabled: true, priority: 1 },
+  'tt-telecoms': { name: 'Telecoms (TSTT, Digicel, TATT)', enabled: true, priority: 1 },
+  'tt-public-it': { name: 'Public-Sector IT & Procurement', enabled: true, priority: 1 },
+  'tt-safety': { name: 'Crime & Public Safety (aggregate)', enabled: true, priority: 1 },
+  'tt-weather': { name: 'Weather, Hurricanes & Outages', enabled: true, priority: 1 },
+  // Wider context (existing feeds / data panels)
+  latam: { name: 'Latin America', enabled: true, priority: 2 },
+  politics: { name: 'World News', enabled: true, priority: 2 },
+  energy: { name: 'Global Energy & Resources', enabled: true, priority: 2 },
+  commodities: { name: 'Energy Commodities (WTI, Brent, NatGas)', enabled: true, priority: 2 },
+  'energy-complex': { name: 'Oil & Gas Complex', enabled: false, priority: 2 },
+  polymarket: { name: 'Predictions', enabled: false, priority: 2 },
+  insights: { name: 'AI Insights', enabled: false, priority: 2 },
+  climate: { name: 'Climate Anomalies', enabled: false, priority: 2 },
+  'disease-outbreaks': { name: 'Disease Outbreaks', enabled: false, priority: 2 },
+  monitors: { name: 'My Monitors', enabled: true, priority: 2 },
+  'world-clock': { name: 'World Clock', enabled: true, priority: 2 },
+};
+
+// Caribbean-relevant layers only; everything else explicitly off. Enabled keys
+// must appear in VARIANT_LAYER_ORDER.tt (map-layer-definitions.ts) — guardrail
+// test: tests/variant-layer-guardrail.test.mjs
+const TT_MAP_LAYERS: MapLayers = {
+  iranAttacks: false,
+  gpsJamming: false,
+  satellites: false,
+  conflicts: true,
+  bases: false,
+  cables: true,
+  pipelines: true,
+  storageFacilities: true,
+  fuelShortages: false,
+  hotspots: true,
+  ais: false,
+  nuclear: false,
+  irradiators: false,
+  radiationWatch: false,
+  sanctions: true,
+  weather: true,
+  economic: false,
+  waterways: true,
+  outages: false,
+  cyberThreats: false,
+  datacenters: false,
+  protests: false,
+  flights: false,
+  military: false,
+  natural: true,
+  spaceports: false,
+  minerals: false,
+  fires: false,
+  ucdpEvents: false,
+  displacement: false,
+  climate: false,
+  startupHubs: false,
+  cloudRegions: false,
+  accelerators: false,
+  techHQs: false,
+  techEvents: false,
+  stockExchanges: false,
+  financialCenters: false,
+  centralBanks: false,
+  commodityHubs: false,
+  gulfInvestments: false,
+  positiveEvents: false,
+  kindness: false,
+  happiness: false,
+  speciesRecovery: false,
+  renewableInstallations: false,
+  tradeRoutes: false,
+  ciiChoropleth: false,
+  resilienceScore: false,
+  dayNight: false,
+  miningSites: false,
+  processingPlants: false,
+  commodityPorts: true,
+  webcams: false,
+  diseaseOutbreaks: false,
+  liveTankers: false,
+};
+
+const TT_MOBILE_MAP_LAYERS: MapLayers = {
+  iranAttacks: false,
+  gpsJamming: false,
+  satellites: false,
+  conflicts: true,
+  bases: false,
+  cables: false,
+  pipelines: false,
+  storageFacilities: false,
+  fuelShortages: false,
+  hotspots: true,
+  ais: false,
+  nuclear: false,
+  irradiators: false,
+  radiationWatch: false,
+  sanctions: true,
+  weather: true,
+  economic: false,
+  waterways: false,
+  outages: false,
+  cyberThreats: false,
+  datacenters: false,
+  protests: false,
+  flights: false,
+  military: false,
+  natural: true,
+  spaceports: false,
+  minerals: false,
+  fires: false,
+  ucdpEvents: false,
+  displacement: false,
+  climate: false,
+  startupHubs: false,
+  cloudRegions: false,
+  accelerators: false,
+  techHQs: false,
+  techEvents: false,
+  stockExchanges: false,
+  financialCenters: false,
+  centralBanks: false,
+  commodityHubs: false,
+  gulfInvestments: false,
+  positiveEvents: false,
+  kindness: false,
+  happiness: false,
+  speciesRecovery: false,
+  renewableInstallations: false,
+  tradeRoutes: false,
+  ciiChoropleth: false,
+  resilienceScore: false,
+  dayNight: false,
+  miningSites: false,
+  processingPlants: false,
+  commodityPorts: false,
+  webcams: false,
+  diseaseOutbreaks: false,
+  liveTankers: false,
+};
+
 // ============================================
 // UNIFIED PANEL REGISTRY
 // ============================================
 
-type PanelVariant = 'full' | 'tech' | 'finance' | 'commodity' | 'energy' | 'happy';
+type PanelVariant = 'full' | 'tech' | 'finance' | 'commodity' | 'energy' | 'happy' | 'tt';
 
 const VARIANT_PANEL_CONFIGS: Record<PanelVariant, Record<string, PanelConfig>> = {
   full: FULL_PANELS,
@@ -1105,6 +1261,7 @@ const VARIANT_PANEL_CONFIGS: Record<PanelVariant, Record<string, PanelConfig>> =
   commodity: COMMODITY_PANELS,
   energy: ENERGY_PANELS,
   happy: HAPPY_PANELS,
+  tt: TT_PANELS,
 };
 
 function getVariantPanelConfigs(variant: string): Record<string, PanelConfig> | undefined {
@@ -1115,6 +1272,7 @@ function getVariantPanelConfigs(variant: string): Record<string, PanelConfig> | 
 
 /** All panels from all variants — canonical cross-variant registry. */
 export const ALL_PANELS: Record<string, PanelConfig> = {
+  ...TT_PANELS,
   ...HAPPY_PANELS,
   ...COMMODITY_PANELS,
   ...ENERGY_PANELS,
@@ -1131,6 +1289,7 @@ export const VARIANT_DEFAULTS: Record<string, string[]> = {
   commodity: Object.keys(VARIANT_PANEL_CONFIGS.commodity),
   energy:    Object.keys(VARIANT_PANEL_CONFIGS.energy),
   happy:     Object.keys(VARIANT_PANEL_CONFIGS.happy),
+  tt:        Object.keys(VARIANT_PANEL_CONFIGS.tt),
 };
 
 /**
@@ -1300,7 +1459,9 @@ export const DEFAULT_MAP_LAYERS = SITE_VARIANT === 'happy'
         ? COMMODITY_MAP_LAYERS
         : SITE_VARIANT === 'energy'
           ? ENERGY_MAP_LAYERS
-          : FULL_MAP_LAYERS;
+          : SITE_VARIANT === 'tt'
+            ? TT_MAP_LAYERS
+            : FULL_MAP_LAYERS;
 
 export const MOBILE_DEFAULT_MAP_LAYERS = SITE_VARIANT === 'happy'
   ? HAPPY_MOBILE_MAP_LAYERS
@@ -1312,7 +1473,9 @@ export const MOBILE_DEFAULT_MAP_LAYERS = SITE_VARIANT === 'happy'
         ? COMMODITY_MOBILE_MAP_LAYERS
         : SITE_VARIANT === 'energy'
           ? ENERGY_MOBILE_MAP_LAYERS
-          : FULL_MOBILE_MAP_LAYERS;
+          : SITE_VARIANT === 'tt'
+            ? TT_MOBILE_MAP_LAYERS
+            : FULL_MOBILE_MAP_LAYERS;
 
 /** Maps map-layer toggle keys to their data-freshness source IDs (single source of truth). */
 export const LAYER_TO_SOURCE: Partial<Record<keyof MapLayers, DataSourceId[]>> = {
@@ -1461,6 +1624,23 @@ export const PANEL_CATEGORY_MAP: Record<string, { labelKey: string; panelKeys: s
     labelKey: 'header.panelCatHappyPlanet',
     panelKeys: ['species', 'renewable', 'giving'],
     variants: ['happy'],
+  },
+
+  // Trinidad & Tobago variant
+  ttNews: {
+    labelKey: 'header.panelCatTTNews',
+    panelKeys: ['tt-news', 'tt-gov', 'caribbean', 'latam', 'politics'],
+    variants: ['tt'],
+  },
+  ttLenses: {
+    labelKey: 'header.panelCatTTLenses',
+    panelKeys: ['tt-energy', 'tt-education', 'tt-telecoms', 'tt-public-it', 'tt-safety', 'tt-weather'],
+    variants: ['tt'],
+  },
+  ttContext: {
+    labelKey: 'header.panelCatTTContext',
+    panelKeys: ['energy', 'commodities', 'energy-complex', 'polymarket', 'insights', 'climate', 'disease-outbreaks', 'monitors', 'world-clock'],
+    variants: ['tt'],
   },
 };
 

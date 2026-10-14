@@ -129,7 +129,8 @@
       "america": "Amerika",
       "africa": "Afrika",
       "latam": "Latinamerika",
-      "oceania": "Oceanien"
+      "oceania": "Oceanien",
+      "caribbean": "Caribbean"
     },
     "tips": {
       "map": "Skriv ett landsnamn för att flyga dit på kartan",
@@ -509,7 +510,8 @@
         "mena": "MENA",
         "asia": "Asien",
         "africa": "Afrika",
-        "oceania": "Oceanien"
+        "oceania": "Oceanien",
+        "caribbean": "Caribbean"
       },
       "zoomIn": "Zooma in",
       "zoomOut": "Zooma ut",
@@ -2861,7 +2863,13 @@
     "panelCatCommodityEcon": "Ekonomi & Handel",
     "panelCatHappyNews": "Goda Nyheter",
     "panelCatHappyPlanet": "Planet & Välgörenhet",
-    "embed": "Embed"
+    "embed": "Embed",
+    "sourceRegionTT": "Trinidad & Tobago",
+    "sourceRegionTTLenses": "T&T Topic Lenses",
+    "sourceRegionCaribbean": "Caribbean",
+    "panelCatTTNews": "T&T & Caribbean News",
+    "panelCatTTLenses": "T&T Topic Lenses",
+    "panelCatTTContext": "Context & Tracking"
   },
   "countryBrief": {
     "identifying": "Identifierar land...",

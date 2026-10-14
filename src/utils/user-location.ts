@@ -1,6 +1,13 @@
 import { isDesktopRuntime, toApiUrl } from '@/services/runtime';
 
-type MapView = 'global' | 'america' | 'mena' | 'eu' | 'asia' | 'latam' | 'africa' | 'oceania';
+type MapView = 'global' | 'america' | 'mena' | 'eu' | 'asia' | 'latam' | 'africa' | 'oceania' | 'caribbean';
+
+const CARIBBEAN_TIMEZONES = new Set([
+  'America/Port_of_Spain', 'America/Barbados', 'America/Grenada', 'America/St_Vincent',
+  'America/St_Lucia', 'America/Dominica', 'America/Antigua', 'America/St_Kitts', 'America/Guyana',
+  'America/Jamaica', 'America/Caracas', 'America/Curacao', 'America/Aruba', 'America/Martinique',
+  'America/Guadeloupe', 'America/Puerto_Rico', 'America/Santo_Domingo', 'America/Port-au-Prince',
+]);
 
 const ASIA_EAST_TIMEZONES = new Set([
   'Asia/Tokyo', 'Asia/Seoul', 'Asia/Shanghai', 'Asia/Hong_Kong',
@@ -9,6 +16,7 @@ const ASIA_EAST_TIMEZONES = new Set([
 
 function timezoneToRegion(tz: string): MapView | null {
   if (ASIA_EAST_TIMEZONES.has(tz)) return 'asia';
+  if (CARIBBEAN_TIMEZONES.has(tz)) return 'caribbean';
   const prefix = tz.split('/')[0];
   switch (prefix) {
     case 'America':
@@ -30,6 +38,8 @@ function timezoneToRegion(tz: string): MapView | null {
 }
 
 function coordsToRegion(lat: number, lon: number): MapView {
+  // Caribbean basin (Lesser Antilles → Greater Antilles, incl. T&T and the Guyana coast) before the wider LatAm/America boxes
+  if (lat > 8 && lat < 24 && lon > -86 && lon < -57) return 'caribbean';
   if (lat > 15 && lon > 60 && lon < 150) return 'asia';
   if (lat > 10 && lat < 45 && lon > 25 && lon < 65) return 'mena';
   if (lat > -40 && lat < 40 && lon > -25 && lon < 55) return 'africa';
@@ -68,6 +78,8 @@ const TIMEZONE_TO_COUNTRY: Record<string, string> = {
   'America/Edmonton': 'CA', 'America/Winnipeg': 'CA', 'America/Halifax': 'CA',
   'America/Mexico_City': 'MX', 'America/Sao_Paulo': 'BR', 'America/Argentina/Buenos_Aires': 'AR',
   'America/Bogota': 'CO', 'America/Lima': 'PE', 'America/Santiago': 'CL',
+  'America/Port_of_Spain': 'TT', 'America/Barbados': 'BB', 'America/Jamaica': 'JM',
+  'America/Guyana': 'GY', 'America/Caracas': 'VE',
   'Asia/Tokyo': 'JP', 'Asia/Seoul': 'KR', 'Asia/Shanghai': 'CN',
   'Asia/Hong_Kong': 'HK', 'Asia/Taipei': 'TW', 'Asia/Singapore': 'SG',
   'Asia/Kolkata': 'IN', 'Asia/Dubai': 'AE', 'Asia/Riyadh': 'SA',

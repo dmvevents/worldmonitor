@@ -59,7 +59,7 @@ import { trackGateHit } from '@/services/analytics';
 export type { ScenarioVisualState, ScenarioResult };
 
 export type TimeRange = '1h' | '6h' | '24h' | '48h' | '7d' | 'all';
-export type MapView = 'global' | 'america' | 'mena' | 'eu' | 'asia' | 'latam' | 'africa' | 'oceania';
+export type MapView = 'global' | 'america' | 'mena' | 'eu' | 'asia' | 'latam' | 'africa' | 'oceania' | 'caribbean';
 
 type RendererKind = 'svg' | 'deck' | 'globe';
 type PendingCenter = { lat: number; lon: number; zoom?: number };

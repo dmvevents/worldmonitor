@@ -1,5 +1,6 @@
 import { Panel } from './Panel';
 import { t, getLocale } from '@/services/i18n';
+import { SITE_VARIANT } from '@/config';
 import { unsafeRawHtml } from '@/utils/sanitize';
 
 interface CityEntry {
@@ -42,10 +43,17 @@ const WORLD_CITIES: CityEntry[] = [
   { id: 'jakarta', city: 'Jakarta', label: 'IDX', timezone: 'Asia/Jakarta', marketOpen: 9, marketClose: 16 },
   { id: 'taipei', city: 'Taipei', label: 'TWSE', timezone: 'Asia/Taipei', marketOpen: 9, marketClose: 13 },
   { id: 'kuala-lumpur', city: 'Kuala Lumpur', label: 'Bursa', timezone: 'Asia/Kuala_Lumpur', marketOpen: 9, marketClose: 17 },
+  // Caribbean (tt variant home region)
+  { id: 'port-of-spain', city: 'Port of Spain', label: 'TTSE', timezone: 'America/Port_of_Spain', marketOpen: 9, marketClose: 12 },
+  { id: 'georgetown', city: 'Georgetown', label: 'GSE', timezone: 'America/Guyana' },
+  { id: 'caracas', city: 'Caracas', label: 'BVC', timezone: 'America/Caracas', marketOpen: 9, marketClose: 13 },
+  { id: 'bridgetown', city: 'Bridgetown', label: 'BSE', timezone: 'America/Barbados' },
+  { id: 'kingston', city: 'Kingston', label: 'JSE', timezone: 'America/Jamaica', marketOpen: 9, marketClose: 13 },
 ];
 
 const CITY_REGIONS: { name: string; ids: string[] }[] = [
   { name: 'Americas', ids: ['new-york', 'chicago', 'toronto', 'los-angeles', 'mexico-city', 'sao-paulo', 'buenos-aires'] },
+  { name: 'Caribbean', ids: ['port-of-spain', 'bridgetown', 'georgetown', 'caracas', 'kingston'] },
   { name: 'Europe', ids: ['london', 'paris', 'frankfurt', 'zurich', 'moscow', 'istanbul'] },
   { name: 'Middle East & Africa', ids: ['riyadh', 'dubai', 'cairo', 'lagos', 'johannesburg'] },
   { name: 'Asia-Pacific', ids: ['mumbai', 'bangkok', 'jakarta', 'kuala-lumpur', 'singapore', 'hong-kong', 'shanghai', 'taipei', 'seoul', 'tokyo', 'sydney', 'auckland'] },
@@ -65,7 +73,9 @@ TIMEZONE_TO_CITY['Asia/Saigon'] = 'bangkok';
 TIMEZONE_TO_CITY['Pacific/Sydney'] = 'sydney';
 
 const STORAGE_KEY = 'worldmonitor-world-clock-cities';
-const DEFAULT_CITIES = ['new-york', 'london', 'dubai', 'bangkok', 'tokyo', 'sydney'];
+const DEFAULT_CITIES = SITE_VARIANT === 'tt'
+  ? ['port-of-spain', 'new-york', 'caracas', 'georgetown', 'london', 'tokyo']
+  : ['new-york', 'london', 'dubai', 'bangkok', 'tokyo', 'sydney'];
 
 function detectHomeCity(): string | null {
   try {
