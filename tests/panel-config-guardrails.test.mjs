@@ -9,7 +9,7 @@ const panelLayoutSrc = readFileSync(resolve(__dirname, '../src/app/panel-layout.
 const panelsSrc = readFileSync(resolve(__dirname, '../src/config/panels.ts'), 'utf-8');
 const commandsSrc = readFileSync(resolve(__dirname, '../src/config/commands.ts'), 'utf-8');
 
-const VARIANT_FILES = ['full', 'tech', 'finance', 'commodity', 'energy', 'happy', 'tt'];
+const VARIANT_FILES = ['full', 'tech', 'finance', 'commodity', 'energy', 'happy', 'tt', 'chips', 'gy'];
 const PANEL_WIDE_CLASS_RE = /className:\s*['"][^'"]*\bpanel-wide\b/;
 const COMPONENT_SOURCE_RE = /\.tsx?$/;
 
@@ -565,6 +565,17 @@ describe('panel-config guardrails', () => {
     const allowedPairs = new Set([
       'ai-regulation|fin-regulation',
       'fin-regulation|ai-regulation',
+      // Country variants share lens names by design (tt-* vs gy-*).
+      'tt-news|gy-news',
+      'gy-news|tt-news',
+      'tt-gov|gy-gov',
+      'gy-gov|tt-gov',
+      'tt-safety|gy-safety',
+      'gy-safety|tt-safety',
+      'tt-weather|gy-weather',
+      'gy-weather|tt-weather',
+      'TT_PANELS|GY_PANELS',
+      'GY_PANELS|TT_PANELS',
     ]);
     const typos = [];
     for (let i = 0; i < keys.length; i++) {

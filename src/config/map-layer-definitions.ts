@@ -3,7 +3,7 @@ import type { MapLayers } from '@/types';
 import { isDesktopRuntime } from '@/services/runtime';
 
 export type MapRenderer = 'flat' | 'globe';
-export type MapVariant = 'full' | 'tech' | 'finance' | 'happy' | 'commodity' | 'energy' | 'tt';
+export type MapVariant = 'full' | 'tech' | 'finance' | 'happy' | 'commodity' | 'energy' | 'tt' | 'chips' | 'gy';
 
 const _desktop = isDesktopRuntime();
 
@@ -341,6 +341,14 @@ const VARIANT_LAYER_ORDER: Record<MapVariant, Array<keyof MapLayers>> = {
     'cables', 'pipelines', 'storageFacilities', 'commodityPorts', 'waterways', 'tradeRoutes', 'ais', 'liveTankers',
     'sanctions', 'outages', 'economic', 'displacement', 'diseaseOutbreaks',
     'ciiChoropleth', 'resilienceScore', 'dayNight', 'webcams',
+  ],
+  gy: [
+    // Guyana — mirror of GY_MAP_LAYERS in panels.ts
+    'hurricanes', 'hotspots', 'conflicts', 'protests', 'ucdpEvents', 'weather', 'natural', 'climate', 'fires', 'cables', 'pipelines', 'storageFacilities', 'commodityPorts', 'waterways', 'tradeRoutes', 'ais', 'liveTankers', 'minerals', 'sanctions', 'outages', 'economic', 'displacement', 'diseaseOutbreaks', 'ciiChoropleth', 'resilienceScore', 'dayNight', 'webcams',
+  ],
+  chips: [
+    // AI Compute & Semiconductors — mirror of CHIPS_MAP_LAYERS in panels.ts
+    'datacenters', 'cloudRegions', 'techHQs', 'startupHubs', 'accelerators', 'cables', 'outages', 'cyberThreats', 'techEvents', 'resilienceScore', 'natural', 'fires', 'dayNight',
   ],
 };
 

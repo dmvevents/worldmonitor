@@ -8,9 +8,11 @@
     "happy": 6,
     "commodity": 18,
     "energy": 18,
-    "tt": 27
+    "tt": 27,
+    "gy": 27,
+    "chips": 13
   },
-  "variantCount": 7,
+  "variantCount": 9,
   "componentTopLevelTsFiles": 160,
   "serviceTopLevelEntries": 198,
   "apiEndpointEntries": 88,
@@ -73,7 +75,7 @@
   "workflowCount": 20,
   "freshnessSources": 35,
   "freshnessRequiredForRisk": 2,
-  "feedDefinitions": 636,
+  "feedDefinitions": 713,
   "airportCount": 111,
   "stockExchangeCount": 29,
   "centralBankInstitutionCount": 14,

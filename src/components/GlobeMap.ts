@@ -2753,6 +2753,7 @@ export class GlobeMap {
     oceania:  { lat: -25, lng: 140,  altitude: 1.5 },
     caribbean: { lat: 12.5, lng: -62.5, altitude: 0.5 },
     trinidad: { lat: 10.7, lng: -61.2, altitude: 0.12 },
+    guyana: { lat: 4.9, lng: -58.9, altitude: 0.35 },
   };
 
   public setView(view: MapView, zoom?: number): void {

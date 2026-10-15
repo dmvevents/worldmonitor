@@ -82,6 +82,8 @@ const VARIANT_DEFAULTS = {
   commodity: { desktop: 'COMMODITY_MAP_LAYERS',  mobile: 'COMMODITY_MOBILE_MAP_LAYERS' },
   energy:    { desktop: 'ENERGY_MAP_LAYERS',     mobile: 'ENERGY_MOBILE_MAP_LAYERS' },
   tt:        { desktop: 'TT_MAP_LAYERS',         mobile: 'TT_MOBILE_MAP_LAYERS' },
+  chips:    { desktop: 'CHIPS_MAP_LAYERS', mobile: 'CHIPS_MOBILE_MAP_LAYERS' },
+  gy:       { desktop: 'GY_MAP_LAYERS', mobile: 'GY_MOBILE_MAP_LAYERS' },
 };
 
 describe('variant layer guardrail', () => {

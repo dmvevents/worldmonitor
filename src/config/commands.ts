@@ -42,6 +42,7 @@ export const COMMANDS: Command[] = [
   { id: 'nav:latam', keywords: ['latam', 'latin america', 'south america'], label: 'Map: Latin America', icon: '\u{1F30E}', category: 'navigate' },
   { id: 'nav:oceania', keywords: ['oceania', 'australia', 'pacific islands'], label: 'Map: Oceania', icon: '\u{1F30F}', category: 'navigate' },
   { id: 'nav:caribbean', keywords: ['caribbean', 'west indies', 'antilles', 'venezuela', 'guyana'], label: 'Map: Caribbean', icon: '\u{1F30E}', category: 'navigate' },
+  { id: 'nav:guyana', keywords: ['guyana', 'georgetown', 'essequibo', 'berbice', 'demerara'], label: 'Map: Guyana', icon: '\u{1F1EC}\u{1F1FE}', category: 'navigate' },
   { id: 'nav:trinidad', keywords: ['trinidad', 'tobago', 'port of spain', 'san fernando', 'scarborough', 't&t'], label: 'Map: Trinidad & Tobago', icon: '\u{1F1F9}\u{1F1F9}', category: 'navigate' },
 
   // Layer presets (toggle groups)
@@ -119,6 +120,20 @@ export const COMMANDS: Command[] = [
   { id: 'panel:gov', keywords: ['government', 'gov', 'policy', 'legislation'], label: 'Panel: Government', icon: '\u{1F3DB}\uFE0F', category: 'panels' },
   { id: 'panel:policy', keywords: ['policy', 'ai policy', 'regulation', 'tech policy'], label: 'Panel: AI Policy & Regulation', icon: '\u{1F4DC}', category: 'panels' },
   { id: 'panel:thinktanks', keywords: ['think tanks', 'thinktanks', 'analysis'], label: 'Panel: Think Tanks', icon: '\u{1F9E0}', category: 'panels' },
+  // Guyana variant panels
+  { id: 'panel:gy-news', keywords: ['guyana news', 'stabroek', 'kaieteur', 'georgetown news'], label: 'Panel: Guyana News', icon: '\u{1F1EC}\u{1F1FE}', category: 'panels' },
+  { id: 'panel:gy-gov', keywords: ['guyana government', 'dpi', 'gecom', 'parliament guyana'], label: 'Panel: Guyana Government and Official', icon: '\u{1F3DB}\uFE0F', category: 'panels' },
+  { id: 'panel:gy-oil', keywords: ['guyana oil', 'stabroek block', 'exxon guyana', 'gas to energy', 'oilnow'], label: 'Panel: Guyana Oil, Gas and Energy', icon: '\u{1F6E2}\uFE0F', category: 'panels' },
+  { id: 'panel:gy-essequibo', keywords: ['essequibo', 'venezuela guyana', 'icj', 'caricom', 'border'], label: 'Panel: Essequibo and Regional Geopolitics', icon: '\u{1F30E}', category: 'panels' },
+  { id: 'panel:gy-economy', keywords: ['guyana economy', 'bank of guyana', 'natural resource fund', 'budget', 'infrastructure'], label: 'Panel: Guyana Economy and Infrastructure', icon: '\u{1F4C8}', category: 'panels' },
+  { id: 'panel:gy-safety', keywords: ['guyana police', 'public safety', 'gpf', 'gdf', 'courts'], label: 'Panel: Guyana Public Safety', icon: '\u{1F6A8}', category: 'panels' },
+  { id: 'panel:gy-weather', keywords: ['guyana weather', 'hydromet', 'flooding', 'hurricane', 'nhc'], label: 'Panel: Guyana Weather, Flooding and Hurricanes', icon: '\u{1F327}\uFE0F', category: 'panels' },
+  // AI Compute & Semiconductors variant panels
+  { id: 'panel:chips-semis', keywords: ['semiconductors', 'nvidia', 'amd', 'gpu', 'accelerators', 'chips'], label: 'Panel: Semiconductors and Accelerators', icon: '\u{1F4BE}', category: 'panels' },
+  { id: 'panel:chips-datacenters', keywords: ['data centers', 'datacenters', 'hyperscalers', 'capex', 'grid power', 'cooling'], label: 'Panel: Data Centres, Power and Hyperscalers', icon: '\u{1F3ED}', category: 'panels' },
+  { id: 'panel:chips-ailabs', keywords: ['ai labs', 'deepmind', 'openai', 'anthropic', 'hugging face', 'frontier models'], label: 'Panel: AI Labs and Research', icon: '\u{1F9E0}', category: 'panels' },
+  { id: 'panel:chips-policy', keywords: ['export controls', 'chips act', 'chip ban', 'ai regulation', 'taiwan semiconductor'], label: 'Panel: Chip Policy and Export Controls', icon: '\u{2696}\uFE0F', category: 'panels' },
+  { id: 'panel:chips-markets', keywords: ['chip stocks', 'semis earnings', 'hbm', 'memory', 'foundry', 'tsmc'], label: 'Panel: Chip Markets, Memory and Foundry', icon: '\u{1F4C8}', category: 'panels' },
   // Trinidad & Tobago variant panels
   { id: 'panel:tt-news', keywords: ['trinidad news', 'tobago news', 't&t news', 'express', 'newsday', 'guardian tt'], label: 'Panel: T&T News', icon: '\u{1F1F9}\u{1F1F9}', category: 'panels' },
   { id: 'panel:tt-gov', keywords: ['trinidad government', 'parliament', 'ministry', 'official sources', 'ttps', 'tatt', 'ebc'], label: 'Panel: T&T Government & Official', icon: '\u{1F3DB}\uFE0F', category: 'panels' },

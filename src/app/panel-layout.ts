@@ -776,6 +776,7 @@ export class PanelLayoutManager implements AppModule {
               <option value="oceania">${t('components.deckgl.views.oceania')}</option>
               <option value="caribbean">${t('components.deckgl.views.caribbean')}</option>
               <option value="trinidad">${t('components.deckgl.views.trinidad')}</option>
+              <option value="guyana">${t('components.deckgl.views.guyana')}</option>
             </select>
           </div>
           <span id="missionPresetMount" class="mission-preset-mount"></span>
@@ -867,6 +868,7 @@ export class PanelLayoutManager implements AppModule {
         { value: 'oceania', label: t('components.deckgl.views.oceania') },
         { value: 'caribbean', label: t('components.deckgl.views.caribbean') },
         { value: 'trinidad', label: t('components.deckgl.views.trinidad') },
+        { value: 'guyana', label: t('components.deckgl.views.guyana') },
       ].map(r =>
         `<button class="region-sheet-option ${r.value === initialRegion ? 'active' : ''}" data-region="${r.value}">
           <span>${r.label}</span>
@@ -879,7 +881,7 @@ export class PanelLayoutManager implements AppModule {
         <div class="map-section" id="mapSection">
           <div class="panel-header">
             <div class="panel-header-left">
-              <span class="panel-title">${SITE_VARIANT === 'tech' ? t('panels.techMap') : SITE_VARIANT === 'happy' ? 'Good News Map' : SITE_VARIANT === 'tt' ? 'Trinidad & Tobago / Southern Caribbean' : t('panels.map')}</span>
+              <span class="panel-title">${SITE_VARIANT === 'tech' ? t('panels.techMap') : SITE_VARIANT === 'happy' ? 'Good News Map' : SITE_VARIANT === 'tt' ? 'Trinidad & Tobago / Southern Caribbean' : SITE_VARIANT === 'gy' ? 'Guyana / Guiana Shield' : SITE_VARIANT === 'chips' ? 'AI Compute: Data Centres, Fabs and Cloud Regions' : t('panels.map')}</span>
             </div>
             <span class="header-clock" id="headerClock" translate="no"></span>
             <div class="map-header-actions">

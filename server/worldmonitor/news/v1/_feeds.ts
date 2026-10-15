@@ -571,6 +571,117 @@ export const VARIANT_FEEDS: Record<string, Record<string, ServerFeed[]>> = {
       { name: 'Caribbean Geopolitics', url: gn('Caribbean (China OR "United States" OR Cuba OR Haiti OR SOUTHCOM OR Venezuela OR Colombia) when:2d') },
     ],
   },
+
+  // ── Guyana variant (mirrors src/config/feeds.ts GY_FEEDS) ──
+  gy: {
+    'gy-news': [
+      { name: 'Stabroek News', url: gn('site:stabroeknews.com when:1d') },
+      { name: 'Kaieteur News', url: gn('site:kaieteurnewsonline.com when:1d') },
+      { name: 'News Room Guyana', url: gn('site:newsroom.gy when:1d') },
+      { name: 'iNews Guyana', url: 'https://inewsguyana.com/feed/' },
+      { name: 'Guyana Chronicle', url: 'https://guyanachronicle.com/feed/' },
+      { name: 'Guyana Times', url: 'https://guyanatimesgy.com/feed/' },
+      { name: 'Demerara Waves', url: 'https://demerarawaves.com/feed/' },
+      { name: 'Village Voice GY', url: 'https://villagevoicenews.com/feed/' },
+      { name: 'Guyana Headlines', url: gn('Guyana when:1d') },
+    ],
+    'gy-gov': [
+      { name: 'DPI Guyana', url: 'https://dpi.gov.gy/feed/' },
+      { name: 'Guyana Revenue Authority', url: 'https://gra.gov.gy/feed/' },
+      { name: 'Parliament of Guyana', url: gn('site:parliament.gov.gy when:7d') },
+      { name: 'GECOM', url: gn('(site:gecom.org.gy OR "Guyana Elections Commission") when:7d') },
+      { name: 'Office of the President GY', url: gn('(site:op.gov.gy OR "Office of the President" Guyana) when:3d') },
+      { name: 'Ministry of Natural Resources GY', url: gn('(site:mnr.gov.gy OR "Ministry of Natural Resources" Guyana) when:7d') },
+    ],
+    'gy-oil': [
+      { name: 'OilNOW', url: gn('site:oilnow.gy when:2d') },
+      { name: 'Stabroek Block Watch', url: gn('Guyana (Exxon OR ExxonMobil OR "Stabroek block" OR Hess OR CNOOC OR "Liza" OR "Payara" OR "Yellowtail" OR "Uaru" OR "Whiptail") when:2d') },
+      { name: 'Gas-to-Energy and Power', url: gn('Guyana ("gas-to-energy" OR "Wales" power plant OR GPL OR "Guyana Power and Light" OR "Natural Resource Fund") when:3d') },
+      { name: 'Guyana Power and Light', url: 'https://gplinc.com/feed/' },
+      { name: 'Guiana Basin Energy', url: gn('(Suriname OR "Guyana-Suriname basin" OR Staatsolie OR TotalEnergies Suriname OR "Block 58") when:3d') },
+    ],
+    'gy-essequibo': [
+      { name: 'Essequibo Watch', url: gn('(Essequibo OR "Guyana Venezuela" OR "ICJ Guyana" OR "Ankoko" OR "Guyana border") when:2d') },
+      { name: 'Venezuela Watch', url: gn('Venezuela (Maduro OR sanctions OR "National Assembly" OR migrants OR SOUTHCOM) when:1d') },
+      { name: 'CARICOM and Regional', url: gn('(CARICOM OR "Caribbean Community" OR "Caribbean Court of Justice" OR OECS) when:3d') },
+      { name: 'Brazil and Suriname Border', url: gn('Guyana (Brazil OR Suriname OR Lethem OR Corentyne OR "Takutu") when:3d') },
+    ],
+    'gy-economy': [
+      { name: 'Bank of Guyana', url: gn('(site:bankofguyana.org.gy OR "Bank of Guyana") when:7d') },
+      { name: 'Guyana Economy', url: gn('Guyana (budget OR GDP OR inflation OR "cost of living" OR "Natural Resource Fund" OR gold OR bauxite OR rice OR sugar OR GuySuCo) when:2d') },
+      { name: 'Georgetown Chamber', url: gn('(site:gcci.gy OR "Georgetown Chamber of Commerce" OR "Private Sector Commission" Guyana) when:7d') },
+      { name: 'Guyana Infrastructure', url: gn('Guyana (highway OR bridge OR "Demerara Harbour Bridge" OR housing OR "Silica City" OR airport OR port) when:3d') },
+    ],
+    'gy-safety': [
+      { name: 'Guyana Public Safety', url: gn('Guyana ("Guyana Police Force" OR GPF OR police OR homicide OR GDF OR "Defence Force" OR trafficking OR "Coast Guard") when:1d') },
+      { name: 'Civil Defence Commission', url: gn('("Civil Defence Commission" OR CDC Guyana) when:7d') },
+      { name: 'Guyana Courts', url: gn('Guyana ("High Court" OR "Court of Appeal" OR "Caribbean Court of Justice" OR DPP OR "Chief Justice") when:3d') },
+    ],
+    'gy-weather': [
+      { name: 'Guyana Hydromet', url: 'https://hydromet.gov.gy/feed/' },
+      { name: 'NHC Atlantic', url: 'https://www.nhc.noaa.gov/index-at.xml' },
+      { name: 'Guyana Weather and Flooding', url: gn('Guyana (flooding OR flood OR "weather advisory" OR "spring tide" OR drought OR "El Nino") when:3d') },
+    ],
+    caribbean: [
+      { name: 'CARICOM Today', url: 'https://today.caricom.org/feed/' },
+      { name: 'Caribbean News Global', url: 'https://caribbeannewsglobal.com/feed/' },
+      { name: 'Barbados Today', url: 'https://barbadostoday.bb/feed/' },
+      { name: 'Jamaica Observer', url: 'https://www.jamaicaobserver.com/feed/' },
+      { name: 'Trinidad Express', url: 'https://trinidadexpress.com/search/?f=rss&t=article&l=25&s=start_time&sd=desc' },
+      { name: 'WIC News', url: 'https://wicnews.com/feed' },
+      { name: 'Searchlight SVG', url: 'https://www.searchlight.vc/feed/' },
+      { name: 'Antigua Observer', url: 'https://antiguaobserver.com/feed/' },
+    ],
+  },
+
+  // ── AI Compute & Semiconductors variant (mirrors src/config/feeds.ts CHIPS_FEEDS) ──
+  chips: {
+    'chips-semis': [
+      { name: 'NVIDIA Blog', url: 'https://blogs.nvidia.com/feed/' },
+      { name: 'NVIDIA Newsroom', url: 'https://nvidianews.nvidia.com/releases.xml' },
+      { name: 'SemiAnalysis', url: 'https://semianalysis.com/feed/' },
+      { name: 'SemiWiki', url: 'https://semiwiki.com/feed/' },
+      { name: 'EE Times', url: 'https://www.eetimes.com/feed/' },
+      { name: 'Semiconductor Engineering', url: 'https://semiengineering.com/feed/' },
+      { name: 'Chips and Cheese', url: 'https://chipsandcheese.com/feed' },
+      { name: "Tom's Hardware", url: 'https://www.tomshardware.com/feeds/all' },
+      { name: 'TechPowerUp', url: 'https://www.techpowerup.com/rss/news' },
+      { name: 'ServeTheHome', url: 'https://www.servethehome.com/feed/' },
+      { name: 'Phoronix', url: 'https://www.phoronix.com/rss.php' },
+      { name: 'Chipmaker Wire', url: gn('(Nvidia OR AMD OR Intel OR TSMC OR ASML OR Broadcom OR Micron OR Qualcomm OR Arm Holdings OR Samsung Foundry OR SK Hynix) when:1d') },
+    ],
+    'chips-datacenters': [
+      { name: 'Data Center Dynamics', url: 'https://www.datacenterdynamics.com/en/rss/' },
+      { name: 'Data Center Knowledge', url: 'https://www.datacenterknowledge.com/rss.xml' },
+      { name: 'Uptime Institute Journal', url: 'https://journal.uptimeinstitute.com/feed/' },
+      { name: 'HPCwire', url: 'https://www.hpcwire.com/feed/' },
+      { name: 'The Next Platform', url: 'https://www.nextplatform.com/feed/' },
+      { name: 'The Register', url: 'https://www.theregister.com/headlines.atom' },
+      { name: 'Data Centre Power and Grid', url: gn('("data center" OR datacenter OR "data centre") (power OR gigawatt OR grid OR nuclear OR "small modular" OR cooling OR water OR interconnection) when:2d') },
+      { name: 'Hyperscaler Capex', url: gn('(Microsoft OR Google OR Amazon OR Meta OR Oracle OR CoreWeave OR xAI OR Stargate) ("data center" OR capex OR "AI infrastructure" OR GPUs) when:2d') },
+    ],
+    'chips-ailabs': [
+      { name: 'Google DeepMind Blog', url: 'https://deepmind.google/blog/rss.xml' },
+      { name: 'Hugging Face Blog', url: 'https://huggingface.co/blog/feed.xml' },
+      { name: 'Google AI Blog', url: 'https://blog.google/technology/ai/rss/' },
+      { name: 'Import AI', url: 'https://importai.substack.com/feed' },
+      { name: 'Interconnects', url: 'https://www.interconnects.ai/feed' },
+      { name: 'Latent Space', url: 'https://www.latent.space/feed' },
+      { name: 'Frontier Lab Wire', url: gn('(OpenAI OR Anthropic OR "Google DeepMind" OR "Meta AI" OR Mistral OR xAI OR DeepSeek OR Qwen) (model OR release OR benchmark OR training OR compute) when:1d') },
+    ],
+    'chips-policy': [
+      { name: 'IEEE Spectrum', url: 'https://spectrum.ieee.org/feeds/feed.rss' },
+      { name: 'Export Controls and CHIPS Act', url: gn('("export controls" OR "chip ban" OR "CHIPS Act" OR "semiconductor tariff" OR "BIS entity list" OR "AI diffusion rule") when:3d') },
+      { name: 'Chip Geopolitics', url: gn('(Taiwan OR TSMC OR "Hsinchu" OR "rare earths" OR gallium OR "Netherlands ASML" OR "China chips" OR SMIC OR Huawei Ascend) semiconductor when:2d') },
+      { name: 'AI Regulation', url: gn('("AI Act" OR "AI regulation" OR "AI safety" OR "frontier model" OR "compute threshold") when:3d') },
+    ],
+    'chips-markets': [
+      { name: 'Semis Earnings and Guidance', url: gn('(Nvidia OR AMD OR Intel OR TSMC OR ASML OR Broadcom OR Micron OR Qualcomm OR Arm OR "Super Micro") (earnings OR guidance OR revenue OR shares OR stock) when:2d') },
+      { name: 'Memory and HBM', url: gn('(HBM OR "high bandwidth memory" OR DRAM OR NAND OR "SK Hynix" OR Micron OR Samsung memory) when:3d') },
+      { name: 'Foundry and Packaging', url: gn('(foundry OR "advanced packaging" OR CoWoS OR "2nm" OR "3nm" OR "Intel Foundry" OR "Samsung Foundry" OR Rapidus) when:3d') },
+      { name: 'AI Chip Startups', url: gn('(Cerebras OR Groq OR Tenstorrent OR SambaNova OR Etched OR "d-Matrix" OR Graphcore OR "AI chip startup") when:7d') },
+    ],
+  },
 };
 
 export const INTEL_SOURCES: ServerFeed[] = [

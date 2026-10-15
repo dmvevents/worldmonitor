@@ -765,6 +765,8 @@ const RSS_PROXY_ALLOWED_DOMAINS = new Set([
   'trinidadexpress.com', 'www.ttt.live', 'www.ttparliament.org', 'www.moe.gov.tt', 'tatt.org.tt', 'ebctt.com', 'www.central-bank.org.tt', 'www.energy.gov.tt', 'ngc.co.tt', 'igovtt.tt', 'www.nhc.noaa.gov', 'today.caricom.org', 'caribbeannewsglobal.com', 'barbadostoday.bb', 'www.jamaicaobserver.com', 'guyanachronicle.com',
   'www.tv6tnt.com', 'power102fm.com', 'tobagoupdates.com', 'www.tha.gov.tt', 'guyanatimesgy.com', 'demerarawaves.com', 'wicnews.com', 'www.searchlight.vc', 'www.iwnsvg.com', 'nowgrenada.com', 'stluciatimes.com', 'dominicanewsonline.com', 'antiguaobserver.com',
   'mapservices.weather.noaa.gov',
+  'inewsguyana.com', 'dpi.gov.gy', 'gra.gov.gy', 'gplinc.com', 'hydromet.gov.gy', 'villagevoicenews.com',
+  'blogs.nvidia.com', 'nvidianews.nvidia.com', 'semianalysis.com', 'semiwiki.com', 'www.eetimes.com', 'semiengineering.com', 'chipsandcheese.com', 'www.techpowerup.com', 'www.servethehome.com', 'www.theregister.com', 'www.phoronix.com', 'www.hpcwire.com', 'www.nextplatform.com', 'spectrum.ieee.org', 'www.datacenterdynamics.com', 'www.datacenterknowledge.com', 'journal.uptimeinstitute.com', 'deepmind.google', 'blog.google', 'importai.substack.com', 'www.interconnects.ai', 'www.latent.space',
 ]);
 
 function rssProxyPlugin(): Plugin {

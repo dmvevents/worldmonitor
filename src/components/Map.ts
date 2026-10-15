@@ -77,7 +77,7 @@ import {
 
 
 export type TimeRange = '1h' | '6h' | '24h' | '48h' | '7d' | 'all';
-export type MapView = 'global' | 'america' | 'mena' | 'eu' | 'asia' | 'latam' | 'africa' | 'oceania' | 'caribbean' | 'trinidad';
+export type MapView = 'global' | 'america' | 'mena' | 'eu' | 'asia' | 'latam' | 'africa' | 'oceania' | 'caribbean' | 'trinidad' | 'guyana';
 
 export interface MapState {
   zoom: number;
@@ -3695,6 +3695,7 @@ export class MapComponent {
       oceania: { zoom: 2.2, pan: { x: -420, y: -100 } },
       caribbean: { zoom: 5, pan: { x: 330, y: 60 } },
       trinidad: { zoom: 8, pan: { x: 320, y: 70 } },
+      guyana: { zoom: 6, pan: { x: 300, y: 120 } },
     };
 
     const settings = viewSettings[view];

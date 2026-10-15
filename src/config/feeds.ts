@@ -116,6 +116,52 @@ export const SOURCE_TYPES: Record<string, SourceType> = {
   'Guyana Times': 'mainstream', 'Demerara Waves': 'mainstream', 'WIC News': 'mainstream', 'Searchlight SVG': 'mainstream',
   'iWitness News SVG': 'mainstream', 'NOW Grenada': 'mainstream', 'St Lucia Times': 'mainstream',
   'Dominica News Online': 'mainstream', 'Antigua Observer': 'mainstream',
+
+  // AI Compute & Semiconductors variant
+  'NVIDIA Blog': 'tech',
+  'NVIDIA Newsroom': 'tech',
+  'SemiAnalysis': 'tech',
+  'SemiWiki': 'tech',
+  'EE Times': 'tech',
+  'Semiconductor Engineering': 'tech',
+  'Chips and Cheese': 'tech',
+  'Tom\'s Hardware': 'tech',
+  'TechPowerUp': 'tech',
+  'ServeTheHome': 'tech',
+  'Phoronix': 'tech',
+  'Chipmaker Wire': 'tech',
+  'Data Center Dynamics': 'tech',
+  'Data Center Knowledge': 'tech',
+  'Uptime Institute Journal': 'tech',
+  'HPCwire': 'tech',
+  'The Next Platform': 'tech',
+  'The Register': 'tech',
+  'Google DeepMind Blog': 'tech',
+  'Hugging Face Blog': 'tech',
+  'Google AI Blog': 'tech',
+  'Import AI': 'tech',
+  'Interconnects': 'tech',
+  'Latent Space': 'tech',
+  'IEEE Spectrum': 'tech',
+
+  // Guyana variant
+  'iNews Guyana': 'mainstream',
+  'Stabroek News': 'mainstream',
+  'Kaieteur News': 'mainstream',
+  'News Room Guyana': 'mainstream',
+  'Village Voice GY': 'mainstream',
+  'Guyana Headlines': 'mainstream',
+  'DPI Guyana': 'gov',
+  'Guyana Revenue Authority': 'gov',
+  'Parliament of Guyana': 'gov',
+  'GECOM': 'gov',
+  'Office of the President GY': 'gov',
+  'Ministry of Natural Resources GY': 'gov',
+  'Guyana Power and Light': 'gov',
+  'Bank of Guyana': 'gov',
+  'Civil Defence Commission': 'gov',
+  'Guyana Hydromet': 'gov',
+  'OilNOW': 'market',
 };
 
 export function getSourceType(sourceName: string): SourceType {
@@ -1105,6 +1151,121 @@ const TT_FEEDS: Record<string, Feed[]> = {
   ],
 };
 
+// Guyana variant (VITE_VARIANT=gy). Public news and official sources only, aggregate/topic level.
+// Direct RSS where published (probed 2026-10-15); Google News site-scoped queries where sites block
+// or lack RSS (Stabroek News, Kaieteur News, News Room, OilNOW, GECOM, Parliament). Mirror: server/worldmonitor/news/v1/_feeds.ts
+const GY_FEEDS: Record<string, Feed[]> = {
+  'gy-news': [
+    { name: 'Stabroek News', url: rss('https://news.google.com/rss/search?q=site:stabroeknews.com+when:1d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Kaieteur News', url: rss('https://news.google.com/rss/search?q=site:kaieteurnewsonline.com+when:1d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'News Room Guyana', url: rss('https://news.google.com/rss/search?q=site:newsroom.gy+when:1d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'iNews Guyana', url: rss('https://inewsguyana.com/feed/') },
+    { name: 'Guyana Chronicle', url: rss('https://guyanachronicle.com/feed/') },
+    { name: 'Guyana Times', url: rss('https://guyanatimesgy.com/feed/') },
+    { name: 'Demerara Waves', url: rss('https://demerarawaves.com/feed/') },
+    { name: 'Village Voice GY', url: rss('https://villagevoicenews.com/feed/') },
+    { name: 'Guyana Headlines', url: rss('https://news.google.com/rss/search?q=Guyana+when:1d&hl=en-US&gl=US&ceid=US:en') },
+  ],
+  'gy-gov': [
+    { name: 'DPI Guyana', url: rss('https://dpi.gov.gy/feed/') },
+    { name: 'Guyana Revenue Authority', url: rss('https://gra.gov.gy/feed/') },
+    { name: 'Parliament of Guyana', url: rss('https://news.google.com/rss/search?q=site:parliament.gov.gy+when:7d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'GECOM', url: rss('https://news.google.com/rss/search?q=(site:gecom.org.gy+OR+"Guyana+Elections+Commission")+when:7d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Office of the President GY', url: rss('https://news.google.com/rss/search?q=(site:op.gov.gy+OR+"Office+of+the+President"+Guyana)+when:3d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Ministry of Natural Resources GY', url: rss('https://news.google.com/rss/search?q=(site:mnr.gov.gy+OR+"Ministry+of+Natural+Resources"+Guyana)+when:7d&hl=en-US&gl=US&ceid=US:en') },
+  ],
+  'gy-oil': [
+    { name: 'OilNOW', url: rss('https://news.google.com/rss/search?q=site:oilnow.gy+when:2d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Stabroek Block Watch', url: rss('https://news.google.com/rss/search?q=Guyana+(Exxon+OR+ExxonMobil+OR+"Stabroek+block"+OR+Hess+OR+CNOOC+OR+"Liza"+OR+"Payara"+OR+"Yellowtail"+OR+"Uaru"+OR+"Whiptail")+when:2d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Gas-to-Energy and Power', url: rss('https://news.google.com/rss/search?q=Guyana+("gas-to-energy"+OR+"Wales"+power+plant+OR+GPL+OR+"Guyana+Power+and+Light"+OR+"Natural+Resource+Fund")+when:3d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Guyana Power and Light', url: rss('https://gplinc.com/feed/') },
+    { name: 'Guiana Basin Energy', url: rss('https://news.google.com/rss/search?q=(Suriname+OR+"Guyana-Suriname+basin"+OR+Staatsolie+OR+TotalEnergies+Suriname+OR+"Block+58")+when:3d&hl=en-US&gl=US&ceid=US:en') },
+  ],
+  'gy-essequibo': [
+    { name: 'Essequibo Watch', url: rss('https://news.google.com/rss/search?q=(Essequibo+OR+"Guyana+Venezuela"+OR+"ICJ+Guyana"+OR+"Ankoko"+OR+"Guyana+border")+when:2d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Venezuela Watch', url: rss('https://news.google.com/rss/search?q=Venezuela+(Maduro+OR+sanctions+OR+"National+Assembly"+OR+migrants+OR+SOUTHCOM)+when:1d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'CARICOM and Regional', url: rss('https://news.google.com/rss/search?q=(CARICOM+OR+"Caribbean+Community"+OR+"Caribbean+Court+of+Justice"+OR+OECS)+when:3d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Brazil and Suriname Border', url: rss('https://news.google.com/rss/search?q=Guyana+(Brazil+OR+Suriname+OR+Lethem+OR+Corentyne+OR+"Takutu")+when:3d&hl=en-US&gl=US&ceid=US:en') },
+  ],
+  'gy-economy': [
+    { name: 'Bank of Guyana', url: rss('https://news.google.com/rss/search?q=(site:bankofguyana.org.gy+OR+"Bank+of+Guyana")+when:7d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Guyana Economy', url: rss('https://news.google.com/rss/search?q=Guyana+(budget+OR+GDP+OR+inflation+OR+"cost+of+living"+OR+"Natural+Resource+Fund"+OR+gold+OR+bauxite+OR+rice+OR+sugar+OR+GuySuCo)+when:2d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Georgetown Chamber', url: rss('https://news.google.com/rss/search?q=(site:gcci.gy+OR+"Georgetown+Chamber+of+Commerce"+OR+"Private+Sector+Commission"+Guyana)+when:7d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Guyana Infrastructure', url: rss('https://news.google.com/rss/search?q=Guyana+(highway+OR+bridge+OR+"Demerara+Harbour+Bridge"+OR+housing+OR+"Silica+City"+OR+airport+OR+port)+when:3d&hl=en-US&gl=US&ceid=US:en') },
+  ],
+  'gy-safety': [
+    { name: 'Guyana Public Safety', url: rss('https://news.google.com/rss/search?q=Guyana+("Guyana+Police+Force"+OR+GPF+OR+police+OR+homicide+OR+GDF+OR+"Defence+Force"+OR+trafficking+OR+"Coast+Guard")+when:1d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Civil Defence Commission', url: rss('https://news.google.com/rss/search?q=("Civil+Defence+Commission"+OR+CDC+Guyana)+when:7d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Guyana Courts', url: rss('https://news.google.com/rss/search?q=Guyana+("High+Court"+OR+"Court+of+Appeal"+OR+"Caribbean+Court+of+Justice"+OR+DPP+OR+"Chief+Justice")+when:3d&hl=en-US&gl=US&ceid=US:en') },
+  ],
+  'gy-weather': [
+    { name: 'Guyana Hydromet', url: rss('https://hydromet.gov.gy/feed/') },
+    { name: 'NHC Atlantic', url: rss('https://www.nhc.noaa.gov/index-at.xml') },
+    { name: 'Guyana Weather and Flooding', url: rss('https://news.google.com/rss/search?q=Guyana+(flooding+OR+flood+OR+"weather+advisory"+OR+"spring+tide"+OR+drought+OR+"El+Nino")+when:3d&hl=en-US&gl=US&ceid=US:en') },
+  ],
+  caribbean: [
+    { name: 'CARICOM Today', url: rss('https://today.caricom.org/feed/') },
+    { name: 'Caribbean News Global', url: rss('https://caribbeannewsglobal.com/feed/') },
+    { name: 'Barbados Today', url: rss('https://barbadostoday.bb/feed/') },
+    { name: 'Jamaica Observer', url: rss('https://www.jamaicaobserver.com/feed/') },
+    { name: 'Trinidad Express', url: rss('https://trinidadexpress.com/search/?f=rss&t=article&l=25&s=start_time&sd=desc') },
+    { name: 'WIC News', url: rss('https://wicnews.com/feed') },
+    { name: 'Searchlight SVG', url: rss('https://www.searchlight.vc/feed/') },
+    { name: 'Antigua Observer', url: rss('https://antiguaobserver.com/feed/') },
+  ],
+};
+
+// AI compute / semiconductors / data-centre variant (VITE_VARIANT=chips).
+// Publisher and vendor RSS verified 2026-10-15; Google News topic queries fill the gaps (AMD, Intel, TSMC and ASML
+// newsrooms publish no RSS). Mirror: server/worldmonitor/news/v1/_feeds.ts
+const CHIPS_FEEDS: Record<string, Feed[]> = {
+  'chips-semis': [
+    { name: 'NVIDIA Blog', url: rss('https://blogs.nvidia.com/feed/') },
+    { name: 'NVIDIA Newsroom', url: rss('https://nvidianews.nvidia.com/releases.xml') },
+    { name: 'SemiAnalysis', url: rss('https://semianalysis.com/feed/') },
+    { name: 'SemiWiki', url: rss('https://semiwiki.com/feed/') },
+    { name: 'EE Times', url: rss('https://www.eetimes.com/feed/') },
+    { name: 'Semiconductor Engineering', url: rss('https://semiengineering.com/feed/') },
+    { name: 'Chips and Cheese', url: rss('https://chipsandcheese.com/feed') },
+    { name: 'Tom\'s Hardware', url: rss('https://www.tomshardware.com/feeds/all') },
+    { name: 'TechPowerUp', url: rss('https://www.techpowerup.com/rss/news') },
+    { name: 'ServeTheHome', url: rss('https://www.servethehome.com/feed/') },
+    { name: 'Phoronix', url: rss('https://www.phoronix.com/rss.php') },
+    { name: 'Chipmaker Wire', url: rss('https://news.google.com/rss/search?q=(Nvidia+OR+AMD+OR+Intel+OR+TSMC+OR+ASML+OR+Broadcom+OR+Micron+OR+Qualcomm+OR+Arm+Holdings+OR+Samsung+Foundry+OR+SK+Hynix)+when:1d&hl=en-US&gl=US&ceid=US:en') },
+  ],
+  'chips-datacenters': [
+    { name: 'Data Center Dynamics', url: rss('https://www.datacenterdynamics.com/en/rss/') },
+    { name: 'Data Center Knowledge', url: rss('https://www.datacenterknowledge.com/rss.xml') },
+    { name: 'Uptime Institute Journal', url: rss('https://journal.uptimeinstitute.com/feed/') },
+    { name: 'HPCwire', url: rss('https://www.hpcwire.com/feed/') },
+    { name: 'The Next Platform', url: rss('https://www.nextplatform.com/feed/') },
+    { name: 'The Register', url: rss('https://www.theregister.com/headlines.atom') },
+    { name: 'Data Centre Power and Grid', url: rss('https://news.google.com/rss/search?q=("data+center"+OR+datacenter+OR+"data+centre")+(power+OR+gigawatt+OR+grid+OR+nuclear+OR+"small+modular"+OR+cooling+OR+water+OR+interconnection)+when:2d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Hyperscaler Capex', url: rss('https://news.google.com/rss/search?q=(Microsoft+OR+Google+OR+Amazon+OR+Meta+OR+Oracle+OR+CoreWeave+OR+xAI+OR+Stargate)+("data+center"+OR+capex+OR+"AI+infrastructure"+OR+GPUs)+when:2d&hl=en-US&gl=US&ceid=US:en') },
+  ],
+  'chips-ailabs': [
+    { name: 'Google DeepMind Blog', url: rss('https://deepmind.google/blog/rss.xml') },
+    { name: 'Hugging Face Blog', url: rss('https://huggingface.co/blog/feed.xml') },
+    { name: 'Google AI Blog', url: rss('https://blog.google/technology/ai/rss/') },
+    { name: 'Import AI', url: rss('https://importai.substack.com/feed') },
+    { name: 'Interconnects', url: rss('https://www.interconnects.ai/feed') },
+    { name: 'Latent Space', url: rss('https://www.latent.space/feed') },
+    { name: 'Frontier Lab Wire', url: rss('https://news.google.com/rss/search?q=(OpenAI+OR+Anthropic+OR+"Google+DeepMind"+OR+"Meta+AI"+OR+Mistral+OR+xAI+OR+DeepSeek+OR+Qwen)+(model+OR+release+OR+benchmark+OR+training+OR+compute)+when:1d&hl=en-US&gl=US&ceid=US:en') },
+  ],
+  'chips-policy': [
+    { name: 'IEEE Spectrum', url: rss('https://spectrum.ieee.org/feeds/feed.rss') },
+    { name: 'Export Controls and CHIPS Act', url: rss('https://news.google.com/rss/search?q=("export+controls"+OR+"chip+ban"+OR+"CHIPS+Act"+OR+"semiconductor+tariff"+OR+"BIS+entity+list"+OR+"AI+diffusion+rule")+when:3d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Chip Geopolitics', url: rss('https://news.google.com/rss/search?q=(Taiwan+OR+TSMC+OR+"Hsinchu"+OR+"rare+earths"+OR+gallium+OR+"Netherlands+ASML"+OR+"China+chips"+OR+SMIC+OR+Huawei+Ascend)+semiconductor+when:2d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'AI Regulation', url: rss('https://news.google.com/rss/search?q=("AI+Act"+OR+"AI+regulation"+OR+"AI+safety"+OR+"frontier+model"+OR+"compute+threshold")+when:3d&hl=en-US&gl=US&ceid=US:en') },
+  ],
+  'chips-markets': [
+    { name: 'Semis Earnings and Guidance', url: rss('https://news.google.com/rss/search?q=(Nvidia+OR+AMD+OR+Intel+OR+TSMC+OR+ASML+OR+Broadcom+OR+Micron+OR+Qualcomm+OR+Arm+OR+"Super+Micro")+(earnings+OR+guidance+OR+revenue+OR+shares+OR+stock)+when:2d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Memory and HBM', url: rss('https://news.google.com/rss/search?q=(HBM+OR+"high+bandwidth+memory"+OR+DRAM+OR+NAND+OR+"SK+Hynix"+OR+Micron+OR+Samsung+memory)+when:3d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Foundry and Packaging', url: rss('https://news.google.com/rss/search?q=(foundry+OR+"advanced+packaging"+OR+CoWoS+OR+"2nm"+OR+"3nm"+OR+"Intel+Foundry"+OR+"Samsung+Foundry"+OR+Rapidus)+when:3d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'AI Chip Startups', url: rss('https://news.google.com/rss/search?q=(Cerebras+OR+Groq+OR+Tenstorrent+OR+SambaNova+OR+Etched+OR+"d-Matrix"+OR+Graphcore+OR+"AI+chip+startup")+when:7d&hl=en-US&gl=US&ceid=US:en') },
+  ],
+};
+
 export const FEEDS = SITE_VARIANT === 'tech'
   ? TECH_FEEDS
   : SITE_VARIANT === 'finance'
@@ -1117,7 +1278,11 @@ export const FEEDS = SITE_VARIANT === 'tech'
           ? ENERGY_FEEDS
           : SITE_VARIANT === 'tt'
             ? TT_FEEDS
-            : FULL_FEEDS;
+            : SITE_VARIANT === 'gy'
+              ? GY_FEEDS
+              : SITE_VARIANT === 'chips'
+                ? CHIPS_FEEDS
+                : FULL_FEEDS;
 
 // Canonical category→feeds map: the union of every variant's feed set.
 // `FEEDS` (above) is just the active variant's PRESET; users freely customize
@@ -1134,6 +1299,8 @@ export const CANONICAL_FEEDS: Record<string, Feed[]> = mergeCanonicalFeeds([
   ENERGY_FEEDS,
   HAPPY_FEEDS,
   TT_FEEDS,
+  CHIPS_FEEDS,
+  GY_FEEDS,
 ]);
 
 export const SOURCE_REGION_MAP: Record<string, { labelKey: string; feedKeys: string[] }> = {
@@ -1172,6 +1339,14 @@ export const SOURCE_REGION_MAP: Record<string, { labelKey: string; feedKeys: str
   tt: { labelKey: 'header.sourceRegionTT', feedKeys: ['tt-news', 'tt-gov'] },
   ttLenses: { labelKey: 'header.sourceRegionTTLenses', feedKeys: ['tt-energy', 'tt-education', 'tt-telecoms', 'tt-public-it', 'tt-safety', 'tt-weather'] },
   caribbean: { labelKey: 'header.sourceRegionCaribbean', feedKeys: ['caribbean'] },
+
+  // AI Compute & Semiconductors variant regions
+  chipsCompute: { labelKey: 'header.sourceRegionChipsCompute', feedKeys: ['chips-semis', 'chips-datacenters', 'chips-markets'] },
+  chipsAi: { labelKey: 'header.sourceRegionChipsAi', feedKeys: ['chips-ailabs', 'chips-policy'] },
+
+  // Guyana variant regions
+  gy: { labelKey: 'header.sourceRegionGuyana', feedKeys: ['gy-news', 'gy-gov'] },
+  gyLenses: { labelKey: 'header.sourceRegionGuyanaLenses', feedKeys: ['gy-oil', 'gy-essequibo', 'gy-economy', 'gy-safety', 'gy-weather'] },
 };
 
 export const INTEL_SOURCES: Feed[] = [

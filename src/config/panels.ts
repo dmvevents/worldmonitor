@@ -1252,11 +1252,307 @@ const TT_MOBILE_MAP_LAYERS: MapLayers = {
   hurricanes: true,
 };
 
+// ─────────────────────────────────────────────────────────────────────────────
+// GUYANA VARIANT (VITE_VARIANT=gy). News panel keys here must match GY_FEEDS category keys in src/config/feeds.ts.
+// Canonical description: src/config/variants/gy.ts
+// ─────────────────────────────────────────────────────────────────────────────
+const GY_PANELS: Record<string, PanelConfig> = {
+  map: { name: 'Guyana / Guiana Shield', enabled: true, priority: 1 },
+  'live-news': { name: 'Live News', enabled: true, priority: 1 },
+  'gy-news': { name: 'Guyana News', enabled: true, priority: 1 },
+  'gy-gov': { name: 'Government and Official', enabled: true, priority: 1 },
+  'gy-oil': { name: 'Oil, Gas and Energy', enabled: true, priority: 1 },
+  'gy-essequibo': { name: 'Essequibo and Regional Geopolitics', enabled: true, priority: 1 },
+  'gy-economy': { name: 'Economy and Infrastructure', enabled: true, priority: 1 },
+  'gy-safety': { name: 'Public Safety (aggregate)', enabled: true, priority: 1 },
+  'gy-weather': { name: 'Weather, Flooding and Hurricanes', enabled: true, priority: 1 },
+  caribbean: { name: 'Caribbean', enabled: true, priority: 1 },
+  latam: { name: 'Latin America', enabled: true, priority: 2 },
+  politics: { name: 'World News', enabled: true, priority: 2 },
+  energy: { name: 'Global Energy and Resources', enabled: true, priority: 2 },
+  'energy-complex': { name: 'Oil and Gas Complex (WTI, Brent, NatGas)', enabled: true, priority: 2 },
+  polymarket: { name: 'Predictions', enabled: false, priority: 2 },
+  insights: { name: 'AI Insights', enabled: false, priority: 2 },
+  climate: { name: 'Climate Anomalies', enabled: false, priority: 2 },
+  monitors: { name: 'My Monitors', enabled: true, priority: 2 },
+  'world-clock': { name: 'World Clock', enabled: true, priority: 2 },
+};
+
+const GY_MAP_LAYERS: MapLayers = {
+  iranAttacks: false,
+  gpsJamming: false,
+  satellites: false,
+  conflicts: true,
+  bases: false,
+  cables: true,
+  pipelines: true,
+  storageFacilities: true,
+  fuelShortages: false,
+  hotspots: true,
+  ais: false,
+  nuclear: false,
+  irradiators: false,
+  radiationWatch: false,
+  sanctions: true,
+  weather: true,
+  economic: false,
+  waterways: true,
+  outages: false,
+  cyberThreats: false,
+  datacenters: false,
+  protests: false,
+  flights: false,
+  military: false,
+  natural: true,
+  spaceports: false,
+  minerals: false,
+  fires: false,
+  ucdpEvents: false,
+  displacement: false,
+  climate: false,
+  startupHubs: false,
+  cloudRegions: false,
+  accelerators: false,
+  techHQs: false,
+  techEvents: false,
+  stockExchanges: false,
+  financialCenters: false,
+  centralBanks: false,
+  commodityHubs: false,
+  gulfInvestments: false,
+  positiveEvents: false,
+  kindness: false,
+  happiness: false,
+  speciesRecovery: false,
+  renewableInstallations: false,
+  tradeRoutes: true,
+  ciiChoropleth: false,
+  resilienceScore: false,
+  dayNight: false,
+  miningSites: false,
+  processingPlants: false,
+  commodityPorts: true,
+  webcams: false,
+  diseaseOutbreaks: false,
+  liveTankers: false,
+  ebcConstituencies: false,
+  hurricanes: true,
+};
+
+const GY_MOBILE_MAP_LAYERS: MapLayers = {
+  iranAttacks: false,
+  gpsJamming: false,
+  satellites: false,
+  conflicts: true,
+  bases: false,
+  cables: false,
+  pipelines: false,
+  storageFacilities: false,
+  fuelShortages: false,
+  hotspots: true,
+  ais: false,
+  nuclear: false,
+  irradiators: false,
+  radiationWatch: false,
+  sanctions: true,
+  weather: true,
+  economic: false,
+  waterways: false,
+  outages: false,
+  cyberThreats: false,
+  datacenters: false,
+  protests: false,
+  flights: false,
+  military: false,
+  natural: true,
+  spaceports: false,
+  minerals: false,
+  fires: false,
+  ucdpEvents: false,
+  displacement: false,
+  climate: false,
+  startupHubs: false,
+  cloudRegions: false,
+  accelerators: false,
+  techHQs: false,
+  techEvents: false,
+  stockExchanges: false,
+  financialCenters: false,
+  centralBanks: false,
+  commodityHubs: false,
+  gulfInvestments: false,
+  positiveEvents: false,
+  kindness: false,
+  happiness: false,
+  speciesRecovery: false,
+  renewableInstallations: false,
+  tradeRoutes: false,
+  ciiChoropleth: false,
+  resilienceScore: false,
+  dayNight: false,
+  miningSites: false,
+  processingPlants: false,
+  commodityPorts: false,
+  webcams: false,
+  diseaseOutbreaks: false,
+  liveTankers: false,
+  ebcConstituencies: false,
+  hurricanes: true,
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// AI COMPUTE / SEMICONDUCTORS / DATA-CENTRE VARIANT (VITE_VARIANT=chips). News panel keys match CHIPS_FEEDS category keys in src/config/feeds.ts.
+// Canonical description: src/config/variants/chips.ts
+// ─────────────────────────────────────────────────────────────────────────────
+const CHIPS_PANELS: Record<string, PanelConfig> = {
+  map: { name: 'AI Compute: Data Centres, Fabs and Cloud Regions', enabled: true, priority: 1 },
+  'live-news': { name: 'Live Business News', enabled: true, priority: 1 },
+  'chips-semis': { name: 'Semiconductors and Accelerators', enabled: true, priority: 1 },
+  'chips-datacenters': { name: 'Data Centres, Power and Hyperscalers', enabled: true, priority: 1 },
+  'chips-ailabs': { name: 'AI Labs and Research', enabled: true, priority: 1 },
+  'chips-policy': { name: 'Chip Policy and Export Controls', enabled: true, priority: 1 },
+  'chips-markets': { name: 'Chip Markets, Memory and Foundry', enabled: true, priority: 1 },
+  ai: { name: 'AI/ML News', enabled: true, priority: 1 },
+  hardware: { name: 'Hardware', enabled: true, priority: 2 },
+  cloud: { name: 'Cloud and Infrastructure', enabled: true, priority: 2 },
+  markets: { name: 'Chip and AI Stocks', enabled: true, priority: 1 },
+  heatmap: { name: 'Sector Heatmap', enabled: true, priority: 2 },
+  'service-status': { name: 'Service Status', enabled: true, priority: 2 },
+  'internet-disruptions': { name: 'Internet Disruptions', enabled: true, priority: 2 },
+  layoffs: { name: 'Layoffs Tracker', enabled: true, priority: 2 },
+  polymarket: { name: 'Tech Predictions', enabled: true, priority: 2 },
+  insights: { name: 'AI Insights', enabled: false, priority: 2 },
+  monitors: { name: 'My Monitors', enabled: true, priority: 2 },
+  'world-clock': { name: 'World Clock', enabled: true, priority: 2 },
+};
+
+const CHIPS_MAP_LAYERS: MapLayers = {
+  iranAttacks: false,
+  gpsJamming: false,
+  satellites: false,
+  conflicts: false,
+  bases: false,
+  cables: true,
+  pipelines: false,
+  storageFacilities: false,
+  fuelShortages: false,
+  hotspots: false,
+  ais: false,
+  nuclear: false,
+  irradiators: false,
+  radiationWatch: false,
+  sanctions: false,
+  weather: false,
+  economic: false,
+  waterways: false,
+  outages: true,
+  cyberThreats: false,
+  datacenters: true,
+  protests: false,
+  flights: false,
+  military: false,
+  natural: false,
+  spaceports: false,
+  minerals: false,
+  fires: false,
+  ucdpEvents: false,
+  displacement: false,
+  climate: false,
+  startupHubs: false,
+  cloudRegions: true,
+  accelerators: false,
+  techHQs: true,
+  techEvents: false,
+  stockExchanges: false,
+  financialCenters: false,
+  centralBanks: false,
+  commodityHubs: false,
+  gulfInvestments: false,
+  positiveEvents: false,
+  kindness: false,
+  happiness: false,
+  speciesRecovery: false,
+  renewableInstallations: false,
+  tradeRoutes: false,
+  ciiChoropleth: false,
+  resilienceScore: false,
+  dayNight: false,
+  miningSites: false,
+  processingPlants: false,
+  commodityPorts: false,
+  webcams: false,
+  diseaseOutbreaks: false,
+  liveTankers: false,
+  ebcConstituencies: false,
+  hurricanes: false,
+};
+
+const CHIPS_MOBILE_MAP_LAYERS: MapLayers = {
+  iranAttacks: false,
+  gpsJamming: false,
+  satellites: false,
+  conflicts: false,
+  bases: false,
+  cables: false,
+  pipelines: false,
+  storageFacilities: false,
+  fuelShortages: false,
+  hotspots: false,
+  ais: false,
+  nuclear: false,
+  irradiators: false,
+  radiationWatch: false,
+  sanctions: false,
+  weather: false,
+  economic: false,
+  waterways: false,
+  outages: false,
+  cyberThreats: false,
+  datacenters: true,
+  protests: false,
+  flights: false,
+  military: false,
+  natural: false,
+  spaceports: false,
+  minerals: false,
+  fires: false,
+  ucdpEvents: false,
+  displacement: false,
+  climate: false,
+  startupHubs: false,
+  cloudRegions: true,
+  accelerators: false,
+  techHQs: false,
+  techEvents: false,
+  stockExchanges: false,
+  financialCenters: false,
+  centralBanks: false,
+  commodityHubs: false,
+  gulfInvestments: false,
+  positiveEvents: false,
+  kindness: false,
+  happiness: false,
+  speciesRecovery: false,
+  renewableInstallations: false,
+  tradeRoutes: false,
+  ciiChoropleth: false,
+  resilienceScore: false,
+  dayNight: false,
+  miningSites: false,
+  processingPlants: false,
+  commodityPorts: false,
+  webcams: false,
+  diseaseOutbreaks: false,
+  liveTankers: false,
+  ebcConstituencies: false,
+  hurricanes: false,
+};
+
 // ============================================
 // UNIFIED PANEL REGISTRY
 // ============================================
 
-type PanelVariant = 'full' | 'tech' | 'finance' | 'commodity' | 'energy' | 'happy' | 'tt';
+type PanelVariant = 'full' | 'tech' | 'finance' | 'commodity' | 'energy' | 'happy' | 'tt' | 'chips' | 'gy';
 
 const VARIANT_PANEL_CONFIGS: Record<PanelVariant, Record<string, PanelConfig>> = {
   full: FULL_PANELS,
@@ -1266,6 +1562,8 @@ const VARIANT_PANEL_CONFIGS: Record<PanelVariant, Record<string, PanelConfig>> =
   energy: ENERGY_PANELS,
   happy: HAPPY_PANELS,
   tt: TT_PANELS,
+  chips: CHIPS_PANELS,
+  gy: GY_PANELS,
 };
 
 function getVariantPanelConfigs(variant: string): Record<string, PanelConfig> | undefined {
@@ -1276,6 +1574,8 @@ function getVariantPanelConfigs(variant: string): Record<string, PanelConfig> | 
 
 /** All panels from all variants — canonical cross-variant registry. */
 export const ALL_PANELS: Record<string, PanelConfig> = {
+  ...GY_PANELS,
+  ...CHIPS_PANELS,
   ...TT_PANELS,
   ...HAPPY_PANELS,
   ...COMMODITY_PANELS,
@@ -1294,6 +1594,8 @@ export const VARIANT_DEFAULTS: Record<string, string[]> = {
   energy:    Object.keys(VARIANT_PANEL_CONFIGS.energy),
   happy:     Object.keys(VARIANT_PANEL_CONFIGS.happy),
   tt:        Object.keys(VARIANT_PANEL_CONFIGS.tt),
+  chips:    Object.keys(VARIANT_PANEL_CONFIGS.chips),
+  gy:       Object.keys(VARIANT_PANEL_CONFIGS.gy),
 };
 
 /**
@@ -1465,7 +1767,11 @@ export const DEFAULT_MAP_LAYERS = SITE_VARIANT === 'happy'
           ? ENERGY_MAP_LAYERS
           : SITE_VARIANT === 'tt'
             ? TT_MAP_LAYERS
-            : FULL_MAP_LAYERS;
+            : SITE_VARIANT === 'gy'
+              ? GY_MAP_LAYERS
+              : SITE_VARIANT === 'chips'
+                ? CHIPS_MAP_LAYERS
+                : FULL_MAP_LAYERS;
 
 export const MOBILE_DEFAULT_MAP_LAYERS = SITE_VARIANT === 'happy'
   ? HAPPY_MOBILE_MAP_LAYERS
@@ -1479,7 +1785,11 @@ export const MOBILE_DEFAULT_MAP_LAYERS = SITE_VARIANT === 'happy'
           ? ENERGY_MOBILE_MAP_LAYERS
           : SITE_VARIANT === 'tt'
             ? TT_MOBILE_MAP_LAYERS
-            : FULL_MOBILE_MAP_LAYERS;
+            : SITE_VARIANT === 'gy'
+              ? GY_MOBILE_MAP_LAYERS
+              : SITE_VARIANT === 'chips'
+                ? CHIPS_MOBILE_MAP_LAYERS
+                : FULL_MOBILE_MAP_LAYERS;
 
 /** Maps map-layer toggle keys to their data-freshness source IDs (single source of truth). */
 export const LAYER_TO_SOURCE: Partial<Record<keyof MapLayers, DataSourceId[]>> = {
@@ -1645,6 +1955,40 @@ export const PANEL_CATEGORY_MAP: Record<string, { labelKey: string; panelKeys: s
     labelKey: 'header.panelCatTTContext',
     panelKeys: ['energy', 'commodities', 'energy-complex', 'polymarket', 'insights', 'climate', 'disease-outbreaks', 'monitors', 'world-clock'],
     variants: ['tt'],
+  },
+
+  // Guyana variant
+  gyNews: {
+    labelKey: 'header.panelCatGyNews',
+    panelKeys: ['gy-news', 'gy-gov', 'caribbean', 'latam', 'politics'],
+    variants: ['gy'],
+  },
+  gyLenses: {
+    labelKey: 'header.panelCatGyLenses',
+    panelKeys: ['gy-oil', 'gy-essequibo', 'gy-economy', 'gy-safety', 'gy-weather'],
+    variants: ['gy'],
+  },
+  gyContext: {
+    labelKey: 'header.panelCatGyContext',
+    panelKeys: ['energy', 'energy-complex', 'polymarket', 'insights', 'climate', 'monitors', 'world-clock'],
+    variants: ['gy'],
+  },
+
+  // AI Compute & Semiconductors variant
+  chipsNews: {
+    labelKey: 'header.panelCatChipsNews',
+    panelKeys: ['chips-semis', 'chips-datacenters', 'chips-markets', 'hardware', 'cloud'],
+    variants: ['chips'],
+  },
+  chipsAi: {
+    labelKey: 'header.panelCatChipsAi',
+    panelKeys: ['chips-ailabs', 'chips-policy', 'ai', 'insights'],
+    variants: ['chips'],
+  },
+  chipsMarkets: {
+    labelKey: 'header.panelCatChipsMarkets',
+    panelKeys: ['markets', 'heatmap', 'polymarket', 'service-status', 'internet-disruptions', 'layoffs', 'monitors', 'world-clock'],
+    variants: ['chips'],
   },
 };
 

@@ -565,7 +565,7 @@ describe('welcome landing page routing', () => {
     assert.equal(variantUrls.full, 'https://www.worldmonitor.app/dashboard');
 
     // `tt` is a local-only variant (self-host / localhost) with no public crawler stub.
-    const nonFullUrls = Object.entries(variantUrls).filter(([variant]) => variant !== 'full' && variant !== 'tt');
+    const nonFullUrls = Object.entries(variantUrls).filter(([variant]) => variant !== 'full' && variant !== 'tt' && variant !== 'gy' && variant !== 'chips');
     assert.ok(nonFullUrls.length >= 5, 'expected non-full variant metadata entries');
     for (const [variant, url] of nonFullUrls) {
       assert.equal(
@@ -579,7 +579,7 @@ describe('welcome landing page routing', () => {
   it('keeps variant crawler-stub canonicals aligned with variant metadata', () => {
     const variantUrls = getVariantUrls();
     // `tt` is a local-only variant (self-host / localhost) with no public crawler stub.
-    const nonFullUrls = Object.entries(variantUrls).filter(([variant]) => variant !== 'full' && variant !== 'tt');
+    const nonFullUrls = Object.entries(variantUrls).filter(([variant]) => variant !== 'full' && variant !== 'tt' && variant !== 'gy' && variant !== 'chips');
 
     for (const [variant, url] of nonFullUrls) {
       assert.match(

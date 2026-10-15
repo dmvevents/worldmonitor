@@ -216,7 +216,17 @@
     "sourceRegionCaribbean": "Caribbean",
     "panelCatTTNews": "T&T & Caribbean News",
     "panelCatTTLenses": "T&T Topic Lenses",
-    "panelCatTTContext": "Context & Tracking"
+    "panelCatTTContext": "Context & Tracking",
+    "sourceRegionGuyana": "Guyana",
+    "sourceRegionGuyanaLenses": "Guyana Topic Lenses",
+    "panelCatGyNews": "Guyana and Caribbean News",
+    "panelCatGyLenses": "Guyana Topic Lenses",
+    "panelCatGyContext": "Context and Tracking",
+    "sourceRegionChipsCompute": "Chips and Compute",
+    "sourceRegionChipsAi": "AI Labs and Policy",
+    "panelCatChipsNews": "Chips and Compute",
+    "panelCatChipsAi": "AI Labs and Policy",
+    "panelCatChipsMarkets": "Markets and Tracking"
   },
   "panels": {
     "liveNews": "ライブニュース",
@@ -350,7 +360,8 @@
       "latam": "ラテンアメリカ",
       "oceania": "オセアニア",
       "caribbean": "Caribbean",
-      "trinidad": "Trinidad & Tobago"
+      "trinidad": "Trinidad & Tobago",
+      "guyana": "Guyana"
     },
     "tips": {
       "map": "国名を入力して地図上でその場所に移動",
@@ -1065,7 +1076,8 @@
         "africa": "アフリカ",
         "oceania": "オセアニア",
         "caribbean": "Caribbean",
-        "trinidad": "Trinidad & Tobago"
+        "trinidad": "Trinidad & Tobago",
+        "guyana": "Guyana"
       },
       "layers": {
         "startupHubs": "スタートアップハブ",

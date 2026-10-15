@@ -131,7 +131,8 @@
       "latam": "Latinamerika",
       "oceania": "Oceanien",
       "caribbean": "Caribbean",
-      "trinidad": "Trinidad & Tobago"
+      "trinidad": "Trinidad & Tobago",
+      "guyana": "Guyana"
     },
     "tips": {
       "map": "Skriv ett landsnamn för att flyga dit på kartan",
@@ -513,7 +514,8 @@
         "africa": "Afrika",
         "oceania": "Oceanien",
         "caribbean": "Caribbean",
-        "trinidad": "Trinidad & Tobago"
+        "trinidad": "Trinidad & Tobago",
+        "guyana": "Guyana"
       },
       "zoomIn": "Zooma in",
       "zoomOut": "Zooma ut",
@@ -2874,7 +2876,17 @@
     "sourceRegionCaribbean": "Caribbean",
     "panelCatTTNews": "T&T & Caribbean News",
     "panelCatTTLenses": "T&T Topic Lenses",
-    "panelCatTTContext": "Context & Tracking"
+    "panelCatTTContext": "Context & Tracking",
+    "sourceRegionGuyana": "Guyana",
+    "sourceRegionGuyanaLenses": "Guyana Topic Lenses",
+    "panelCatGyNews": "Guyana and Caribbean News",
+    "panelCatGyLenses": "Guyana Topic Lenses",
+    "panelCatGyContext": "Context and Tracking",
+    "sourceRegionChipsCompute": "Chips and Compute",
+    "sourceRegionChipsAi": "AI Labs and Policy",
+    "panelCatChipsNews": "Chips and Compute",
+    "panelCatChipsAi": "AI Labs and Policy",
+    "panelCatChipsMarkets": "Markets and Tracking"
   },
   "countryBrief": {
     "identifying": "Identifierar land...",

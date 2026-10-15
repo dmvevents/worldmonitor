@@ -131,7 +131,8 @@
       "latam": "América Latina",
       "oceania": "Oceânia",
       "caribbean": "Caribbean",
-      "trinidad": "Trinidad & Tobago"
+      "trinidad": "Trinidad & Tobago",
+      "guyana": "Guyana"
     },
     "tips": {
       "map": "Digite o nome de um país para voar até lá no mapa",
@@ -513,7 +514,8 @@
         "africa": "África",
         "oceania": "Oceânia",
         "caribbean": "Caribbean",
-        "trinidad": "Trinidad & Tobago"
+        "trinidad": "Trinidad & Tobago",
+        "guyana": "Guyana"
       },
       "zoomIn": "Ampliar",
       "zoomOut": "Diminuir zoom",
@@ -2890,7 +2892,17 @@
     "sourceRegionCaribbean": "Caribbean",
     "panelCatTTNews": "T&T & Caribbean News",
     "panelCatTTLenses": "T&T Topic Lenses",
-    "panelCatTTContext": "Context & Tracking"
+    "panelCatTTContext": "Context & Tracking",
+    "sourceRegionGuyana": "Guyana",
+    "sourceRegionGuyanaLenses": "Guyana Topic Lenses",
+    "panelCatGyNews": "Guyana and Caribbean News",
+    "panelCatGyLenses": "Guyana Topic Lenses",
+    "panelCatGyContext": "Context and Tracking",
+    "sourceRegionChipsCompute": "Chips and Compute",
+    "sourceRegionChipsAi": "AI Labs and Policy",
+    "panelCatChipsNews": "Chips and Compute",
+    "panelCatChipsAi": "AI Labs and Policy",
+    "panelCatChipsMarkets": "Markets and Tracking"
   },
   "countryBrief": {
     "identifying": "Identificando país...",

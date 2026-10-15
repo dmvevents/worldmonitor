@@ -216,7 +216,17 @@
     "sourceRegionCaribbean": "Caribbean",
     "panelCatTTNews": "T&T & Caribbean News",
     "panelCatTTLenses": "T&T Topic Lenses",
-    "panelCatTTContext": "Context & Tracking"
+    "panelCatTTContext": "Context & Tracking",
+    "sourceRegionGuyana": "Guyana",
+    "sourceRegionGuyanaLenses": "Guyana Topic Lenses",
+    "panelCatGyNews": "Guyana and Caribbean News",
+    "panelCatGyLenses": "Guyana Topic Lenses",
+    "panelCatGyContext": "Context and Tracking",
+    "sourceRegionChipsCompute": "Chips and Compute",
+    "sourceRegionChipsAi": "AI Labs and Policy",
+    "panelCatChipsNews": "Chips and Compute",
+    "panelCatChipsAi": "AI Labs and Policy",
+    "panelCatChipsMarkets": "Markets and Tracking"
   },
   "panels": {
     "liveNews": "Новости в реальном времени",
@@ -350,7 +360,8 @@
       "latam": "Латинская Америка",
       "oceania": "Океания",
       "caribbean": "Caribbean",
-      "trinidad": "Trinidad & Tobago"
+      "trinidad": "Trinidad & Tobago",
+      "guyana": "Guyana"
     },
     "tips": {
       "map": "Введите название страны, чтобы перелететь к ней на карте",
@@ -1065,7 +1076,8 @@
         "africa": "Африка",
         "oceania": "Океания",
         "caribbean": "Caribbean",
-        "trinidad": "Trinidad & Tobago"
+        "trinidad": "Trinidad & Tobago",
+        "guyana": "Guyana"
       },
       "layers": {
         "startupHubs": "Хабы стартапов",

@@ -73,7 +73,11 @@ TIMEZONE_TO_CITY['Asia/Saigon'] = 'bangkok';
 TIMEZONE_TO_CITY['Pacific/Sydney'] = 'sydney';
 
 const STORAGE_KEY = 'worldmonitor-world-clock-cities';
-const DEFAULT_CITIES = SITE_VARIANT === 'tt'
+const DEFAULT_CITIES = SITE_VARIANT === 'chips'
+  ? ['los-angeles', 'new-york', 'frankfurt', 'taipei', 'seoul', 'tokyo']
+  : SITE_VARIANT === 'gy'
+  ? ['georgetown', 'port-of-spain', 'caracas', 'new-york', 'london', 'shanghai']
+  : SITE_VARIANT === 'tt'
   ? ['port-of-spain', 'new-york', 'caracas', 'georgetown', 'london', 'tokyo']
   : ['new-york', 'london', 'dubai', 'bangkok', 'tokyo', 'sydney'];
 

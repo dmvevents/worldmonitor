@@ -184,7 +184,7 @@ import {
 
 
 export type TimeRange = '1h' | '6h' | '24h' | '48h' | '7d' | 'all';
-export type DeckMapView = 'global' | 'america' | 'mena' | 'eu' | 'asia' | 'latam' | 'africa' | 'oceania' | 'caribbean' | 'trinidad';
+export type DeckMapView = 'global' | 'america' | 'mena' | 'eu' | 'asia' | 'latam' | 'africa' | 'oceania' | 'caribbean' | 'trinidad' | 'guyana';
 type MapInteractionMode = 'flat' | '3d';
 
 export interface CountryClickPayload {
@@ -235,6 +235,7 @@ const VIEW_PRESETS: Record<DeckMapView, { longitude: number; latitude: number; z
   oceania: { longitude: 135, latitude: -25, zoom: 3.5 },
   caribbean: { longitude: -62.5, latitude: 12.5, zoom: 5 },
   trinidad: { longitude: -61.2, latitude: 10.7, zoom: 8.2 },
+  guyana: { longitude: -58.9, latitude: 4.9, zoom: 6.2 },
 };
 
 const MAP_INTERACTION_MODE: MapInteractionMode =
@@ -5481,6 +5482,7 @@ export class DeckGLMap {
           <option value="oceania">${t('components.deckgl.views.oceania')}</option>
           <option value="caribbean">${t('components.deckgl.views.caribbean')}</option>
           <option value="trinidad">${t('components.deckgl.views.trinidad')}</option>
+          <option value="guyana">${t('components.deckgl.views.guyana')}</option>
         </select>
       </div>
     `, "legacy direct innerHTML migration"));

@@ -5,7 +5,7 @@
 // The view keys mirror the MapView union in src/components/MapContainer.ts;
 // they are plain strings here to avoid a config → components import.
 export type DefaultMapView =
-  | 'global' | 'america' | 'mena' | 'eu' | 'asia' | 'latam' | 'africa' | 'oceania' | 'caribbean' | 'trinidad';
+  | 'global' | 'america' | 'mena' | 'eu' | 'asia' | 'latam' | 'africa' | 'oceania' | 'caribbean' | 'trinidad' | 'guyana';
 
 const VARIANT_DEFAULT_MAP_VIEW: Partial<Record<string, DefaultMapView>> = {
   // Trinidad & Tobago variant opens framed on both islands (the 'caribbean'
@@ -13,6 +13,7 @@ const VARIANT_DEFAULT_MAP_VIEW: Partial<Record<string, DefaultMapView>> = {
   // where the viewer is (the user's own timezone would otherwise pick e.g.
   // 'america' on mobile).
   tt: 'trinidad',
+  gy: 'guyana',
 };
 
 /**

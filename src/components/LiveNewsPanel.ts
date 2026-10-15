@@ -204,6 +204,19 @@ export const OPTIONAL_LIVE_CHANNELS: LiveChannel[] = [
   { id: 'cbc-barbados', name: 'CBC Barbados', handle: '@cbcbarbados246' },
   { id: 'gbn-grenada', name: 'GBN Grenada', handle: '@grenadabroadcastingnetwork9673' },
   { id: 'telesur-english', name: 'teleSUR English', handle: '@telesurenglish' },       // UCmuTmpLY35O3csvhyA6vrkg
+  // Caribbean IPTV: broadcasters' own public HLS feeds (indexed by iptv-org; probed 2026-10-15,
+  // all answer with Access-Control-Allow-Origin: * so hls.js can play them in the browser).
+  { id: 'bizz-tv', name: 'Bizz TV (T&T)', hlsUrl: 'https://stream.bizzmedia.biz/bizz_tv/index.m3u8', useFallbackOnly: true },
+  { id: 'sankhya-tv', name: 'Sankhya TV (T&T)', hlsUrl: 'https://5c59fd5680a05.streamlock.net/live/_definst_/ngrp:SANKHYATV.stream_all/playlist.m3u8', useFallbackOnly: true },
+  { id: 'scorch-tv', name: 'Scorch TV (T&T)', hlsUrl: 'https://w6oy7x7jlxrg-hls-live.5centscdn.com/MandETV/955ad3298db330b5ee880c2c9e6f23a0.sdp/playlist.m3u8', useFallbackOnly: true },
+  { id: 'hgptv', name: 'HGPTV (Guyana)', hlsUrl: 'https://cdn-us-east-prod-ingest-infra-dacast-com.akamaized.net/8424fb7f-99a9-87ae-3861-f0620849d11c/source/index.m3u8', useFallbackOnly: true },
+  { id: 'mtv-guyana', name: 'MTV Guyana', hlsUrl: 'https://stream.mtvgy.com/mtvguyana/index.fmp4.m3u8', useFallbackOnly: true },
+  { id: 'little-guyana-tv', name: 'Little Guyana TV', hlsUrl: 'https://video1.getstreamhosting.com:1936/8122/8122/playlist.m3u8', useFallbackOnly: true },
+  { id: 'cbc-tv8', name: 'CBC TV8 (Barbados)', hlsUrl: 'https://1740288887.rsc.cdn77.org/1740288887/index.m3u8', useFallbackOnly: true },
+  { id: 'tvj-hls', name: 'TVJ (Jamaica)', hlsUrl: 'https://vod2live.univtec.com/manifest/a99a1804-dc83-411f-8c1c-b62f08cdfa59.m3u8', useFallbackOnly: true },
+  { id: 'gnn-tv', name: 'GNN TV (Jamaica)', hlsUrl: 'https://na.linear.zype.com/bf94f9f4-383c-40e0-9d49-279a4f33ab8d/f29b8836-d990-4c8d-b421-192a8f43edc4-zype/live.m3u8', useFallbackOnly: true },
+  { id: 'dbs-tv', name: 'DBS TV (St Lucia)', hlsUrl: 'https://stream.dbstvstlucia.com/hls/dbstv_main.m3u8', useFallbackOnly: true },
+  { id: 'pointe-tv', name: 'Pointe TV (Antigua)', hlsUrl: 'https://tv.pointville.ag/hls/mystream.m3u8', useFallbackOnly: true },
   // Oceania
   { id: 'abc-news-au', name: 'ABC News Australia', handle: '@abcnewsaustralia', fallbackVideoId: 'vOTiJkg1voo' },
 ];
@@ -216,19 +229,29 @@ const _REGION_ENTRIES: { key: string; labelKey: string; channelIds: string[] }[]
   { key: 'me', labelKey: 'components.liveNews.regionMiddleEast', channelIds: ['alarabiya', 'aljazeera', 'al-hadath', 'sky-news-arabia', 'trt-world', 'iran-intl', 'press-tv', 'cgtn-arabic', 'kan-11', 'i24-news', 'asharq-news', 'aljazeera-arabic', 'aljazeera-mubasher', 'alarabiya-business', 'al-qahera-news', 'dw-arabic', 'rt-arabic', 'rudaw'] },
   { key: 'africa', labelKey: 'components.liveNews.regionAfrica', channelIds: ['africanews', 'channels-tv', 'ktn-news', 'enca', 'sabc-news', 'arise-news'] },
   { key: 'oc', labelKey: 'components.liveNews.regionOceania', channelIds: ['abc-news-au'] },
-  { key: 'caribbean', labelKey: 'components.liveNews.regionCaribbean', channelIds: ['ttt-live', 'cnc3', 'cnc3-prime', 'tv6-news', 'tt-parliament', 'tobago-channel5', 'tobago-updates', 'ietv', 'ncn-guyana', 'tvj', 'cvm-tv', 'abs-antigua', 'cbc-barbados', 'gbn-grenada', 'telesur-english'] },
+  { key: 'caribbean', labelKey: 'components.liveNews.regionCaribbean', channelIds: ['ttt-live', 'cnc3', 'cnc3-prime', 'tv6-news', 'tt-parliament', 'tobago-channel5', 'tobago-updates', 'ietv', 'ncn-guyana', 'tvj', 'cvm-tv', 'abs-antigua', 'cbc-barbados', 'gbn-grenada', 'telesur-english', 'bizz-tv', 'sankhya-tv', 'scorch-tv', 'hgptv', 'mtv-guyana', 'little-guyana-tv', 'cbc-tv8', 'tvj-hls', 'gnn-tv', 'dbs-tv', 'pointe-tv'] },
 ];
 export const OPTIONAL_CHANNEL_REGIONS: { key: string; labelKey: string; channelIds: string[] }[] = [
   ..._REGION_ENTRIES,
 ];
 
 // Trinidad & Tobago variant: local broadcasters first, then two 24/7 world feeds.
-const TT_LIVE_CHANNEL_IDS = ['ttt-live', 'cnc3', 'tv6-news', 'tt-parliament', 'tobago-updates', 'telesur-english', 'sky', 'aljazeera'];
+const TT_LIVE_CHANNEL_IDS = ['ttt-live', 'cnc3', 'tv6-news', 'tt-parliament', 'tobago-updates', 'bizz-tv', 'cbc-tv8', 'telesur-english', 'sky', 'aljazeera'];
 const TT_LIVE_CHANNELS: LiveChannel[] = TT_LIVE_CHANNEL_IDS
   .map(id => OPTIONAL_LIVE_CHANNELS.find(c => c.id === id))
   .filter((c): c is LiveChannel => c !== undefined);
 
-const DEFAULT_LIVE_CHANNELS = SITE_VARIANT === 'tech' ? TECH_LIVE_CHANNELS : SITE_VARIANT === 'happy' ? [] : SITE_VARIANT === 'tt' ? TT_LIVE_CHANNELS : FULL_LIVE_CHANNELS;
+const GY_LIVE_CHANNEL_IDS = ['ncn-guyana', 'hgptv', 'mtv-guyana', 'little-guyana-tv', 'telesur-english', 'tvj', 'sky', 'aljazeera'];
+const GY_LIVE_CHANNELS: LiveChannel[] = GY_LIVE_CHANNEL_IDS
+  .map(id => OPTIONAL_LIVE_CHANNELS.find(c => c.id === id))
+  .filter((c): c is LiveChannel => c !== undefined);
+
+const CHIPS_LIVE_CHANNEL_IDS = ['bloomberg', 'cnbc', 'yahoo', 'nasa', 'sky', 'aljazeera'];
+const CHIPS_LIVE_CHANNELS: LiveChannel[] = CHIPS_LIVE_CHANNEL_IDS
+  .map(id => OPTIONAL_LIVE_CHANNELS.find(c => c.id === id))
+  .filter((c): c is LiveChannel => c !== undefined);
+
+const DEFAULT_LIVE_CHANNELS = SITE_VARIANT === 'tech' ? TECH_LIVE_CHANNELS : SITE_VARIANT === 'happy' ? [] : SITE_VARIANT === 'tt' ? TT_LIVE_CHANNELS : SITE_VARIANT === 'gy' ? GY_LIVE_CHANNELS : SITE_VARIANT === 'chips' ? CHIPS_LIVE_CHANNELS : FULL_LIVE_CHANNELS;
 
 /** Default channel list for the current variant (for restore in channel management). */
 export function getDefaultLiveChannels(): LiveChannel[] {

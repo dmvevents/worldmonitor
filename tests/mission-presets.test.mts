@@ -59,7 +59,7 @@ class MemoryStorage {
   }
 }
 
-const VARIANTS: MapVariant[] = ['full', 'tech', 'finance', 'commodity', 'energy', 'happy', 'tt'];
+const VARIANTS: MapVariant[] = ['full', 'tech', 'finance', 'commodity', 'energy', 'happy', 'tt', 'gy', 'chips'];
 
 let originalLocalStorage: PropertyDescriptor | undefined;
 let originalWindow: PropertyDescriptor | undefined;
