@@ -16,16 +16,18 @@ export interface PresetTab {
   panelKeys: string[];
   /** Map region the tab opens on (see map-view.ts). */
   mapView: string;
+  /** Map panel header shown while the tab is active. */
+  mapTitle: string;
   /** Live News channel ids to put first when the tab is selected. */
   liveChannelIds: string[];
 }
 
-interface PresetTabSource { id: string; name: string; variant: string }
+interface PresetTabSource { id: string; name: string; variant: string; mapTitle: string }
 
 const PRESETS: Record<string, PresetTabSource> = {
-  tt: { id: 'preset-tt', name: 'Trinidad & Tobago', variant: 'tt' },
-  gy: { id: 'preset-gy', name: 'Guyana', variant: 'gy' },
-  chips: { id: 'preset-chips', name: 'Chips & AI', variant: 'chips' },
+  tt: { id: 'preset-tt', name: 'Trinidad & Tobago', variant: 'tt', mapTitle: 'Trinidad & Tobago / Southern Caribbean' },
+  gy: { id: 'preset-gy', name: 'Guyana', variant: 'gy', mapTitle: 'Guyana / Guiana Shield' },
+  chips: { id: 'preset-chips', name: 'Chips & AI', variant: 'chips', mapTitle: 'AI Compute: Data Centres, Fabs and Cloud Regions' },
 };
 
 // Which presets each variant offers besides its own default tab.
@@ -48,6 +50,7 @@ function toPresetTab(p: PresetTabSource): PresetTab {
     name: p.name,
     panelKeys: getVariantEnabledPanelKeys(p.variant),
     mapView: getDefaultMapView(p.variant, 'global'),
+    mapTitle: p.mapTitle,
     liveChannelIds: VARIANT_LIVE_CHANNEL_IDS[p.variant] ?? [],
   };
 }

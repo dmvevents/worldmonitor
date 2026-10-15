@@ -1107,6 +1107,8 @@ export class PanelLayoutManager implements AppModule {
     this.ctx.map?.setView(preset.mapView as MapView);
     const regionSelect = document.getElementById('regionSelect') as HTMLSelectElement | null;
     if (regionSelect) regionSelect.value = preset.mapView;
+    const mapTitle = document.querySelector('#mapSection .panel-title');
+    if (mapTitle) mapTitle.textContent = preset.mapTitle;
     const live = this.ctx.panels['live-news'] as { applyChannelPreset?: (ids: string[]) => void } | undefined;
     if (preset.liveChannelIds.length > 0) live?.applyChannelPreset?.(preset.liveChannelIds);
   }
