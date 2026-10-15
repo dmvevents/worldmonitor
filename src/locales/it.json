@@ -1757,7 +1757,14 @@
       "offAir": "{{name}} is off air right now — it streams during newscasts only",
       "playReplay": "Play latest bulletin (replay)",
       "nextLive": "Next live channel",
-      "scheduledHint": "Streams during newscasts only — may be off air"
+      "scheduledHint": "Streams during newscasts only — may be off air",
+      "iptvDirectory": "IPTV directory (iptv-org)",
+      "iptvCountry": "Country",
+      "iptvAllCountries": "All countries",
+      "iptvHint": "Live TV streams from the public iptv-org index, verified for browser playback. Pick a country or search, then add to your strip.",
+      "iptvPrompt": "Choose a country or type to search.",
+      "iptvAdded": "Added",
+      "iptvUnavailable": "IPTV directory not available. Run `node scripts/iptv-sync.mjs` to build it."
     },
     "securityAdvisories": {
       "loading": "Caricamento avvisi di viaggio...",
