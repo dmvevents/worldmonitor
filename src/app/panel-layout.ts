@@ -1063,6 +1063,30 @@ export class PanelLayoutManager implements AppModule {
     };
   }
 
+  private pendingLiveChannelPreset: string[] | null = null;
+
+  /**
+   * Hand a preset channel set to the Live News panel. The panel mounts lazily
+   * (and re-mounts when a tab enables it), so if it is not there yet the
+   * preset is parked and applied when the mount completes.
+   */
+  private applyLiveChannelPreset(ids: string[]): void {
+    const live = this.ctx.panels['live-news'] as { applyChannelPreset?: (ids: string[]) => void } | undefined;
+    if (live?.applyChannelPreset) {
+      this.pendingLiveChannelPreset = null;
+      live.applyChannelPreset(ids);
+      return;
+    }
+    this.pendingLiveChannelPreset = ids;
+  }
+
+  /** Called once the lazy Live News panel instance exists. */
+  private flushPendingLiveChannelPreset(): void {
+    if (!this.pendingLiveChannelPreset) return;
+    const ids = this.pendingLiveChannelPreset;
+    this.applyLiveChannelPreset(ids);
+  }
+
   /** Capture the live panel state (settings + order) for a tab snapshot. */
   private captureCurrentTabState(): Pick<PanelTab, 'panelSettings' | 'panelOrder' | 'bottomSet'> {
     // Persist the live DOM order first so the snapshot reflects any drags.
@@ -1109,8 +1133,7 @@ export class PanelLayoutManager implements AppModule {
     if (regionSelect) regionSelect.value = preset.mapView;
     const mapTitle = document.querySelector('#mapSection .panel-title');
     if (mapTitle) mapTitle.textContent = preset.mapTitle;
-    const live = this.ctx.panels['live-news'] as { applyChannelPreset?: (ids: string[]) => void } | undefined;
-    if (preset.liveChannelIds.length > 0) live?.applyChannelPreset?.(preset.liveChannelIds);
+    if (preset.liveChannelIds.length > 0) this.applyLiveChannelPreset(preset.liveChannelIds);
   }
 
   private addTab(): void {
@@ -1380,8 +1403,19 @@ export class PanelLayoutManager implements AppModule {
   mountLiveNewsIfReady(): void {
     if (this.ctx.panels['live-news']) return;
     const grid = document.getElementById('panelsGrid');
+    // A tab switch that re-enables live-news reserves a deferred shell for it;
+    // mount into that shell instead of appending a second panel next to it.
+    const deferredLive = this.deferredPanelMounts.get('live-news');
+    const liveShell = deferredLive?.placeholder
+      ?? (grid?.querySelector('.panel-deferred-shell[data-panel="live-news"]') as HTMLElement | null)
+      ?? null;
+    if (deferredLive) {
+      deferredLive.observer?.disconnect();
+      if (deferredLive.retryTimer !== null) clearTimeout(deferredLive.retryTimer);
+      this.deferredPanelMounts.delete('live-news');
+    }
     if (this.lazyPanelRegistrations.has('live-news') && grid) {
-      this.mountLazyPanel('live-news', grid);
+      this.mountLazyPanel('live-news', grid, liveShell);
       return;
     }
     void this.importPanel(
@@ -1399,7 +1433,9 @@ export class PanelLayoutManager implements AppModule {
       this.ctx.panels['live-news'] = panel;
       const el = panel.getElement();
       this.makeDraggable(el, 'live-news');
-      if (grid) {
+      if (liveShell?.parentNode) {
+        liveShell.parentNode.replaceChild(el, liveShell);
+      } else if (grid) {
         const addBlock = grid.querySelector('.add-panel-block');
         if (addBlock) grid.insertBefore(el, addBlock);
         else grid.appendChild(el);
@@ -1695,6 +1731,7 @@ export class PanelLayoutManager implements AppModule {
   private afterPanelMounted(key: string, panel: Panel): void {
     const config = this.ctx.panelSettings[key];
     if (config) panel.toggle(config.enabled);
+    if (key === 'live-news') this.flushPendingLiveChannelPreset();
     this.observePanelForHydration(panel);
     if (config?.enabled) {
       this.scheduleHydrationForPanelElement(panel.getElement(), 'near');
