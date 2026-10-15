@@ -5,8 +5,9 @@ Local-only site variant that turns World Monitor into a Trinidad & Tobago / sout
 ## Run
 
 ```bash
-npm run dev:hub         # RECOMMENDED: the global World Monitor dashboard on http://localhost:3100 with Trinidad & Tobago,
-                        # Guyana and Chips & AI as tabs next to the default Main tab (local Ollama wired in)
+npm run dev:hub:claude  # RECOMMENDED: the global World Monitor dashboard on http://localhost:3100 with Trinidad & Tobago,
+                        # Guyana and Chips & AI as tabs next to the default Main tab; AI briefs on Claude (Bedrock), see below
+npm run dev:hub         # same hub with the local Ollama model instead of Claude
 npm run dev:tt          # T&T-first variant on :3100 (Main = T&T, tabs for Guyana and Chips & AI)
 npm run build:tt        # production build of the tt variant
 ```
@@ -41,7 +42,7 @@ Direct RSS (verified 2026-10-14): Trinidad Express and TV6 (BLOX search RSS), TT
 
 No usable RSS (blocked, 404, or empty) → Google News `site:` queries instead: Guardian TT, CNC3, Newsday, TTPS, Office of the Prime Minister, Met Office, OPR, Energy Chamber, Stabroek/Kaieteur. Also no feed: i95.5FM, Tobago Today, Wired868 (403), CMC, Nation News (403), ODPM, CSO.
 
-Live TV is YouTube-based: the resolver checks `youtube.com/@handle/live`. TTT, CNC3, TV6, Parliament and Tobago Updates stream only during newscasts and sittings, so when a station is off air the panel plays its most recent upload (latest bulletin) instead of an offline card; the tab is not marked live in that state. teleSUR English, Sky and Al Jazeera are near 24/7. The main T&T news stations (TTT, CNC3, TV6) publish no public HLS URL, so they stay on YouTube; the IPTV channels listed under *Sibling monitors* below are the broadcasters that do. Loop TT's domain no longer resolves and is omitted. A `site:gov.tt` catch-all was tried and removed: Google indexes spam pages on compromised gov.tt subdomains.
+Live TV first. The strip opens on a channel that is live around the clock (an HLS feed such as Bizz TV, or a 24/7 YouTube stream). TTT, CNC3, TV6, Parliament and Tobago Updates are YouTube-only and stream just during newscasts and sittings; they carry a ◷ marker in the strip, and when one is off air the panel shows an off-air card with *Next live channel*, *Play latest bulletin (replay)* and *Retry* instead of silently playing a recording. A replay is badged REPLAY on its tab. Verified 2026-10-15 (curl, iptv-org index and the broadcasters' own sites): none of TTT, CNC3 (Cloudflare-gated), TV6 (Dailymotion embed locked to tv6tnt.com), IETV (RTMP ingest only), ParlView (per-event archive player) or NCN Guyana publish a browser-playable live HLS feed, so YouTube remains their only route. teleSUR English, Sky and Al Jazeera are near 24/7. The main T&T news stations (TTT, CNC3, TV6) publish no public HLS URL, so they stay on YouTube; the IPTV channels listed under *Sibling monitors* below are the broadcasters that do. Loop TT's domain no longer resolves and is omitted. A `site:gov.tt` catch-all was tried and removed: Google indexes spam pages on compromised gov.tt subdomains.
 
 Trinidad Express rate-limits bursts (HTTP 429) if the same host fetches its three feeds repeatedly within minutes; the dashboard's per-feed cache keeps this from mattering in normal use.
 
@@ -56,7 +57,7 @@ Two more variants ship alongside `tt`, built the same way:
 
 You do not need the extra servers to use them: each dashboard seeds the other two as **preset tabs** in the tab bar (Main · Guyana · Chips & AI). A preset tab enables exactly that variant's default panels, re-centres the map on its region (Trinidad & Tobago, Guyana, global for Chips) and puts its broadcasters first in the Live News strip; feeds load through the shared catalog. Deleting a preset tab sticks; the seed runs once per variant. The standalone `dev:gy` / `dev:chips` servers are optional.
 
-Live IPTV: the Live News panel also carries broadcasters' public HLS feeds (CORS-verified 2026-10-15) for Bizz TV, Sankhya TV and Scorch TV (T&T), HGPTV, MTV Guyana and Little Guyana TV, CBC TV8 Barbados, TVJ and GNN Jamaica, DBS St Lucia, Pointe TV Antigua, ZNS Bahamas, Antena 7 and Noticias 16 (Dominican Republic), Radio y TV Martí and Prensa Latina TV (Cuba), Haiti News Channel and RTH TV1, Telemundo Puerto Rico, and for Venezuela teleSUR (Spanish and English HD), Venevisión Internacional and Canal I. Per-variant default channel sets live in `src/config/live-channel-defaults.ts`. The main T&T news stations publish no HLS; they stay on YouTube with the latest-upload fallback.
+Live IPTV: the Live News panel also carries broadcasters' public HLS feeds (CORS-verified 2026-10-15) for Bizz TV, Sankhya TV, Scorch TV, Riddim & Hope TV and The Islamic Network (T&T), ZIZ TV and Nevis Television (St Kitts & Nevis), Caribbean Hot 7 TV (St Lucia), Guardian Talk Radio (Bahamas), Fame 95 FM (Jamaica), HGPTV, MTV Guyana and Little Guyana TV, CBC TV8 Barbados, TVJ and GNN Jamaica, DBS St Lucia, Pointe TV Antigua, ZNS Bahamas, Antena 7 and Noticias 16 (Dominican Republic), Radio y TV Martí and Prensa Latina TV (Cuba), Haiti News Channel and RTH TV1, Telemundo Puerto Rico, and for Venezuela teleSUR (Spanish and English HD), Venevisión Internacional and Canal I. Per-variant default channel sets live in `src/config/live-channel-defaults.ts`. The main T&T news stations publish no HLS; they stay on YouTube with the latest-upload fallback.
 
 ## Testing and validation
 
@@ -84,6 +85,50 @@ Public news and official sources only, aggregate and topic level. No profiling o
 
 Headlines grouped by lens, timestamps in `America/Port_of_Spain`. If a local Ollama is reachable (`OLLAMA_URL`, `OLLAMA_MODEL`) an executive summary is prepended; otherwise the digest says so and stays unsummarised. No cloud key is used.
 
+## AI briefs on Claude (Amazon Bedrock)
+
+This Mac has Bedrock access (`AWS_PROFILE=bedrock`, us-east-1) with Claude Sonnet 5, Opus 5.5 and Fable 5.1
+inference profiles. World Monitor's server only speaks the OpenAI chat-completions format, so
+`scripts/tt-claude-proxy.py` (stdlib + boto3) runs a local shim on :8788 that translates to the Bedrock
+Converse API, streaming included. `npm run dev:hub:claude` starts the shim, points the `generic` LLM
+provider at it (`LLM_API_URL`, `LLM_MODEL`, `LLM_TOOL_PROVIDER` / `LLM_REASONING_PROVIDER=generic`) and
+deliberately leaves Ollama unset: `server/_shared/llm.ts` tries providers in the fixed order
+ollama → openrouter → groq → generic, so an Ollama URL would send every brief to the local 8B model first.
+
+```bash
+npm run dev:hub:claude                                           # Claude Sonnet 5 (default)
+BEDROCK_MODEL=us.anthropic.claude-opus-5-5 npm run dev:hub:claude
+curl -s http://127.0.0.1:8788/health                             # shim status
+LLM_API_URL=http://127.0.0.1:8788/v1/chat/completions LLM_MODEL=us.anthropic.claude-sonnet-5 \
+  ./node_modules/.bin/tsx scripts/tt-daily-digest.mts            # digest summary on Claude
+```
+
+Verified 2026-10-15: `/api/intelligence/v1/get-country-intel-brief?country_code=TT` and `GY` return
+Claude-written briefs (model `us.anthropic.claude-sonnet-5`, 12-16 s). Caveat: with no Redis-seeded
+context the brief has zero grounding sources and is model knowledge, not the day's headlines; treat it
+as background, not as news. Claude 5 models reject `temperature`, so the shim drops sampling fields
+(`BEDROCK_FORWARD_SAMPLING=1` re-enables them for older Claude).
+
+## Data-source keys (outside the repo)
+
+Keys live in `~/.config/worldmonitor/keys.env` (chmod 600, `KEY=value` lines), loaded by
+`scripts/tt-dev-hub-claude.sh`; no `.env*` file is needed. Obtained 2026-10-15 (free tiers, registered
+with Anton's primary Gmail): `ALPHA_VANTAGE_API_KEY`, `EIA_API_KEY`, `UPSTASH_REDIS_REST_URL` +
+`UPSTASH_REDIS_REST_TOKEN` (database `worldmonitor-tt`, us-east-1). The market, commodity and energy
+handlers read only Redis bootstrap keys, so seed them (and re-seed after the TTLs lapse):
+
+```bash
+set -a; . ~/.config/worldmonitor/keys.env; set +a
+node scripts/seed-commodity-quotes.mjs    # Alpha Vantage → market:commodities-bootstrap:v1 (33 records)
+node scripts/seed-market-quotes.mjs       # Alpha Vantage + keyless Yahoo → stocks (48 records)
+node scripts/seed-eia-petroleum.mjs       # EIA → energy:eia-petroleum:v1
+node scripts/seed-fuel-prices.mjs         # EIA → economic:fuel-prices:v1
+```
+
+Not obtained (sign-up has a captcha or needs a password/approval, so Anton does these himself):
+Finnhub (stock ticker breadth), FRED (`seed-economy.mjs` macro panels), ACLED (regional conflict events).
+Groq is unnecessary now that Claude is wired in.
+
 ## Local AI with Ollama (no cloud key)
 
 Ollama is installed on this Mac with llama3.1:8b, qwen3:8b and others. Start it and run the tt
@@ -108,7 +153,7 @@ links next to any summary.
 
 ## Still needs a key (optional)
 
-- AI Insights / country briefs / chat analyst: `GROQ_API_KEY` or `OPENROUTER_API_KEY`, or any OpenAI-compatible endpoint via `LLM_API_URL` (+ `LLM_MODEL`, `LLM_API_KEY`) — Ollama works for this too.
+- AI Insights / country briefs / chat analyst: covered by Claude on Bedrock (`dev:hub:claude`) or Ollama; `GROQ_API_KEY` / `OPENROUTER_API_KEY` remain optional alternatives.
 - Vessel tracking (`ais` layer): `AISSTREAM_API_KEY` (free).
 - Satellite fire detections: `NASA_FIRMS_API_KEY` (free).
 - ACLED conflict/protest events: `ACLED_EMAIL` / `ACLED_PASSWORD` (free for researchers).
