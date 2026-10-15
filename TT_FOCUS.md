@@ -36,7 +36,7 @@ Direct RSS (verified 2026-10-14): Trinidad Express and TV6 (BLOX search RSS), TT
 
 No usable RSS (blocked, 404, or empty) → Google News `site:` queries instead: Guardian TT, CNC3, Newsday, TTPS, Office of the Prime Minister, Met Office, OPR, Energy Chamber, Stabroek/Kaieteur. Also no feed: i95.5FM, Tobago Today, Wired868 (403), CMC, Nation News (403), ODPM, CSO.
 
-Live TV is YouTube-based: the dev middleware resolves `youtube.com/@handle/live`, so a channel is playable only while the broadcaster is actually streaming (TTT, Parliament and Tobago Updates stream sittings and newscasts; teleSUR English is near 24/7). No IPTV m3u8 streams were added because none of the T&T broadcasters publish a public HLS URL. Loop TT's domain no longer resolves and is omitted. A `site:gov.tt` catch-all was tried and removed: Google indexes spam pages on compromised gov.tt subdomains.
+Live TV is YouTube-based: the resolver checks `youtube.com/@handle/live`. TTT, CNC3, TV6, Parliament and Tobago Updates stream only during newscasts and sittings, so when a station is off air the panel plays its most recent upload (latest bulletin) instead of an offline card; the tab is not marked live in that state. teleSUR English, Sky and Al Jazeera are near 24/7. No IPTV m3u8 streams were added because none of the T&T broadcasters publish a public HLS URL. Loop TT's domain no longer resolves and is omitted. A `site:gov.tt` catch-all was tried and removed: Google indexes spam pages on compromised gov.tt subdomains.
 
 Trinidad Express rate-limits bursts (HTTP 429) if the same host fetches its three feeds repeatedly within minutes; the dashboard's per-feed cache keeps this from mattering in normal use.
 
