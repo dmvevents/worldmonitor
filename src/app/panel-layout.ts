@@ -1125,15 +1125,32 @@ export class PanelLayoutManager implements AppModule {
    * region and puts its broadcasters first in the Live News strip. Any other
    * tab restores the active variant's own region and channels.
    */
+  /** True while a regional preset's channel set is in the Live News strip. */
+  private presetChannelsActive = false;
+
+  private activePresetTab(): PresetTab | null {
+    const id = this.tabsState?.activeTabId;
+    return id ? getPresetTabs(SITE_VARIANT).find((p) => p.id === id) ?? null : null;
+  }
+
   private applyTabRegion(tabId: string): void {
-    const preset = getPresetTabs(SITE_VARIANT).find((p) => p.id === tabId) ?? getOwnVariantPreset(SITE_VARIANT);
+    const regional = getPresetTabs(SITE_VARIANT).find((p) => p.id === tabId) ?? null;
+    const preset = regional ?? getOwnVariantPreset(SITE_VARIANT);
     if (!preset) return;
     this.ctx.map?.setView(preset.mapView as MapView);
     const regionSelect = document.getElementById('regionSelect') as HTMLSelectElement | null;
     if (regionSelect) regionSelect.value = preset.mapView;
     const mapTitle = document.querySelector('#mapSection .panel-title');
     if (mapTitle) mapTitle.textContent = preset.mapTitle;
-    if (preset.liveChannelIds.length > 0) this.applyLiveChannelPreset(preset.liveChannelIds);
+    // Only touch the channel strip when a regional preset is involved: switching
+    // between ordinary tabs must not undo a user's own channel arrangement.
+    if (regional) {
+      if (regional.liveChannelIds.length > 0) this.applyLiveChannelPreset(regional.liveChannelIds);
+      this.presetChannelsActive = true;
+    } else if (this.presetChannelsActive) {
+      if (preset.liveChannelIds.length > 0) this.applyLiveChannelPreset(preset.liveChannelIds);
+      this.presetChannelsActive = false;
+    }
   }
 
   private addTab(): void {
@@ -2477,10 +2494,13 @@ export class PanelLayoutManager implements AppModule {
     this.ctx.map = new MapContainer(mapContainer, {
       zoom: this.ctx.isMobile ? 2.5 : 1.0,
       pan: { x: 0, y: 0 },
-      view: getDefaultMapView(SITE_VARIANT, this.ctx.isMobile ? this.ctx.resolvedLocation : 'global'),
+      view: (this.activePresetTab()?.mapView ?? getDefaultMapView(SITE_VARIANT, this.ctx.isMobile ? this.ctx.resolvedLocation : 'global')) as MapView,
       layers: this.ctx.mapLayers,
       timeRange: '7d',
     }, preferGlobe);
+    // A regional preset tab restored from storage opens on its own region, header and channel set.
+    const restoredPreset = this.activePresetTab();
+    if (restoredPreset) this.applyTabRegion(restoredPreset.id);
 
     const eagerSupplyChainPanel = this.ctx.panels['supply-chain'] as SupplyChainPanel | undefined;
     if (eagerSupplyChainPanel) {
