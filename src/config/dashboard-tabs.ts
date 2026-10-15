@@ -25,6 +25,7 @@ export interface PresetTab {
 interface PresetTabSource { id: string; name: string; variant: string; mapTitle: string }
 
 const PRESETS: Record<string, PresetTabSource> = {
+  full: { id: 'preset-full', name: 'World Monitor', variant: 'full', mapTitle: 'Global Situation' },
   tt: { id: 'preset-tt', name: 'Trinidad & Tobago', variant: 'tt', mapTitle: 'Trinidad & Tobago / Southern Caribbean' },
   gy: { id: 'preset-gy', name: 'Guyana', variant: 'gy', mapTitle: 'Guyana / Guiana Shield' },
   chips: { id: 'preset-chips', name: 'Chips & AI', variant: 'chips', mapTitle: 'AI Compute: Data Centres, Fabs and Cloud Regions' },
@@ -32,6 +33,8 @@ const PRESETS: Record<string, PresetTabSource> = {
 
 // Which presets each variant offers besides its own default tab.
 const VARIANT_PRESET_TABS: Partial<Record<string, string[]>> = {
+  // The global dashboard keeps its default tab and gains the regional/topic monitors as tabs.
+  full: ['tt', 'gy', 'chips'],
   tt: ['gy', 'chips'],
   gy: ['tt', 'chips'],
   chips: ['tt', 'gy'],

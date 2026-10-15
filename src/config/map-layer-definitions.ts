@@ -303,6 +303,8 @@ const VARIANT_LAYER_ORDER: Record<MapVariant, Array<keyof MapLayers>> = {
     'waterways', 'economic', 'minerals', 'gpsJamming',
     'satellites', 'ciiChoropleth', 'resilienceScore', 'sanctions', 'dayNight', 'webcams',
     'diseaseOutbreaks',
+    // Regional layers usable from the T&T / Guyana preset tabs on the global dashboard (off by default)
+    'ebcConstituencies', 'hurricanes',
   ],
   tech: [
     'startupHubs', 'techHQs', 'accelerators', 'cloudRegions',
