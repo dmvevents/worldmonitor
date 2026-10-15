@@ -14,8 +14,10 @@
  *   ./node_modules/.bin/tsx scripts/tt-daily-digest.mts --hours 48 --per-category 15 --out /tmp/tt
  *   ./node_modules/.bin/tsx scripts/tt-daily-digest.mts --stdout        # print instead of writing
  *
- * Optional local LLM summary (no cloud key needed): set OLLAMA_URL or OLLAMA_API_URL (default
- * http://localhost:11434) and OLLAMA_MODEL (default llama3.1). If Ollama is not
+ * Optional LLM summary. Either an OpenAI-compatible endpoint via LLM_API_URL (+ LLM_MODEL,
+ * LLM_API_KEY) — e.g. the Claude/Bedrock shim from scripts/tt-claude-proxy.py — or a local
+ * Ollama via OLLAMA_URL / OLLAMA_API_URL (default http://localhost:11434) and OLLAMA_MODEL
+ * (default llama3.1). If neither is
  * reachable the digest is written without the summary and says so.
  *
  * Schedule daily with launchd: see scripts/tt-daily-digest.launchd.plist.example
@@ -196,6 +198,46 @@ function ttDateStamp(now: Date): string {
   return `${get('year')}-${get('month')}-${get('day')}`;
 }
 
+const SUMMARY_PROMPT_LINES = [
+  'You are preparing a neutral daily situational-awareness brief for Trinidad and Tobago from public headlines only.',
+  'Write 5-8 bullet points covering: energy/LNG, education and the student laptop programme, telecoms, public-sector IT/procurement, public safety at an aggregate level, weather/hurricane alerts, and Caribbean geopolitics (Venezuela, Guyana, CARICOM).',
+  'Only use facts present in the headlines. Do not name or characterise private individuals. Be concise.',
+];
+
+/** OpenAI-compatible chat completion (LLM_API_URL / LLM_API_KEY / LLM_MODEL), e.g. Claude via the local Bedrock shim. */
+async function openAiCompatibleSummary(bulletLines: string[]): Promise<string | null> {
+  const url = process.env.LLM_API_URL;
+  if (!url) return null;
+  const model = process.env.LLM_MODEL || 'gpt-4o-mini';
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(process.env.LLM_API_KEY ? { Authorization: `Bearer ${process.env.LLM_API_KEY}` } : {}),
+      },
+      body: JSON.stringify({
+        model,
+        max_tokens: 900,
+        messages: [
+          { role: 'system', content: SUMMARY_PROMPT_LINES.join('\n') },
+          { role: 'user', content: ['Headlines:', ...bulletLines].join('\n') },
+        ],
+      }),
+      signal: AbortSignal.timeout(180_000),
+    });
+    if (!res.ok) return null;
+    const data = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
+    return data.choices?.[0]?.message?.content?.trim() || null;
+  } catch {
+    return null;
+  }
+}
+
+async function llmSummary(bulletLines: string[]): Promise<string | null> {
+  return (await openAiCompatibleSummary(bulletLines)) ?? ollamaSummary(bulletLines);
+}
+
 async function ollamaSummary(bulletLines: string[]): Promise<string | null> {
   const base = (process.env.OLLAMA_URL || process.env.OLLAMA_API_URL || 'http://localhost:11434').replace(/\/$/, '');
   const model = process.env.OLLAMA_MODEL || 'llama3.1';
@@ -205,14 +247,7 @@ async function ollamaSummary(bulletLines: string[]): Promise<string | null> {
   } catch {
     return null;
   }
-  const prompt = [
-    'You are preparing a neutral daily situational-awareness brief for Trinidad and Tobago from public headlines only.',
-    'Write 5-8 bullet points covering: energy/LNG, education and the student laptop programme, telecoms, public-sector IT/procurement, public safety at an aggregate level, weather/hurricane alerts, and Caribbean geopolitics (Venezuela, Guyana, CARICOM).',
-    'Only use facts present in the headlines. Do not name or characterise private individuals. Be concise.',
-    '',
-    'Headlines:',
-    ...bulletLines,
-  ].join('\n');
+  const prompt = [...SUMMARY_PROMPT_LINES, '', 'Headlines:', ...bulletLines].join('\n');
   try {
     const res = await fetch(`${base}/api/generate`, {
       method: 'POST',
@@ -282,11 +317,11 @@ async function main(): Promise<void> {
     lines.push('');
   }
 
-  const summary = allBullets.length ? await ollamaSummary(allBullets.slice(0, 120)) : null;
+  const summary = allBullets.length ? await llmSummary(allBullets.slice(0, 120)) : null;
   const header: string[] = [];
   header.push('## Executive summary');
   header.push('');
-  header.push(summary ?? '_Not generated: no local LLM reachable (set OLLAMA_URL / OLLAMA_MODEL to enable). Headlines below are unsummarised._');
+  header.push(summary ?? '_Not generated: no LLM reachable (set LLM_API_URL / LLM_MODEL or OLLAMA_URL / OLLAMA_MODEL to enable). Headlines below are unsummarised._');
   header.push('');
   lines.splice(4, 0, ...header);
 
