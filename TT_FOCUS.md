@@ -40,6 +40,19 @@ Live TV is YouTube-based: the resolver checks `youtube.com/@handle/live`. TTT, C
 
 Trinidad Express rate-limits bursts (HTTP 429) if the same host fetches its three feeds repeatedly within minutes; the dashboard's per-feed cache keeps this from mattering in normal use.
 
+## Sibling monitors and dashboard tabs
+
+Two more variants ship alongside `tt`, built the same way:
+
+| Variant | Run | What it covers |
+| --- | --- | --- |
+| `gy` (Guyana) | `npm run dev:gy` → http://localhost:3101 | Guyana news, government and official sources, Stabroek-block oil and gas, Essequibo and regional geopolitics, economy, public safety, weather; Guyana map frame; NCN/HGPTV/MTV Guyana live |
+| `chips` (AI compute) | `npm run dev:chips` → http://localhost:3102 | Semiconductors and accelerators, data centres and power, AI labs, chip policy and export controls, chip markets; AI data-centre / cloud-region / tech-HQ layers; semiconductor ticker tape |
+
+You do not need the extra servers to use them: each dashboard seeds the other two as **preset tabs** in the tab bar (Main · Guyana · Chips & AI). A preset tab enables exactly that variant's default panels; feeds load through the shared catalog. Deleting a preset tab sticks; the seed runs once per variant.
+
+Live IPTV: the Live News panel also carries broadcasters' public HLS feeds (CORS-verified 2026-10-15) for Bizz TV, Sankhya TV and Scorch TV (T&T), HGPTV, MTV Guyana and Little Guyana TV, CBC TV8 Barbados, TVJ and GNN Jamaica, DBS St Lucia and Pointe TV Antigua. The main T&T news stations publish no HLS; they stay on YouTube with the latest-upload fallback.
+
 ## Scope rule
 
 Public news and official sources only, aggregate and topic level. No profiling of private individuals, no voter or phone data, no social-media account scraping of named people. The `tt-safety` lens is public-news aggregate only.
