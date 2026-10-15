@@ -38,6 +38,7 @@ import {
 } from '@/config';
 import { resolveNewsCategories, enabledNewsCategoryKeys } from '@/config/feed-resolution';
 import { getDefaultMapView } from '@/config/map-view';
+import { getPresetTabs, type PresetTab } from '@/config/dashboard-tabs';
 import { BETA_MODE } from '@/config/beta';
 import { t } from '@/services/i18n';
 import { getCurrentTheme } from '@/utils';
@@ -994,6 +995,9 @@ export class PanelLayoutManager implements AppModule {
       }
       if (healedSnapshots) saveTabsState(state);
     }
+    // Seed the variant's preset tabs (e.g. Guyana / Chips & AI on the T&T
+    // dashboard) once; a user who deletes one keeps it deleted.
+    if (this.seedPresetTabs(state)) saveTabsState(state);
     this.tabsState = state;
 
     this.panelTabBar = new PanelTabBar(() => this.tabsState!, {
@@ -1014,6 +1018,48 @@ export class PanelLayoutManager implements AppModule {
       if (before[key]?.enabled !== after[key]?.enabled) return true;
     }
     return false;
+  }
+
+  /**
+   * Append preset tabs that have not been seeded for this variant yet. Each
+   * preset enables exactly the panels its source variant enables by default
+   * and nothing else (dynamic cw-/mcp- panels keep their current state).
+   * Returns true when the tabs state changed.
+   */
+  private seedPresetTabs(state: TabsState): boolean {
+    const presets = getPresetTabs(SITE_VARIANT);
+    if (presets.length === 0) return false;
+    const markerKey = `worldmonitor-tabs-presets-v1:${SITE_VARIANT}`;
+    let seeded: string[] = [];
+    try { seeded = JSON.parse(localStorage.getItem(markerKey) ?? '[]') as string[]; } catch { /* fresh */ }
+    const seededSet = new Set(seeded);
+    let changed = false;
+    for (const preset of presets) {
+      if (seededSet.has(preset.id) || state.tabs.some((tab) => tab.id === preset.id)) continue;
+      state.tabs.push(this.buildPresetTab(preset));
+      seededSet.add(preset.id);
+      changed = true;
+    }
+    if (changed) {
+      try { localStorage.setItem(markerKey, JSON.stringify([...seededSet])); } catch { /* private mode */ }
+    }
+    return changed;
+  }
+
+  private buildPresetTab(preset: PresetTab): PanelTab {
+    const wanted = new Set(preset.panelKeys);
+    const panelSettings: Record<string, PanelConfig> = {};
+    for (const [key, config] of Object.entries(this.ctx.panelSettings)) {
+      const dynamic = !ALL_PANELS[key] && (key === 'runtime-config' || key.startsWith('cw-') || key.startsWith('mcp-'));
+      panelSettings[key] = dynamic ? { ...config } : { ...config, enabled: key === 'map' ? true : wanted.has(key) };
+    }
+    return {
+      id: preset.id,
+      name: preset.name,
+      panelSettings: enforceFreePanelLimit(panelSettings, isProUser()),
+      panelOrder: preset.panelKeys.filter((key) => key !== 'map' && key in panelSettings),
+      bottomSet: [],
+    };
   }
 
   /** Capture the live panel state (settings + order) for a tab snapshot. */

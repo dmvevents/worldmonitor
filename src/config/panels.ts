@@ -1572,6 +1572,13 @@ function getVariantPanelConfigs(variant: string): Record<string, PanelConfig> | 
     : undefined;
 }
 
+/** Panel keys a variant enables by default (used to seed preset dashboard tabs). */
+export function getVariantEnabledPanelKeys(variant: string): string[] {
+  const configs = getVariantPanelConfigs(variant);
+  if (!configs) return [];
+  return Object.entries(configs).filter(([, cfg]) => cfg.enabled).map(([key]) => key);
+}
+
 /** All panels from all variants — canonical cross-variant registry. */
 export const ALL_PANELS: Record<string, PanelConfig> = {
   ...GY_PANELS,
