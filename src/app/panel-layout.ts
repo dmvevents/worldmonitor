@@ -38,7 +38,8 @@ import {
 } from '@/config';
 import { resolveNewsCategories, enabledNewsCategoryKeys } from '@/config/feed-resolution';
 import { getDefaultMapView } from '@/config/map-view';
-import { getPresetTabs, type PresetTab } from '@/config/dashboard-tabs';
+import type { MapView } from '@/components/MapContainer';
+import { getPresetTabs, getOwnVariantPreset, type PresetTab } from '@/config/dashboard-tabs';
 import { BETA_MODE } from '@/config/beta';
 import { t } from '@/services/i18n';
 import { getCurrentTheme } from '@/utils';
@@ -1091,7 +1092,23 @@ export class PanelLayoutManager implements AppModule {
     saveTabsState(this.tabsState);
 
     this.applyTabPanelState(target.panelSettings, target.panelOrder, target.bottomSet);
+    this.applyTabRegion(target.id);
     this.panelTabBar?.refresh();
+  }
+
+  /**
+   * Preset tabs are regional monitors: selecting one re-centres the map on that
+   * region and puts its broadcasters first in the Live News strip. Any other
+   * tab restores the active variant's own region and channels.
+   */
+  private applyTabRegion(tabId: string): void {
+    const preset = getPresetTabs(SITE_VARIANT).find((p) => p.id === tabId) ?? getOwnVariantPreset(SITE_VARIANT);
+    if (!preset) return;
+    this.ctx.map?.setView(preset.mapView as MapView);
+    const regionSelect = document.getElementById('regionSelect') as HTMLSelectElement | null;
+    if (regionSelect) regionSelect.value = preset.mapView;
+    const live = this.ctx.panels['live-news'] as { applyChannelPreset?: (ids: string[]) => void } | undefined;
+    if (preset.liveChannelIds.length > 0) live?.applyChannelPreset?.(preset.liveChannelIds);
   }
 
   private addTab(): void {

@@ -1,5 +1,6 @@
 import { Panel } from './Panel';
 import { fetchLiveVideoInfo } from '@/services/live-news';
+import { VARIANT_LIVE_CHANNEL_IDS } from '@/config/live-channel-defaults';
 import { isDesktopRuntime, getRemoteApiBaseUrl, getApiBaseUrl, getLocalApiPort } from '@/services/runtime';
 import { t } from '../services/i18n';
 import { loadFromStorage, saveToStorage } from '@/utils';
@@ -203,7 +204,7 @@ export const OPTIONAL_LIVE_CHANNELS: LiveChannel[] = [
   { id: 'abs-antigua', name: 'ABS Antigua', handle: '@ABSTVAntigua' },                 // UCzjrwYEm05BM2Tdg1yVZ3yA
   { id: 'cbc-barbados', name: 'CBC Barbados', handle: '@cbcbarbados246' },
   { id: 'gbn-grenada', name: 'GBN Grenada', handle: '@grenadabroadcastingnetwork9673' },
-  { id: 'telesur-english', name: 'teleSUR English', handle: '@telesurenglish' },       // UCmuTmpLY35O3csvhyA6vrkg
+  { id: 'telesur-english', name: 'teleSUR English', handle: '@telesurenglish', hlsUrl: 'https://mblenmain01.telesur.ultrabase.net/mblivev3/hd/playlist.m3u8' },
   // Caribbean IPTV: broadcasters' own public HLS feeds (indexed by iptv-org; probed 2026-10-15,
   // all answer with Access-Control-Allow-Origin: * so hls.js can play them in the browser).
   { id: 'bizz-tv', name: 'Bizz TV (T&T)', hlsUrl: 'https://stream.bizzmedia.biz/bizz_tv/index.m3u8', useFallbackOnly: true },
@@ -217,6 +218,19 @@ export const OPTIONAL_LIVE_CHANNELS: LiveChannel[] = [
   { id: 'gnn-tv', name: 'GNN TV (Jamaica)', hlsUrl: 'https://na.linear.zype.com/bf94f9f4-383c-40e0-9d49-279a4f33ab8d/f29b8836-d990-4c8d-b421-192a8f43edc4-zype/live.m3u8', useFallbackOnly: true },
   { id: 'dbs-tv', name: 'DBS TV (St Lucia)', hlsUrl: 'https://stream.dbstvstlucia.com/hls/dbstv_main.m3u8', useFallbackOnly: true },
   { id: 'pointe-tv', name: 'Pointe TV (Antigua)', hlsUrl: 'https://tv.pointville.ag/hls/mystream.m3u8', useFallbackOnly: true },
+  { id: 'zns-tv', name: 'ZNS-TV (Bahamas)', hlsUrl: 'https://zns-edge1.streamcomedia.cloud/znstv13/zns1080p_stream/playlist.m3u8', useFallbackOnly: true },
+  { id: 'antena7', name: 'Antena 7 (Dominican Rep.)', hlsUrl: 'https://hls.tvabierta.net/hls/007.m3u8', useFallbackOnly: true },
+  { id: 'noticias16', name: 'Noticias 16 (Dominican Rep.)', hlsUrl: 'https://edge.essastream.com/noticias16/playlist.m3u8', useFallbackOnly: true },
+  { id: 'tv-marti', name: 'Radio y TV Martí (Cuba)', hlsUrl: 'https://ocb-ingest.akamaized.net/hls/live/2037032/tvmc01/playlist.m3u8', useFallbackOnly: true },
+  { id: 'prensa-latina-tv', name: 'Prensa Latina TV (Cuba)', hlsUrl: 'https://eu1.servers10.com:8081/8192/index.m3u8', useFallbackOnly: true },
+  { id: 'haiti-news-channel', name: 'Haiti News Channel', hlsUrl: 'https://cdn.haititivi.com/website/haitinews/index.m3u8', useFallbackOnly: true },
+  { id: 'rth-tv1', name: 'RTH TV1 (Haiti)', hlsUrl: 'https://2-fss-2.streamhoster.com/pl_120/amlst:206708-4203440/playlist.m3u8', useFallbackOnly: true },
+  { id: 'telemundo-pr', name: 'Telemundo Puerto Rico', hlsUrl: 'https://nbculocallive.akamaized.net/hls/live/2037499/puertorico/stream1/master.m3u8', useFallbackOnly: true },
+  { id: 'wipr-tv', name: 'WIPR-TV (Puerto Rico)', hlsUrl: 'https://streamwipr.pr/hls/stream/index.m3u8', useFallbackOnly: true },
+  // Venezuela (public HLS, CORS-open) — context for the Essequibo and Dragon-gas lenses
+  { id: 'telesur-hd', name: 'teleSUR (Español)', hlsUrl: 'https://mblesmain01.telesur.ultrabase.net/mbliveMain/hd/playlist.m3u8', useFallbackOnly: true },
+  { id: 'venevision-int', name: 'Venevisión Internacional', hlsUrl: 'https://vod2live.univtec.com/manifest/4c41c0d8-e2e4-43cc-bd43-79afe715e1b3.m3u8', useFallbackOnly: true },
+  { id: 'canal-i', name: 'Canal I (Venezuela)', hlsUrl: 'https://streaming.canal-i.com/canal-i/live/master.m3u8', useFallbackOnly: true },
   // Oceania
   { id: 'abc-news-au', name: 'ABC News Australia', handle: '@abcnewsaustralia', fallbackVideoId: 'vOTiJkg1voo' },
 ];
@@ -224,29 +238,29 @@ export const OPTIONAL_LIVE_CHANNELS: LiveChannel[] = [
 const _REGION_ENTRIES: { key: string; labelKey: string; channelIds: string[] }[] = [
   { key: 'na', labelKey: 'components.liveNews.regionNorthAmerica', channelIds: ['bloomberg', 'cnbc', 'yahoo', 'cnn', 'fox-news', 'newsmax', 'abc-news', 'cbs-news', 'nbc-news', 'cbc-news', 'ctv-news', 'reuters-tv', 'nasa'] },
   { key: 'eu', labelKey: 'components.liveNews.regionEurope', channelIds: ['sky', 'euronews', 'dw', 'france24', 'bbc-news', 'gb-news', 'the-guardian', 'france24-en', 'phoenix', 'rtp3', 'welt', 'rtve', 'trt-haber', 'ntv-turkey', 'cnn-turk', 'tv-rain', 'rt', 'tvp-info', 'telewizja-republika', 'tagesschau24', 'euronews-fr', 'euronews-gr', 'skai-tv', 'ert-news', 'france24-fr', 'france-info', 'bfmtv', 'tv5monde-info', 'nrk1', 'aljazeera-balkans'] },
-  { key: 'latam', labelKey: 'components.liveNews.regionLatinAmerica', channelIds: ['cnn-brasil', 'jovem-pan', 'record-news', 'band-jornalismo', 'tn-argentina', 'c5n', 'milenio', 'noticias-caracol', 'ntn24', 't13', 'dw-espanol', 'rt-espanol', 'cgtn-espanol'] },
+  { key: 'latam', labelKey: 'components.liveNews.regionLatinAmerica', channelIds: ['cnn-brasil', 'jovem-pan', 'record-news', 'band-jornalismo', 'tn-argentina', 'c5n', 'milenio', 'noticias-caracol', 'ntn24', 't13', 'dw-espanol', 'rt-espanol', 'cgtn-espanol', 'telesur-hd', 'venevision-int', 'canal-i'] },
   { key: 'asia', labelKey: 'components.liveNews.regionAsia', channelIds: ['tbs-news', 'ann-news', 'ntv-news', 'cti-news', 'cgtn', 'wion', 'ndtv', 'cna-asia', 'nhk-world', 'arirang-news', 'india-today', 'abp-news'] },
   { key: 'me', labelKey: 'components.liveNews.regionMiddleEast', channelIds: ['alarabiya', 'aljazeera', 'al-hadath', 'sky-news-arabia', 'trt-world', 'iran-intl', 'press-tv', 'cgtn-arabic', 'kan-11', 'i24-news', 'asharq-news', 'aljazeera-arabic', 'aljazeera-mubasher', 'alarabiya-business', 'al-qahera-news', 'dw-arabic', 'rt-arabic', 'rudaw'] },
   { key: 'africa', labelKey: 'components.liveNews.regionAfrica', channelIds: ['africanews', 'channels-tv', 'ktn-news', 'enca', 'sabc-news', 'arise-news'] },
   { key: 'oc', labelKey: 'components.liveNews.regionOceania', channelIds: ['abc-news-au'] },
-  { key: 'caribbean', labelKey: 'components.liveNews.regionCaribbean', channelIds: ['ttt-live', 'cnc3', 'cnc3-prime', 'tv6-news', 'tt-parliament', 'tobago-channel5', 'tobago-updates', 'ietv', 'ncn-guyana', 'tvj', 'cvm-tv', 'abs-antigua', 'cbc-barbados', 'gbn-grenada', 'telesur-english', 'bizz-tv', 'sankhya-tv', 'scorch-tv', 'hgptv', 'mtv-guyana', 'little-guyana-tv', 'cbc-tv8', 'tvj-hls', 'gnn-tv', 'dbs-tv', 'pointe-tv'] },
+  { key: 'caribbean', labelKey: 'components.liveNews.regionCaribbean', channelIds: ['ttt-live', 'cnc3', 'cnc3-prime', 'tv6-news', 'tt-parliament', 'tobago-channel5', 'tobago-updates', 'ietv', 'ncn-guyana', 'tvj', 'cvm-tv', 'abs-antigua', 'cbc-barbados', 'gbn-grenada', 'telesur-english', 'bizz-tv', 'sankhya-tv', 'scorch-tv', 'hgptv', 'mtv-guyana', 'little-guyana-tv', 'cbc-tv8', 'tvj-hls', 'gnn-tv', 'dbs-tv', 'pointe-tv', 'zns-tv', 'antena7', 'noticias16', 'tv-marti', 'prensa-latina-tv', 'haiti-news-channel', 'rth-tv1', 'telemundo-pr', 'wipr-tv'] },
 ];
 export const OPTIONAL_CHANNEL_REGIONS: { key: string; labelKey: string; channelIds: string[] }[] = [
   ..._REGION_ENTRIES,
 ];
 
 // Trinidad & Tobago variant: local broadcasters first, then two 24/7 world feeds.
-const TT_LIVE_CHANNEL_IDS = ['ttt-live', 'cnc3', 'tv6-news', 'tt-parliament', 'tobago-updates', 'bizz-tv', 'cbc-tv8', 'telesur-english', 'sky', 'aljazeera'];
+const TT_LIVE_CHANNEL_IDS = VARIANT_LIVE_CHANNEL_IDS.tt ?? [];
 const TT_LIVE_CHANNELS: LiveChannel[] = TT_LIVE_CHANNEL_IDS
   .map(id => OPTIONAL_LIVE_CHANNELS.find(c => c.id === id))
   .filter((c): c is LiveChannel => c !== undefined);
 
-const GY_LIVE_CHANNEL_IDS = ['ncn-guyana', 'hgptv', 'mtv-guyana', 'little-guyana-tv', 'telesur-english', 'tvj', 'sky', 'aljazeera'];
+const GY_LIVE_CHANNEL_IDS = VARIANT_LIVE_CHANNEL_IDS.gy ?? [];
 const GY_LIVE_CHANNELS: LiveChannel[] = GY_LIVE_CHANNEL_IDS
   .map(id => OPTIONAL_LIVE_CHANNELS.find(c => c.id === id))
   .filter((c): c is LiveChannel => c !== undefined);
 
-const CHIPS_LIVE_CHANNEL_IDS = ['bloomberg', 'cnbc', 'yahoo', 'nasa', 'sky', 'aljazeera'];
+const CHIPS_LIVE_CHANNEL_IDS = VARIANT_LIVE_CHANNEL_IDS.chips ?? [];
 const CHIPS_LIVE_CHANNELS: LiveChannel[] = CHIPS_LIVE_CHANNEL_IDS
   .map(id => OPTIONAL_LIVE_CHANNELS.find(c => c.id === id))
   .filter((c): c is LiveChannel => c !== undefined);
@@ -1829,6 +1843,25 @@ export class LiveNewsPanel extends Panel {
   }
 
   /** Reload channel list from storage (e.g. after edit in separate channel management window). */
+  /**
+   * Replace the channel strip with a preset (dashboard tab switch): the preset's
+   * channels first, then any user-added custom channels, and start on the first
+   * preset channel. Persists like a manual edit so a reload keeps the set.
+   */
+  public applyChannelPreset(ids: string[]): void {
+    const preset = ids
+      .map((id) => OPTIONAL_LIVE_CHANNELS.find((c) => c.id === id))
+      .filter((c): c is LiveChannel => c !== undefined);
+    if (preset.length === 0) return;
+    const presetIds = new Set(preset.map((c) => c.id));
+    const customs = this.channels.filter((c) => !presetIds.has(c.id) && !OPTIONAL_LIVE_CHANNELS.some((o) => o.id === c.id));
+    this.channels = [...preset, ...customs];
+    saveChannelsToStorage(this.channels);
+    this.refreshChannelSwitcher();
+    const first = this.channels[0]!;
+    if (first.id !== this.activeChannel.id) void this.switchChannel(first);
+  }
+
   public refreshChannelsFromStorage(): void {
     this.channels = loadChannelsFromStorage();
     if (this.channels.length === 0) this.channels = getDefaultLiveChannels();

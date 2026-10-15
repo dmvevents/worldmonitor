@@ -6,12 +6,18 @@
 // CANONICAL_FEEDS regardless of the active site variant.
 import { SITE_VARIANT } from './variant';
 import { getVariantEnabledPanelKeys } from './panels';
+import { getDefaultMapView } from './map-view';
+import { VARIANT_LIVE_CHANNEL_IDS } from './live-channel-defaults';
 
 export interface PresetTab {
   /** Stable id so the seeding logic can tell whether a preset already exists. */
   id: string;
   name: string;
   panelKeys: string[];
+  /** Map region the tab opens on (see map-view.ts). */
+  mapView: string;
+  /** Live News channel ids to put first when the tab is selected. */
+  liveChannelIds: string[];
 }
 
 interface PresetTabSource { id: string; name: string; variant: string }
@@ -33,5 +39,21 @@ export function getPresetTabs(variant: string = SITE_VARIANT): PresetTab[] {
   return (VARIANT_PRESET_TABS[variant] ?? [])
     .map((key) => PRESETS[key])
     .filter((p): p is PresetTabSource => p !== undefined)
-    .map((p) => ({ id: p.id, name: p.name, panelKeys: getVariantEnabledPanelKeys(p.variant) }));
+    .map(toPresetTab);
+}
+
+function toPresetTab(p: PresetTabSource): PresetTab {
+  return {
+    id: p.id,
+    name: p.name,
+    panelKeys: getVariantEnabledPanelKeys(p.variant),
+    mapView: getDefaultMapView(p.variant, 'global'),
+    liveChannelIds: VARIANT_LIVE_CHANNEL_IDS[p.variant] ?? [],
+  };
+}
+
+/** The active variant's own default tab, expressed as a preset (used when switching back to it). */
+export function getOwnVariantPreset(variant: string = SITE_VARIANT): PresetTab | null {
+  const p = PRESETS[variant];
+  return p ? toPresetTab(p) : null;
 }
