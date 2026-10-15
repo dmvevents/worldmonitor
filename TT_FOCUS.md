@@ -29,6 +29,7 @@ No API keys are needed for the news panels: the Vite dev server runs the sebuf A
 | Map view | new `trinidad` preset (both islands framed, zoom 8.2) is the tt default via `src/config/map-view.ts`; `caribbean` (zoom 5, Venezuela/Guyana/Lesser Antilles) is one click away in the region selector. Both exist in deck.gl / globe / SVG / URL state / CMD+K (`Map: Trinidad & Tobago`, `Map: Caribbean`) |
 | Live TV | `src/components/LiveNewsPanel.ts`: Caribbean channel region (TTT Live Online, CNC3, CNC3 Prime, TV6 News, Parliament of T&T via ParlView, Tobago Channel 5, Tobago Updates, IETV, NCN Guyana, TVJ, CVM TV News, ABS Antigua, CBC Barbados, GBN Grenada, teleSUR English); tt default set = local broadcasters + teleSUR + Sky + Al Jazeera |
 | EBC boundaries | `public/data/tt-ebc-constituencies.geojson` (41 constituencies, boundary-only, from the tt-geopolitical-intelligence API via `scripts/tt-ebc-export.sh`) |
+| Weather radar | RainViewer's radar composite stops at z7; the raster source now declares `maxzoom: 7` so regional views overzoom the last real level instead of tiling the map with the CDN's "Zoom Level Not Supported" placeholder PNGs (that was the grey-box error on the Trinidad view) |
 | Map layers (tt) | `ebcConstituencies` (constituency polygons, island-tinted, hover shows EBC configuration year / validation status / provenance) and `hurricanes` (NHC active Atlantic cyclones: forecast cone, track, intensity-sized position; empty when no system is active). Data store: `src/services/tt-geo-layers.ts`; NHC reached through the allowlisted feed proxy because nhc.noaa.gov sends no CORS headers |
 | Variant detection & meta | `src/config/variant.ts`, `src/config/variant-meta.ts`, `src/config/variants/tt.ts` (`TT_TIMEZONE`, `TT_COUNTRY_CODE`) |
 | Timezone | `America/Port_of_Spain` → `TT` in `src/utils/user-location.ts`; Port of Spain first in the World Clock for tt |
@@ -57,7 +58,9 @@ Two more variants ship alongside `tt`, built the same way:
 
 You do not need the extra servers to use them: each dashboard seeds the other two as **preset tabs** in the tab bar (Main · Guyana · Chips & AI). A preset tab enables exactly that variant's default panels, re-centres the map on its region (Trinidad & Tobago, Guyana, global for Chips) and puts its broadcasters first in the Live News strip; feeds load through the shared catalog. Deleting a preset tab sticks; the seed runs once per variant. The standalone `dev:gy` / `dev:chips` servers are optional.
 
-Live IPTV: the Live News panel also carries broadcasters' public HLS feeds (CORS-verified 2026-10-15) for Bizz TV, Sankhya TV, Scorch TV, Riddim & Hope TV and The Islamic Network (T&T), ZIZ TV and Nevis Television (St Kitts & Nevis), Caribbean Hot 7 TV (St Lucia), Guardian Talk Radio (Bahamas), Fame 95 FM (Jamaica), HGPTV, MTV Guyana and Little Guyana TV, CBC TV8 Barbados, TVJ and GNN Jamaica, DBS St Lucia, Pointe TV Antigua, ZNS Bahamas, Antena 7 and Noticias 16 (Dominican Republic), Radio y TV Martí and Prensa Latina TV (Cuba), Haiti News Channel and RTH TV1, Telemundo Puerto Rico, and for Venezuela teleSUR (Spanish and English HD), Venevisión Internacional and Canal I. Per-variant default channel sets live in `src/config/live-channel-defaults.ts`. The main T&T news stations publish no HLS; they stay on YouTube with the latest-upload fallback.
+Live IPTV: the Live News panel also carries broadcasters' public HLS feeds (CORS-verified 2026-10-15) for Bizz TV, Sankhya TV, Scorch TV, Riddim & Hope TV and The Islamic Network (T&T), ZIZ TV and Nevis Television (St Kitts & Nevis), Caribbean Hot 7 TV (St Lucia), Guardian Talk Radio (Bahamas), Fame 95 FM (Jamaica), HGPTV, MTV Guyana and Little Guyana TV, CBC TV8 Barbados, TVJ and GNN Jamaica, DBS St Lucia, Pointe TV Antigua, ZNS Bahamas, Antena 7 and Noticias 16 (Dominican Republic), Radio y TV Martí and Prensa Latina TV (Cuba), Haiti News Channel and RTH TV1, Telemundo Puerto Rico, and for Venezuela teleSUR (Spanish and English HD), Venevisión Internacional and Canal I. Per-variant default channel sets live in `src/config/live-channel-defaults.ts`. The main T&T news stations publish no HLS; they stay on YouTube with the off-air card and explicit replay.
+
+IPTV directory: `npm run iptv:sync` (`scripts/iptv-sync.mjs`) pulls the public iptv-org index (github.com/iptv-org/iptv), keeps every Caribbean / Guiana Shield channel plus worldwide news channels, probes each https stream from this machine (manifest 200 + `#EXTM3U` + CORS header; streams that need a Referer or User-Agent are skipped) and writes `public/data/iptv-directory.json` (2026-10-15: 985 verified of 1,946 probed; 177 Dominican Republic, 39 Venezuela, 18 Puerto Rico, all seven T&T/Guyana HLS stations). In the Live News panel, *Manage channels* → **IPTV directory (iptv-org)** lets you filter by country or search and add any entry to the strip with one click; it is stored like a custom channel. Re-run the sync now and then: streams come and go.
 
 ## Testing and validation
 
@@ -127,9 +130,18 @@ node scripts/seed-eia-petroleum.mjs       # EIA → energy:eia-petroleum:v1
 node scripts/seed-fuel-prices.mjs         # EIA → economic:fuel-prices:v1
 ```
 
-Not obtained (sign-up has a captcha or needs a password/approval, so Anton does these himself):
-Finnhub (stock ticker breadth), FRED (`seed-economy.mjs` macro panels), ACLED (regional conflict events).
-Groq is unnecessary now that Claude is wired in.
+The hub launcher also starts `scripts/tt-seed-loop.sh`, which re-runs the market seeds every 25 minutes
+(their Redis keys expire after 30) and the EIA / fuel / economy seeds once a day; only the first market pass
+of the day uses the Alpha Vantage key (25 requests/day), later passes take the seeds' keyless Yahoo path.
+Without the loop the Markets and Energy panels went blank half an hour after a manual seed.
+
+ACLED (2026-10-15): myACLED account registered with Google, password set via the reset link, `ACLED_EMAIL` /
+`ACLED_PASSWORD` stored; the OAuth password grant returns a token, but `/api/acled/read` answers 403
+"Access denied" until ACLED approves data access for the account (they ask for an institutional email).
+Conflict panels fall back to UCDP until then. FRED: account created (password in the macOS Keychain,
+service "fred.stlouisfed.org (World Monitor)"); the sign-in form resisted automation, so request the key
+by hand at https://fredaccount.stlouisfed.org/apikeys and add `FRED_API_KEY` to the keys file. Finnhub still
+has a captcha. Groq is unnecessary now that Claude is wired in.
 
 ## Local AI with Ollama (no cloud key)
 
