@@ -2002,6 +2002,10 @@
     },
     "liveNews": {
       "notLive": "{{name}} is not currently live",
+      "offAir": "{{name}} is off air right now — it streams during newscasts only",
+      "playReplay": "Play latest bulletin (replay)",
+      "nextLive": "Next live channel",
+      "scheduledHint": "Streams during newscasts only — may be off air",
       "cannotEmbed": "{{name}} can't be played here — it may be restricted in your region (error {{code}})",
       "botCheck": "YouTube is requesting sign-in to play {{name}}",
       "signInToYouTube": "Sign in to YouTube",

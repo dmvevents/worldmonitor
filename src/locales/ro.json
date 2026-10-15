@@ -1806,7 +1806,11 @@
       "invalidHlsUrl": "Introduceți un URL valid de flux HLS (.m3u8)",
       "playLiveFeed": "Redă fluxul live",
       "readyStatus": "Gata când ești și tu",
-      "regionCaribbean": "Caribbean"
+      "regionCaribbean": "Caribbean",
+      "offAir": "{{name}} is off air right now — it streams during newscasts only",
+      "playReplay": "Play latest bulletin (replay)",
+      "nextLive": "Next live channel",
+      "scheduledHint": "Streams during newscasts only — may be off air"
     },
     "map": {
       "showMap": "Arată harta",

@@ -2553,6 +2553,32 @@ body.panel-resize-active iframe {
   border-style: dashed;
 }
 
+/* Newscast-only station (no 24/7 feed): may be off air right now. */
+.live-channel-btn.scheduled::before {
+  content: '◷';
+  margin-right: 4px;
+  opacity: 0.7;
+}
+
+/* Deliberately playing a station's latest bulletin instead of live TV. */
+.live-channel-btn.replay:not(.loading)::after {
+  content: 'REPLAY';
+  margin-left: 5px;
+  padding: 0 3px;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  font-size: 0.65em;
+  letter-spacing: 0.04em;
+  vertical-align: middle;
+}
+
+.live-offline .offline-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
 .live-channel-btn {
   cursor: grab;
 }

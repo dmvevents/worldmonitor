@@ -1805,7 +1805,11 @@
       "invalidHlsUrl": "유효한 HLS 스트림 URL (.m3u8)을 입력하세요",
       "playLiveFeed": "라이브 피드 재생",
       "readyStatus": "준비되면 시작",
-      "regionCaribbean": "Caribbean"
+      "regionCaribbean": "Caribbean",
+      "offAir": "{{name}} is off air right now — it streams during newscasts only",
+      "playReplay": "Play latest bulletin (replay)",
+      "nextLive": "Next live channel",
+      "scheduledHint": "Streams during newscasts only — may be off air"
     },
     "map": {
       "showMap": "지도 표시",

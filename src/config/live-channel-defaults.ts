@@ -3,7 +3,7 @@
 // can swap the channel strip when a tab switches region.
 export const VARIANT_LIVE_CHANNEL_IDS: Partial<Record<string, string[]>> = {
   full: ['bloomberg', 'sky', 'euronews', 'dw', 'cnbc', 'cnn', 'france24', 'alarabiya', 'aljazeera', 'telesur-english', 'cbc-tv8', 'tvj-hls', 'bizz-tv', 'hgptv'],
-  tt: ['ttt-live', 'cnc3', 'tv6-news', 'tt-parliament', 'tobago-updates', 'bizz-tv', 'cbc-tv8', 'telesur-english', 'sky', 'aljazeera'],
-  gy: ['ncn-guyana', 'hgptv', 'mtv-guyana', 'little-guyana-tv', 'telesur-english', 'canal-i', 'venevision-int', 'tvj-hls', 'sky', 'aljazeera'],
+  tt: ['bizz-tv', 'ttt-live', 'cnc3', 'tv6-news', 'tt-parliament', 'tobago-updates', 'cbc-tv8', 'ziz-tv', 'telesur-english', 'sky', 'aljazeera'],
+  gy: ['hgptv', 'ncn-guyana', 'mtv-guyana', 'little-guyana-tv', 'telesur-english', 'canal-i', 'venevision-int', 'tvj-hls', 'sky', 'aljazeera'],
   chips: ['bloomberg', 'cnbc', 'yahoo', 'nasa', 'sky', 'aljazeera'],
 };

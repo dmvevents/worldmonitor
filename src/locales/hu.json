@@ -2029,7 +2029,11 @@
       "invalidHlsUrl": "Adjon meg érvényes HLS stream URL-t (.m3u8)",
       "playLiveFeed": "Élő adás lejátszása",
       "readyStatus": "Készen áll, amikor Ön is",
-      "regionCaribbean": "Caribbean"
+      "regionCaribbean": "Caribbean",
+      "offAir": "{{name}} is off air right now — it streams during newscasts only",
+      "playReplay": "Play latest bulletin (replay)",
+      "nextLive": "Next live channel",
+      "scheduledHint": "Streams during newscasts only — may be off air"
     },
     "map": {
       "showMap": "Térkép megjelenítése",

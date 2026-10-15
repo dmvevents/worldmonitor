@@ -1698,7 +1698,11 @@
       "invalidHlsUrl": "Entrez une URL de flux HLS valide (.m3u8)",
       "playLiveFeed": "Lire le flux en direct",
       "readyStatus": "Prêt quand vous l’êtes",
-      "regionCaribbean": "Caribbean"
+      "regionCaribbean": "Caribbean",
+      "offAir": "{{name}} is off air right now — it streams during newscasts only",
+      "playReplay": "Play latest bulletin (replay)",
+      "nextLive": "Next live channel",
+      "scheduledHint": "Streams during newscasts only — may be off air"
     },
     "securityAdvisories": {
       "loading": "Chargement des avis de voyage...",

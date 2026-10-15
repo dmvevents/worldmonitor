@@ -1459,7 +1459,11 @@
       "invalidHlsUrl": "Voer een geldige HLS-stream-URL in (.m3u8)",
       "playLiveFeed": "Livefeed afspelen",
       "readyStatus": "Klaar wanneer jij dat bent",
-      "regionCaribbean": "Caribbean"
+      "regionCaribbean": "Caribbean",
+      "offAir": "{{name}} is off air right now — it streams during newscasts only",
+      "playReplay": "Play latest bulletin (replay)",
+      "nextLive": "Next live channel",
+      "scheduledHint": "Streams during newscasts only — may be off air"
     },
     "securityAdvisories": {
       "loading": "Reisadviezen laden...",

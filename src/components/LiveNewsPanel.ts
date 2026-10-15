@@ -59,6 +59,11 @@ export interface LiveChannel {
   fallbackVideoId?: string; // Fallback if no live stream detected
   videoId?: string; // Dynamically fetched live video ID
   isLive?: boolean;
+  /** Most recent upload of a station that is off air right now. Never auto-played:
+   *  the off-air card offers it as an explicit "latest bulletin" replay. */
+  replayVideoId?: string;
+  /** True while the panel is deliberately playing replayVideoId (badge on the tab). */
+  isReplay?: boolean;
   hlsUrl?: string; // HLS manifest URL for native <video> playback (desktop)
   useFallbackOnly?: boolean; // Skip auto-detection, always use fallback
   geoAvailability?: string[]; // ISO 3166-1 alpha-2 codes; undefined = available everywhere
@@ -219,6 +224,14 @@ export const OPTIONAL_LIVE_CHANNELS: LiveChannel[] = [
   { id: 'dbs-tv', name: 'DBS TV (St Lucia)', hlsUrl: 'https://stream.dbstvstlucia.com/hls/dbstv_main.m3u8', useFallbackOnly: true },
   { id: 'pointe-tv', name: 'Pointe TV (Antigua)', hlsUrl: 'https://tv.pointville.ag/hls/mystream.m3u8', useFallbackOnly: true },
   { id: 'zns-tv', name: 'ZNS-TV (Bahamas)', hlsUrl: 'https://zns-edge1.streamcomedia.cloud/znstv13/zns1080p_stream/playlist.m3u8', useFallbackOnly: true },
+  // Verified 2026-10-15 (manifest 200 + CORS *): more Eastern Caribbean live TV.
+  { id: 'ziz-tv', name: 'ZIZ TV (St Kitts)', hlsUrl: 'https://media.slactech.com:1936/ZIZDirect/ZIZDirect/playlist.m3u8', useFallbackOnly: true },
+  { id: 'nevis-tv', name: 'Nevis Television', hlsUrl: 'https://media.slactech.com:1936/NTvDirect/ngrp:NTvDirect_all/playlist.m3u8', useFallbackOnly: true },
+  { id: 'caribbean-hot7', name: 'Caribbean Hot 7 TV (St Lucia)', hlsUrl: 'https://vids1.intacs.com/caribbeanhot7tv/ch7-1.stream/playlist.m3u8', useFallbackOnly: true },
+  { id: 'guardian-talk-radio', name: 'Guardian Talk Radio (Bahamas)', hlsUrl: 'https://cdn-edge1.streamcomedia.com/abr_tngr969fm/abr-tngr969fm_streams/playlist.m3u8', useFallbackOnly: true },
+  { id: 'fame95', name: 'Fame 95 FM (Jamaica)', hlsUrl: 'https://rjrfame-ioriver-cdn.encoders.immergo.tv/master.m3u8', useFallbackOnly: true },
+  { id: 'riddim-hope-tv', name: 'Riddim & Hope TV (T&T)', hlsUrl: 'https://6zklxwavdw9b-hls-live.5centscdn.com/RIDDIMNHOPE/0954119dc19d9003dd5f4bb37b3f559e.sdp/playlist.m3u8', useFallbackOnly: true },
+  { id: 'islamic-network-tt', name: 'The Islamic Network (T&T)', hlsUrl: 'https://video1.getstreamhosting.com:1936/8322/8322/playlist.m3u8', useFallbackOnly: true },
   { id: 'antena7', name: 'Antena 7 (Dominican Rep.)', hlsUrl: 'https://hls.tvabierta.net/hls/007.m3u8', useFallbackOnly: true },
   { id: 'noticias16', name: 'Noticias 16 (Dominican Rep.)', hlsUrl: 'https://edge.essastream.com/noticias16/playlist.m3u8', useFallbackOnly: true },
   { id: 'tv-marti', name: 'Radio y TV Martí (Cuba)', hlsUrl: 'https://ocb-ingest.akamaized.net/hls/live/2037032/tvmc01/playlist.m3u8', useFallbackOnly: true },
@@ -242,7 +255,7 @@ const _REGION_ENTRIES: { key: string; labelKey: string; channelIds: string[] }[]
   { key: 'me', labelKey: 'components.liveNews.regionMiddleEast', channelIds: ['alarabiya', 'aljazeera', 'al-hadath', 'sky-news-arabia', 'trt-world', 'iran-intl', 'press-tv', 'cgtn-arabic', 'kan-11', 'i24-news', 'asharq-news', 'aljazeera-arabic', 'aljazeera-mubasher', 'alarabiya-business', 'al-qahera-news', 'dw-arabic', 'rt-arabic', 'rudaw'] },
   { key: 'africa', labelKey: 'components.liveNews.regionAfrica', channelIds: ['africanews', 'channels-tv', 'ktn-news', 'enca', 'sabc-news', 'arise-news'] },
   { key: 'oc', labelKey: 'components.liveNews.regionOceania', channelIds: ['abc-news-au'] },
-  { key: 'caribbean', labelKey: 'components.liveNews.regionCaribbean', channelIds: ['ttt-live', 'cnc3', 'cnc3-prime', 'tv6-news', 'tt-parliament', 'tobago-channel5', 'tobago-updates', 'ietv', 'ncn-guyana', 'tvj', 'cvm-tv', 'abs-antigua', 'cbc-barbados', 'gbn-grenada', 'telesur-english', 'bizz-tv', 'sankhya-tv', 'scorch-tv', 'hgptv', 'mtv-guyana', 'little-guyana-tv', 'cbc-tv8', 'tvj-hls', 'gnn-tv', 'dbs-tv', 'pointe-tv', 'zns-tv', 'antena7', 'noticias16', 'tv-marti', 'prensa-latina-tv', 'haiti-news-channel', 'rth-tv1', 'telemundo-pr'] },
+  { key: 'caribbean', labelKey: 'components.liveNews.regionCaribbean', channelIds: ['ttt-live', 'cnc3', 'cnc3-prime', 'tv6-news', 'tt-parliament', 'tobago-channel5', 'tobago-updates', 'ietv', 'ncn-guyana', 'tvj', 'cvm-tv', 'abs-antigua', 'cbc-barbados', 'gbn-grenada', 'telesur-english', 'bizz-tv', 'sankhya-tv', 'scorch-tv', 'hgptv', 'mtv-guyana', 'little-guyana-tv', 'cbc-tv8', 'tvj-hls', 'gnn-tv', 'dbs-tv', 'pointe-tv', 'zns-tv', 'ziz-tv', 'nevis-tv', 'caribbean-hot7', 'guardian-talk-radio', 'fame95', 'riddim-hope-tv', 'islamic-network-tt', 'antena7', 'noticias16', 'tv-marti', 'prensa-latina-tv', 'haiti-news-channel', 'rth-tv1', 'telemundo-pr'] },
 ];
 export const OPTIONAL_CHANNEL_REGIONS: { key: string; labelKey: string; channelIds: string[] }[] = [
   ..._REGION_ENTRIES,
@@ -452,6 +465,7 @@ export class LiveNewsPanel extends Panel {
   private readonly youtubeOrigin: string | null;
   private forceFallbackVideoForNextInit = false;
 
+  private playReplayForNextInit = false;
   // Desktop: always use sidecar embed for YouTube (tauri:// origin gets 153).
   // DIRECT_HLS_MAP channels use native <video> instead.
   private useDesktopEmbedProxy = isDesktopRuntime();
@@ -987,6 +1001,12 @@ export class LiveNewsPanel extends Panel {
     btn.dataset.channelId = channel.id;
 
     btn.textContent = this.getChannelDisplayName(channel);
+    if (!this.isAlwaysLive(channel)) {
+      // Streams only during newscasts/sittings: flag it so the strip is honest
+      // about which tabs are live TV right now.
+      btn.classList.add('scheduled');
+      btn.title = t('components.liveNews.scheduledHint');
+    }
 
     btn.style.cursor = 'grab';
     btn.addEventListener('click', (e) => {
@@ -1145,6 +1165,9 @@ export class LiveNewsPanel extends Panel {
   private async resolveChannelVideo(channel: LiveChannel, forceFallback = false): Promise<void> {
     const useFallbackVideo = channel.useFallbackOnly || forceFallback;
 
+    channel.isReplay = false;
+    channel.replayVideoId = undefined;
+
     if (this.getDirectHlsUrl(channel.id) || this.getProxiedHlsUrl(channel.id) || channel.hlsUrl) {
       channel.videoId = channel.fallbackVideoId;
       channel.isLive = true;
@@ -1165,11 +1188,13 @@ export class LiveNewsPanel extends Panel {
     }
 
     const info = await fetchLiveVideoInfo(channel.handle);
-    // Stations that only stream during newscasts/sittings (the Caribbean set)
-    // have no 24/7 fallbackVideoId; play their most recent upload instead of
-    // an offline card so the tab always shows the latest bulletin.
-    channel.videoId = info.videoId || channel.fallbackVideoId || info.latestVideoId || undefined;
+    // Live only. Stations that stream just during newscasts/sittings (the
+    // Caribbean set) have no 24/7 fallbackVideoId; when they are off air the
+    // panel shows an off-air card and keeps the most recent upload behind an
+    // explicit "latest bulletin" button instead of silently playing a recording.
+    channel.videoId = info.videoId || channel.fallbackVideoId || undefined;
     channel.isLive = !!info.videoId;
+    channel.replayVideoId = !channel.videoId && info.latestVideoId ? info.latestVideoId : undefined;
     // Don't re-apply an hlsUrl while the channel is on HLS failure cooldown —
     // prevents an infinite retry loop in browsers (e.g. Firefox) that reject
     // YouTube HLS manifests via CORS. The cooldown lets the embed fallback run.
@@ -1227,6 +1252,7 @@ export class LiveNewsPanel extends Panel {
     this.channelSwitcher?.querySelectorAll('.live-channel-btn').forEach(btn => {
       const btnEl = btn as HTMLElement;
       btnEl.classList.remove('loading');
+      btnEl.classList.toggle('replay', btnEl.dataset.channelId === channel.id && !!channel.isReplay);
       if (btnEl.dataset.channelId === channel.id && !channel.videoId) {
         btnEl.classList.add('offline');
       }
@@ -1235,16 +1261,49 @@ export class LiveNewsPanel extends Panel {
     this.requestPlaybackForActiveChannel();
   }
 
+  /** A channel that is live around the clock: a direct/proxied HLS feed or a 24/7 YouTube stream id. */
+  private isAlwaysLive(channel: LiveChannel): boolean {
+    return !!(channel.hlsUrl || channel.fallbackVideoId || this.getDirectHlsUrl(channel.id) || this.getProxiedHlsUrl(channel.id));
+  }
+
+  /** Off-air card action: deliberately play the station's most recent upload, badged as a replay. */
+  private playReplay(channel: LiveChannel): void {
+    if (channel.id !== this.activeChannel.id || !channel.replayVideoId) return;
+    this.playReplayForNextInit = true;
+    this.channelSwitcher?.querySelectorAll<HTMLElement>('.live-channel-btn').forEach((btn) => {
+      btn.classList.toggle('replay', btn.dataset.channelId === channel.id);
+      if (btn.dataset.channelId === channel.id) btn.classList.remove('offline');
+    });
+    this.requestPlaybackForActiveChannel();
+  }
+
+  /** Off-air card action: jump to the next channel in the strip that is live around the clock. */
+  private switchToNextAlwaysLive(from: LiveChannel): void {
+    const idx = this.channels.findIndex((c) => c.id === from.id);
+    const ordered = [...this.channels.slice(idx + 1), ...this.channels.slice(0, Math.max(idx, 0))];
+    const next = ordered.find((c) => c.id !== from.id && this.isAlwaysLive(c));
+    if (next) void this.switchChannel(next);
+  }
+
   private showOfflineMessage(channel: LiveChannel): void {
     this.destroyPlayer();
     const safeName = escapeHtml(channel.name);
+    const canReplay = !!channel.replayVideoId;
+    const hasNextLive = this.channels.some((c) => c.id !== channel.id && this.isAlwaysLive(c));
     setTrustedHtml(this.content, trustedHtml(`
       <div class="live-offline live-offline-compact">
         <div class="offline-icon">📺</div>
-        <div class="offline-text">${t('components.liveNews.notLive', { name: safeName })}</div>
-        <button class="offline-retry" onclick="this.closest('.panel').querySelector('.live-channel-btn.active')?.click()">${t('common.retry')}</button>
+        <div class="offline-text">${canReplay ? t('components.liveNews.offAir', { name: safeName }) : t('components.liveNews.notLive', { name: safeName })}</div>
+        <div class="offline-actions">
+          ${hasNextLive ? `<button class="offline-retry live-next-live">${t('components.liveNews.nextLive')}</button>` : ''}
+          ${canReplay ? `<button class="offline-retry live-play-replay">${t('components.liveNews.playReplay')}</button>` : ''}
+          <button class="offline-retry live-retry">${t('common.retry')}</button>
+        </div>
       </div>
     `, "legacy direct innerHTML migration"));
+    this.content.querySelector('.live-next-live')?.addEventListener('click', () => this.switchToNextAlwaysLive(channel));
+    this.content.querySelector('.live-play-replay')?.addEventListener('click', () => this.playReplay(channel));
+    this.content.querySelector('.live-retry')?.addEventListener('click', () => this.requestPlaybackForActiveChannel());
   }
 
   private showEmbedError(channel: LiveChannel, errorCode: number): void {
@@ -1544,7 +1603,17 @@ export class LiveNewsPanel extends Panel {
     const sessionToken = this.liveMediaSessionToken;
     const useFallbackVideo = channel.useFallbackOnly || this.forceFallbackVideoForNextInit;
     this.forceFallbackVideoForNextInit = false;
-    await this.resolveChannelVideo(channel, useFallbackVideo);
+    const playReplay = this.playReplayForNextInit && !!channel.replayVideoId;
+    this.playReplayForNextInit = false;
+    if (playReplay) {
+      // Explicit user choice from the off-air card: play the latest bulletin.
+      channel.videoId = channel.replayVideoId;
+      channel.isLive = false;
+      channel.isReplay = true;
+      channel.hlsUrl = undefined;
+    } else {
+      await this.resolveChannelVideo(channel, useFallbackVideo);
+    }
     if (!this.element?.isConnected) return;
     if (!this.ownsLiveMediaSession(channelId, sessionToken)) return;
 
@@ -1863,7 +1932,9 @@ export class LiveNewsPanel extends Panel {
     this.channels = [...preset, ...customs];
     saveChannelsToStorage(this.channels);
     this.refreshChannelSwitcher();
-    const first = this.channels[0]!;
+    // Open on live TV: the first preset channel that is live around the clock
+    // (HLS or 24/7 YouTube), not a newscast-only station that may be off air.
+    const first = this.channels.find((c) => presetIds.has(c.id) && this.isAlwaysLive(c)) ?? this.channels[0]!;
     if (first.id !== this.activeChannel.id) void this.switchChannel(first);
   }
 

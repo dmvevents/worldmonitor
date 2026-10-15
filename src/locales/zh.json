@@ -1805,7 +1805,11 @@
       "invalidHlsUrl": "请输入有效的HLS流地址（.m3u8）",
       "playLiveFeed": "播放直播源",
       "readyStatus": "准备就绪，随时可播",
-      "regionCaribbean": "Caribbean"
+      "regionCaribbean": "Caribbean",
+      "offAir": "{{name}} is off air right now — it streams during newscasts only",
+      "playReplay": "Play latest bulletin (replay)",
+      "nextLive": "Next live channel",
+      "scheduledHint": "Streams during newscasts only — may be off air"
     },
     "map": {
       "showMap": "显示地图",
