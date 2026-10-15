@@ -41,7 +41,7 @@ Direct RSS (verified 2026-10-14): Trinidad Express and TV6 (BLOX search RSS), TT
 
 No usable RSS (blocked, 404, or empty) → Google News `site:` queries instead: Guardian TT, CNC3, Newsday, TTPS, Office of the Prime Minister, Met Office, OPR, Energy Chamber, Stabroek/Kaieteur. Also no feed: i95.5FM, Tobago Today, Wired868 (403), CMC, Nation News (403), ODPM, CSO.
 
-Live TV is YouTube-based: the resolver checks `youtube.com/@handle/live`. TTT, CNC3, TV6, Parliament and Tobago Updates stream only during newscasts and sittings, so when a station is off air the panel plays its most recent upload (latest bulletin) instead of an offline card; the tab is not marked live in that state. teleSUR English, Sky and Al Jazeera are near 24/7. No IPTV m3u8 streams were added because none of the T&T broadcasters publish a public HLS URL. Loop TT's domain no longer resolves and is omitted. A `site:gov.tt` catch-all was tried and removed: Google indexes spam pages on compromised gov.tt subdomains.
+Live TV is YouTube-based: the resolver checks `youtube.com/@handle/live`. TTT, CNC3, TV6, Parliament and Tobago Updates stream only during newscasts and sittings, so when a station is off air the panel plays its most recent upload (latest bulletin) instead of an offline card; the tab is not marked live in that state. teleSUR English, Sky and Al Jazeera are near 24/7. The main T&T news stations (TTT, CNC3, TV6) publish no public HLS URL, so they stay on YouTube; the IPTV channels listed under *Sibling monitors* below are the broadcasters that do. Loop TT's domain no longer resolves and is omitted. A `site:gov.tt` catch-all was tried and removed: Google indexes spam pages on compromised gov.tt subdomains.
 
 Trinidad Express rate-limits bursts (HTTP 429) if the same host fetches its three feeds repeatedly within minutes; the dashboard's per-feed cache keeps this from mattering in normal use.
 
@@ -56,7 +56,20 @@ Two more variants ship alongside `tt`, built the same way:
 
 You do not need the extra servers to use them: each dashboard seeds the other two as **preset tabs** in the tab bar (Main · Guyana · Chips & AI). A preset tab enables exactly that variant's default panels, re-centres the map on its region (Trinidad & Tobago, Guyana, global for Chips) and puts its broadcasters first in the Live News strip; feeds load through the shared catalog. Deleting a preset tab sticks; the seed runs once per variant. The standalone `dev:gy` / `dev:chips` servers are optional.
 
-Live IPTV: the Live News panel also carries broadcasters' public HLS feeds (CORS-verified 2026-10-15) for Bizz TV, Sankhya TV and Scorch TV (T&T), HGPTV, MTV Guyana and Little Guyana TV, CBC TV8 Barbados, TVJ and GNN Jamaica, DBS St Lucia, Pointe TV Antigua, ZNS Bahamas, Antena 7 and Noticias 16 (Dominican Republic), Radio y TV Martí and Prensa Latina TV (Cuba), Haiti News Channel and RTH TV1, Telemundo and WIPR Puerto Rico, and for Venezuela teleSUR (Spanish and English HD), Venevisión Internacional and Canal I. Per-variant default channel sets live in `src/config/live-channel-defaults.ts`. The main T&T news stations publish no HLS; they stay on YouTube with the latest-upload fallback.
+Live IPTV: the Live News panel also carries broadcasters' public HLS feeds (CORS-verified 2026-10-15) for Bizz TV, Sankhya TV and Scorch TV (T&T), HGPTV, MTV Guyana and Little Guyana TV, CBC TV8 Barbados, TVJ and GNN Jamaica, DBS St Lucia, Pointe TV Antigua, ZNS Bahamas, Antena 7 and Noticias 16 (Dominican Republic), Radio y TV Martí and Prensa Latina TV (Cuba), Haiti News Channel and RTH TV1, Telemundo Puerto Rico, and for Venezuela teleSUR (Spanish and English HD), Venevisión Internacional and Canal I. Per-variant default channel sets live in `src/config/live-channel-defaults.ts`. The main T&T news stations publish no HLS; they stay on YouTube with the latest-upload fallback.
+
+## Testing and validation
+
+```bash
+node scripts/validate-live-channels.mjs             # probe every HLS channel (manifest + CORS) and every YouTube handle (page + latest upload)
+node scripts/validate-live-channels.mjs --hls-only  # skip the YouTube checks
+./node_modules/.bin/tsx --test tests/dashboard-tab-presets.test.mts   # preset tabs ↔ panels / map views / live channels / feed catalog
+npm run typecheck && npm run test:data              # full gate (the tt/gy/chips variants are covered by the existing variant guard tests)
+```
+
+The validator exits 1 when an HLS channel fails; a YouTube station being off air is informational (the panel falls back to its latest upload). Run it before adding or re-ordering channels in `src/components/LiveNewsPanel.ts` or `src/config/live-channel-defaults.ts`.
+
+Browser check for the hub (`npm run dev:hub`, http://localhost:3100/dashboard): clicking Main → Trinidad & Tobago → Guyana → Main must switch the region selector (`global` / `trinidad` / `guyana`), the map header and the Live News channel strip each time, with exactly one Live News panel in the grid. A restored preset tab is applied right after the tab bar initialises (after the map exists), so a reload on a regional tab opens on that region.
 
 ## Scope rule
 
