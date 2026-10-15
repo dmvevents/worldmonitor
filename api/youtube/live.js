@@ -109,7 +109,24 @@ export default async function handler(request) {
     const hlsMatch = html.match(/"hlsManifestUrl"\s*:\s*"([^"]+)"/);
     if (hlsMatch && videoId) hlsUrl = hlsMatch[1].replace(/\\u0026/g, '&');
 
-    return new Response(JSON.stringify({ videoId, isLive: videoId !== null, channelExists, channelName, hlsUrl }), {
+    // Not live: most recent upload, so channels that only stream on air
+    // (newscasts, parliamentary sittings) can play their latest bulletin.
+    let latestVideoId = null;
+    if (!videoId && channelExists) {
+      try {
+        const vidsRes = await fetch(`https://www.youtube.com/${channelHandle}/videos`, {
+          headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
+          redirect: 'follow',
+          signal: AbortSignal.timeout(8000),
+        });
+        if (vidsRes.ok) {
+          const latest = (await vidsRes.text()).match(/"videoId":"([a-zA-Z0-9_-]{11})"/);
+          if (latest) latestVideoId = latest[1];
+        }
+      } catch { /* best effort */ }
+    }
+
+    return new Response(JSON.stringify({ videoId, isLive: videoId !== null, channelExists, channelName, hlsUrl, latestVideoId }), {
       status: 200,
       headers: { ...cors, 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=300, s-maxage=600, stale-while-revalidate=120' },
     });

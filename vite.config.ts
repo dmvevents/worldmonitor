@@ -877,9 +877,27 @@ function youtubeLivePlugin(): Plugin {
             }
           }
 
+          // Not live: surface the channel's most recent upload so stations that
+          // only stream on air (newscasts, parliamentary sittings) still have
+          // something to play. Mirrors api/youtube/live.js.
+          let latestVideoId: string | null = null;
+          if (!videoId) {
+            try {
+              const vidsRes = await fetch(`https://www.youtube.com/${channelHandle}/videos`, {
+                headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
+                redirect: 'follow',
+                signal: AbortSignal.timeout(10_000),
+              });
+              if (vidsRes.ok) {
+                const latest = (await vidsRes.text()).match(/"videoId":"([a-zA-Z0-9_-]{11})"/);
+                if (latest) latestVideoId = latest[1]!;
+              }
+            } catch { /* best effort */ }
+          }
+
           res.setHeader('Content-Type', 'application/json');
           res.setHeader('Cache-Control', 'public, max-age=300');
-          res.end(JSON.stringify({ videoId, isLive: videoId !== null, channel }));
+          res.end(JSON.stringify({ videoId, isLive: videoId !== null, latestVideoId, channel }));
         } catch (error) {
           console.error(`[YouTube Live] Error:`, error);
           res.statusCode = 500;

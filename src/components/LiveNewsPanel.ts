@@ -1123,7 +1123,10 @@ export class LiveNewsPanel extends Panel {
     }
 
     const info = await fetchLiveVideoInfo(channel.handle);
-    channel.videoId = info.videoId || channel.fallbackVideoId;
+    // Stations that only stream during newscasts/sittings (the Caribbean set)
+    // have no 24/7 fallbackVideoId; play their most recent upload instead of
+    // an offline card so the tab always shows the latest bulletin.
+    channel.videoId = info.videoId || channel.fallbackVideoId || info.latestVideoId || undefined;
     channel.isLive = !!info.videoId;
     // Don't re-apply an hlsUrl while the channel is on HLS failure cooldown —
     // prevents an infinite retry loop in browsers (e.g. Firefox) that reject
