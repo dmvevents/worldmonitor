@@ -31,12 +31,19 @@ else
   fi
   PORT="$PROXY_PORT" BEDROCK_MODEL="$MODEL" "$PYTHON" scripts/tt-claude-proxy.py &
   PROXY_PID=$!
-  trap '[ -n "$PROXY_PID" ] && kill "$PROXY_PID" 2>/dev/null || true' EXIT INT TERM
   for _ in $(seq 1 20); do
     curl -fsS -m 1 "http://127.0.0.1:${PROXY_PORT}/health" >/dev/null 2>&1 && break
     sleep 0.25
   done
 fi
+
+# Keep Upstash seeded while the hub runs (market keys expire after 30 min).
+SEED_PID=""
+if [ -n "${UPSTASH_REDIS_REST_URL:-}" ] && [ "${WM_NO_SEED_LOOP:-}" != "1" ]; then
+  bash scripts/tt-seed-loop.sh &
+  SEED_PID=$!
+fi
+trap '[ -n "$PROXY_PID" ] && kill "$PROXY_PID" 2>/dev/null; [ -n "$SEED_PID" ] && kill "$SEED_PID" 2>/dev/null; true' EXIT INT TERM
 
 export VITE_VARIANT=full
 export DEV_PORT="${DEV_PORT:-3100}"
