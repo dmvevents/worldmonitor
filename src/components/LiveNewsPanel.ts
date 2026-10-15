@@ -226,7 +226,6 @@ export const OPTIONAL_LIVE_CHANNELS: LiveChannel[] = [
   { id: 'haiti-news-channel', name: 'Haiti News Channel', hlsUrl: 'https://cdn.haititivi.com/website/haitinews/index.m3u8', useFallbackOnly: true },
   { id: 'rth-tv1', name: 'RTH TV1 (Haiti)', hlsUrl: 'https://2-fss-2.streamhoster.com/pl_120/amlst:206708-4203440/playlist.m3u8', useFallbackOnly: true },
   { id: 'telemundo-pr', name: 'Telemundo Puerto Rico', hlsUrl: 'https://nbculocallive.akamaized.net/hls/live/2037499/puertorico/stream1/master.m3u8', useFallbackOnly: true },
-  { id: 'wipr-tv', name: 'WIPR-TV (Puerto Rico)', hlsUrl: 'https://streamwipr.pr/hls/stream/index.m3u8', useFallbackOnly: true },
   // Venezuela (public HLS, CORS-open) — context for the Essequibo and Dragon-gas lenses
   { id: 'telesur-hd', name: 'teleSUR (Español)', hlsUrl: 'https://mblesmain01.telesur.ultrabase.net/mbliveMain/hd/playlist.m3u8', useFallbackOnly: true },
   { id: 'venevision-int', name: 'Venevisión Internacional', hlsUrl: 'https://vod2live.univtec.com/manifest/4c41c0d8-e2e4-43cc-bd43-79afe715e1b3.m3u8', useFallbackOnly: true },
@@ -243,7 +242,7 @@ const _REGION_ENTRIES: { key: string; labelKey: string; channelIds: string[] }[]
   { key: 'me', labelKey: 'components.liveNews.regionMiddleEast', channelIds: ['alarabiya', 'aljazeera', 'al-hadath', 'sky-news-arabia', 'trt-world', 'iran-intl', 'press-tv', 'cgtn-arabic', 'kan-11', 'i24-news', 'asharq-news', 'aljazeera-arabic', 'aljazeera-mubasher', 'alarabiya-business', 'al-qahera-news', 'dw-arabic', 'rt-arabic', 'rudaw'] },
   { key: 'africa', labelKey: 'components.liveNews.regionAfrica', channelIds: ['africanews', 'channels-tv', 'ktn-news', 'enca', 'sabc-news', 'arise-news'] },
   { key: 'oc', labelKey: 'components.liveNews.regionOceania', channelIds: ['abc-news-au'] },
-  { key: 'caribbean', labelKey: 'components.liveNews.regionCaribbean', channelIds: ['ttt-live', 'cnc3', 'cnc3-prime', 'tv6-news', 'tt-parliament', 'tobago-channel5', 'tobago-updates', 'ietv', 'ncn-guyana', 'tvj', 'cvm-tv', 'abs-antigua', 'cbc-barbados', 'gbn-grenada', 'telesur-english', 'bizz-tv', 'sankhya-tv', 'scorch-tv', 'hgptv', 'mtv-guyana', 'little-guyana-tv', 'cbc-tv8', 'tvj-hls', 'gnn-tv', 'dbs-tv', 'pointe-tv', 'zns-tv', 'antena7', 'noticias16', 'tv-marti', 'prensa-latina-tv', 'haiti-news-channel', 'rth-tv1', 'telemundo-pr', 'wipr-tv'] },
+  { key: 'caribbean', labelKey: 'components.liveNews.regionCaribbean', channelIds: ['ttt-live', 'cnc3', 'cnc3-prime', 'tv6-news', 'tt-parliament', 'tobago-channel5', 'tobago-updates', 'ietv', 'ncn-guyana', 'tvj', 'cvm-tv', 'abs-antigua', 'cbc-barbados', 'gbn-grenada', 'telesur-english', 'bizz-tv', 'sankhya-tv', 'scorch-tv', 'hgptv', 'mtv-guyana', 'little-guyana-tv', 'cbc-tv8', 'tvj-hls', 'gnn-tv', 'dbs-tv', 'pointe-tv', 'zns-tv', 'antena7', 'noticias16', 'tv-marti', 'prensa-latina-tv', 'haiti-news-channel', 'rth-tv1', 'telemundo-pr'] },
 ];
 export const OPTIONAL_CHANNEL_REGIONS: { key: string; labelKey: string; channelIds: string[] }[] = [
   ..._REGION_ENTRIES,

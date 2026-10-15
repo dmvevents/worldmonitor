@@ -953,6 +953,10 @@ export class PanelLayoutManager implements AppModule {
     await this.createPanels();
 
     this.initPanelTabs();
+    // Tabs are initialised after the map exists; a regional preset tab restored
+    // from storage opens on its own region, header and channel set.
+    const restoredPreset = this.activePresetTab();
+    if (restoredPreset) this.applyTabRegion(restoredPreset.id);
     if (import.meta.env.DEV && bootShellFootprint) warnOnBootShellFootprintDrift(bootShellFootprint);
 
     if (this.ctx.isMobile) {
@@ -2494,13 +2498,10 @@ export class PanelLayoutManager implements AppModule {
     this.ctx.map = new MapContainer(mapContainer, {
       zoom: this.ctx.isMobile ? 2.5 : 1.0,
       pan: { x: 0, y: 0 },
-      view: (this.activePresetTab()?.mapView ?? getDefaultMapView(SITE_VARIANT, this.ctx.isMobile ? this.ctx.resolvedLocation : 'global')) as MapView,
+      view: getDefaultMapView(SITE_VARIANT, this.ctx.isMobile ? this.ctx.resolvedLocation : 'global'),
       layers: this.ctx.mapLayers,
       timeRange: '7d',
     }, preferGlobe);
-    // A regional preset tab restored from storage opens on its own region, header and channel set.
-    const restoredPreset = this.activePresetTab();
-    if (restoredPreset) this.applyTabRegion(restoredPreset.id);
 
     const eagerSupplyChainPanel = this.ctx.panels['supply-chain'] as SupplyChainPanel | undefined;
     if (eagerSupplyChainPanel) {
