@@ -973,6 +973,12 @@ export class DeckGLMap {
         type: 'raster',
         tiles: [this.radarTileUrl],
         tileSize: 256,
+        // RainViewer's radar composite stops at z7: from z8 up the CDN answers
+        // every request with the same "Zoom Level Not Supported" placeholder PNG
+        // (verified 2026-10-15: z8/z9/z10 all return the identical 1370-byte
+        // tile), which tiled the regional Trinidad / Guyana views with grey
+        // boxes. Declaring the real ceiling makes MapLibre overzoom z7 instead.
+        maxzoom: 7,
         attribution: '© RainViewer',
       });
       const beforeId = this.maplibreMap.getLayer('country-interactive') ? 'country-interactive' : undefined;
