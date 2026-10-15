@@ -68,6 +68,8 @@ node scripts/validate-live-channels.mjs --hls-only  # skip the YouTube checks
 npm run typecheck && npm run test:data              # full gate (the tt/gy/chips variants are covered by the existing variant guard tests)
 ```
 
+Live TV plays through hls.js (fetch loader, no Referer) on Chrome and Firefox; native HLS only on Safari / the Tauri WKWebView. Chrome defers media loading in a hidden or occluded tab (another window on top, a display asleep), so a black player while the tab is in the background is Chrome, not the stream: bring the tab to the front. Headless check: `node /tmp/pw-live-test2.mjs`-style Playwright with `channel: 'chrome'` (Chromium builds lack H.264).
+
 The validator exits 1 when an HLS channel fails; a YouTube station being off air is informational (the panel falls back to its latest upload). Run it before adding or re-ordering channels in `src/components/LiveNewsPanel.ts` or `src/config/live-channel-defaults.ts`.
 
 Browser check for the hub (`npm run dev:hub`, http://localhost:3100/dashboard): clicking Main → Trinidad & Tobago → Guyana → Main must switch the region selector (`global` / `trinidad` / `guyana`), the map header and the Live News channel strip each time, with exactly one Live News panel in the grid. A restored preset tab is applied right after the tab bar initialises (after the map exists), so a reload on a regional tab opens on that region.
