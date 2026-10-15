@@ -265,7 +265,13 @@ const CHIPS_LIVE_CHANNELS: LiveChannel[] = CHIPS_LIVE_CHANNEL_IDS
   .map(id => OPTIONAL_LIVE_CHANNELS.find(c => c.id === id))
   .filter((c): c is LiveChannel => c !== undefined);
 
-const DEFAULT_LIVE_CHANNELS = SITE_VARIANT === 'tech' ? TECH_LIVE_CHANNELS : SITE_VARIANT === 'happy' ? [] : SITE_VARIANT === 'tt' ? TT_LIVE_CHANNELS : SITE_VARIANT === 'gy' ? GY_LIVE_CHANNELS : SITE_VARIANT === 'chips' ? CHIPS_LIVE_CHANNELS : FULL_LIVE_CHANNELS;
+// Global dashboard hub: the world set plus the regional IPTV channels, so the
+// Caribbean streams are one click away on the Main tab without opening the picker.
+const HUB_LIVE_CHANNELS: LiveChannel[] = (VARIANT_LIVE_CHANNEL_IDS.full ?? [])
+  .map(id => OPTIONAL_LIVE_CHANNELS.find(c => c.id === id))
+  .filter((c): c is LiveChannel => c !== undefined);
+
+const DEFAULT_LIVE_CHANNELS = SITE_VARIANT === 'tech' ? TECH_LIVE_CHANNELS : SITE_VARIANT === 'happy' ? [] : SITE_VARIANT === 'tt' ? TT_LIVE_CHANNELS : SITE_VARIANT === 'gy' ? GY_LIVE_CHANNELS : SITE_VARIANT === 'chips' ? CHIPS_LIVE_CHANNELS : SITE_VARIANT === 'full' && HUB_LIVE_CHANNELS.length > 0 ? HUB_LIVE_CHANNELS : FULL_LIVE_CHANNELS;
 
 /** Default channel list for the current variant (for restore in channel management). */
 export function getDefaultLiveChannels(): LiveChannel[] {

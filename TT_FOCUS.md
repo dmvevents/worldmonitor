@@ -5,9 +5,14 @@ Local-only site variant that turns World Monitor into a Trinidad & Tobago / sout
 ## Run
 
 ```bash
-npm run dev:tt          # VITE_VARIANT=tt on http://localhost:3100  (port 3000 is taken by Docker/Grafana on this Mac)
+npm run dev:hub         # RECOMMENDED: the global World Monitor dashboard on http://localhost:3100 with Trinidad & Tobago,
+                        # Guyana and Chips & AI as tabs next to the default Main tab (local Ollama wired in)
+npm run dev:tt          # T&T-first variant on :3100 (Main = T&T, tabs for Guyana and Chips & AI)
 npm run build:tt        # production build of the tt variant
 ```
+
+On localhost the app honours `localStorage['worldmonitor-variant']` over the build variant; if the wrong dashboard
+loads, set it to `full` (hub) or `tt` and reload. Port 3000 is taken by Docker/Grafana on this Mac.
 
 No API keys are needed for the news panels: the Vite dev server runs the sebuf API gateway and the RSS proxy in-process, so the `tt` digest (`/api/news/v1/list-feed-digest?variant=tt`) and every feed load locally without Redis or Docker.
 
