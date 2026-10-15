@@ -1253,7 +1253,9 @@ export class LiveNewsPanel extends Panel {
       const btnEl = btn as HTMLElement;
       btnEl.classList.remove('loading');
       btnEl.classList.toggle('replay', btnEl.dataset.channelId === channel.id && !!channel.isReplay);
-      if (btnEl.dataset.channelId === channel.id && !channel.videoId) {
+      // HLS channels have no YouTube video id but are live: only a station with
+      // neither a stream nor a video is off air.
+      if (btnEl.dataset.channelId === channel.id && !channel.videoId && !this.isAlwaysLive(channel)) {
         btnEl.classList.add('offline');
       }
     });
@@ -1471,20 +1473,41 @@ export class LiveNewsPanel extends Panel {
     };
 
     const nativeHls = video.canPlayType('application/vnd.apple.mpegurl');
-    if (nativeHls) {
+    // Chrome answers "maybe" here (seen on Chrome 155/macOS) yet has no native HLS
+    // demuxer: the element sits at readyState 0 forever and the user sees a black
+    // panel. Only trust native playback on WebKit (Safari / Tauri's WKWebView) or
+    // when MediaSource is missing; everywhere else use hls.js over MSE.
+    const ua = navigator.userAgent;
+    const isWebKitNative = /Safari\//.test(ua) && !/(Chrome|Chromium|CriOS|Edg|OPR|Firefox|FxiOS)\//.test(ua);
+    const preferNative = !!nativeHls && (isWebKitNative || typeof MediaSource === 'undefined');
+    if (preferNative) {
       // Safari / WKWebView: native HLS support
       video.src = hlsUrl;
       video.addEventListener('error', onHlsFatalError);
     } else {
       // Chrome / Firefox: lazy-load hls.js only when needed
-      const { default: Hls } = await import('hls.js');
+      const { default: Hls, FetchLoader } = await import('hls.js');
       if (!this.element?.isConnected || !this.ownsLiveMediaSession(failedChannel.id, sessionToken)) return;
       if (!Hls.isSupported()) {
+        if (nativeHls) {
+          // MSE unusable but the element claims HLS: last resort, let it try natively.
+          video.src = hlsUrl;
+          video.addEventListener('error', onHlsFatalError);
+          return;
+        }
         // No HLS support at all — fall through to YouTube
         onHlsFatalError();
         return;
       }
-      const hls = new Hls({ enableWorker: true, lowLatencyMode: true });
+      // Fetch loader with no Referer: several broadcaster CDNs (e.g. CDN77 for
+      // CBC TV8) refuse playlist/segment requests that carry a page Referer, and
+      // the XHR loader cannot drop it. Mirrors the <video referrerpolicy> above.
+      const hls = new Hls({
+        enableWorker: true,
+        lowLatencyMode: true,
+        loader: FetchLoader,
+        fetchSetup: (context, initParams) => new Request(context.url, { ...initParams, referrerPolicy: 'no-referrer' }),
+      });
       this.hlsInstance = hls;
       hls.loadSource(hlsUrl);
       hls.attachMedia(video);
