@@ -696,6 +696,69 @@ test('blocks handler global fetches to private network targets (#3549)', async (
   }
 });
 
+test('allows only Docker mode to fetch the configured private LLM origin (LLM_API_URL)', async () => {
+  const originalLlmUrl = process.env.LLM_API_URL;
+  let upstreamHits = 0;
+
+  const upstream = createServer((req, res) => {
+    // The sidecar's own startup health probe GETs the LLM origin; only the
+    // handler's POST proves the handler bundle fetch got through the SSRF guard.
+    if (req.method === 'POST') upstreamHits += 1;
+    res.writeHead(200, { 'content-type': 'application/json' });
+    res.end(JSON.stringify({ choices: [{ message: { content: 'ok' } }] }));
+  });
+  const upstreamPort = await listen(upstream);
+  const llmUrl = `http://127.0.0.1:${upstreamPort}/v1/chat/completions`;
+
+  const localApi = await setupApiDir({
+    'llm-probe.js': `
+      export default async function handler() {
+        const upstream = await fetch(process.env.LLM_API_URL, { method: 'POST', body: '{}' });
+        return new Response(await upstream.text(), {
+          status: upstream.status,
+          headers: { 'content-type': 'application/json' },
+        });
+      }
+    `,
+  });
+
+  async function runProbe(mode) {
+    const app = await createLocalApiServer({
+      port: 0,
+      apiDir: localApi.apiDir,
+      mode,
+      logger: { log() { }, warn() { }, error() { } },
+    });
+    const { port } = await app.start();
+    try {
+      return await authFetch(`http://127.0.0.1:${port}/api/llm-probe`);
+    } finally {
+      await app.close();
+    }
+  }
+
+  process.env.LLM_API_URL = llmUrl;
+
+  try {
+    const dockerResponse = await runProbe('docker');
+    assert.equal(dockerResponse.status, 200);
+    assert.equal(upstreamHits, 1);
+
+    const desktopResponse = await runProbe('desktop-sidecar');
+    assert.equal(desktopResponse.status, 502);
+    const desktopBody = await desktopResponse.json();
+    assert.match(desktopBody.reason, /SSRF blocked/);
+    assert.equal(upstreamHits, 1);
+  } finally {
+    if (originalLlmUrl === undefined) delete process.env.LLM_API_URL;
+    else process.env.LLM_API_URL = originalLlmUrl;
+    await localApi.cleanup();
+    await new Promise((resolve, reject) => {
+      upstream.close((error) => (error ? reject(error) : resolve()));
+    });
+  }
+});
+
 test('allows only Docker mode to fetch configured private Redis REST origin', async () => {
   const originalRedisUrl = process.env.UPSTASH_REDIS_REST_URL;
   const originalRedisToken = process.env.UPSTASH_REDIS_REST_TOKEN;

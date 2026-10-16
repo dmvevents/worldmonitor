@@ -1846,6 +1846,21 @@ export async function createLocalApiServer(options = {}) {
           );
         }
       }
+      // Docker self-host ONLY, same reasoning as the Redis origin above: a local
+      // LLM (Ollama, or an OpenAI-compatible shim such as a Bedrock proxy) lives on
+      // a private origin by definition. The sidecar's own health probes already
+      // pass allowPrivateNetwork for OLLAMA_API_URL / LLM_API_URL, but the handler
+      // bundles call plain fetch(), so without this the SSRF guard marks the
+      // provider offline and every brief / summary silently skips it.
+      if (context.mode === 'docker') {
+        for (const envName of ['OLLAMA_API_URL', 'LLM_API_URL']) {
+          const value = process.env[envName];
+          if (!value) continue;
+          try { extraAllowedPrivateOrigins.push(new URL(value).origin); } catch (err) {
+            context.logger.warn(`[local-api] ${envName} is not a valid URL; not added to the private-fetch allowlist: ${err.message}`);
+          }
+        }
+      }
       if (context.allowPrivateRemoteBase) {
         try { extraAllowedPrivateOrigins.push(new URL(context.remoteBase).origin); } catch {}
       }
