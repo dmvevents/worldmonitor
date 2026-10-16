@@ -117,6 +117,31 @@ class Handler(BaseHTTPRequestHandler):
     def _error(self, status: int, message: str) -> None:
         self._json(status, {"error": {"message": message, "type": "proxy_error"}})
 
+    def _read_body(self) -> bytes:
+        """Read the request body with or without Content-Length.
+
+        Node's http client (the sidecar's fetch shim) streams JSON bodies with
+        Transfer-Encoding: chunked and no Content-Length; BaseHTTPRequestHandler
+        does not decode that, so handle both framings here.
+        """
+        if "chunked" in (self.headers.get("Transfer-Encoding") or "").lower():
+            chunks = []
+            while True:
+                size_line = self.rfile.readline().strip()
+                if not size_line:
+                    break
+                size = int(size_line.split(b";")[0], 16)
+                if size == 0:
+                    # consume trailer lines until the blank line
+                    while self.rfile.readline().strip():
+                        pass
+                    break
+                chunks.append(self.rfile.read(size))
+                self.rfile.readline()  # CRLF after each chunk
+            return b"".join(chunks)
+        length = int(self.headers.get("Content-Length") or 0)
+        return self.rfile.read(length) if length else b""
+
     # -- routes ----------------------------------------------------------
     def do_OPTIONS(self):
         self.send_response(204)
@@ -130,14 +155,16 @@ class Handler(BaseHTTPRequestHandler):
             return self._json(200, {"ok": True, "region": REGION, "profile": PROFILE, "default_model": DEFAULT_MODEL})
         if self.path.startswith("/v1/models"):
             return self._json(200, {"object": "list", "data": [{"id": DEFAULT_MODEL, "object": "model", "owned_by": "anthropic-bedrock"}]})
+        if self.path.startswith("/v1/chat/completions"):
+            # Reachability probes (World Monitor's llm-health GETs the configured URL): answer 200.
+            return self._json(200, {"ok": True, "hint": "POST a chat completion to this path"})
         return self._error(404, "not found")
 
     def do_POST(self):
         if not self.path.startswith("/v1/chat/completions"):
             return self._error(404, "not found")
         try:
-            length = int(self.headers.get("Content-Length") or 0)
-            body = json.loads(self.rfile.read(length) or b"{}")
+            body = json.loads(self._read_body() or b"{}")
         except (ValueError, json.JSONDecodeError) as exc:
             return self._error(400, f"invalid JSON body: {exc}")
         messages = body.get("messages")
