@@ -4,7 +4,7 @@
 # after 30 minutes (CACHE_TTL=1800 in seed-commodity-quotes / seed-market-quotes),
 # which left the Markets / Energy panels empty half an hour after a manual seed.
 #
-#   bash scripts/tt-seed-loop.sh          # loop: market seeds every 25 min, EIA + fuel once a day
+#   bash scripts/tt-seed-loop.sh          # loop: market + weather/quakes/crypto every 25 min, keyless bundles + EIA/fuel/economy daily
 #   bash scripts/tt-seed-loop.sh --once   # single pass
 #
 # Alpha Vantage's free tier allows 25 requests/day, so only the first market pass
@@ -27,7 +27,7 @@ log() { echo "[seed-loop $(date '+%H:%M:%S')] $*" >&2; }
 
 run_seed() { # name [ENV=VALUE ...]
   local name="$1"; shift
-  if env "$@" node "scripts/$name.mjs" >/dev/null 2>"$STAMP_DIR/$name.err"; then
+  if env "$@" timeout 600 node "scripts/$name.mjs" >/dev/null 2>"$STAMP_DIR/$name.err"; then
     log "$name ok"
   else
     log "$name FAILED: $(tail -1 "$STAMP_DIR/$name.err" | cut -c1-160)"
@@ -44,6 +44,8 @@ pass() {
   fi
   run_seed seed-commodity-quotes ${av_override[@]+"${av_override[@]}"}
   run_seed seed-market-quotes ${av_override[@]+"${av_override[@]}"}
+  # Keyless fast-moving sources every pass (the hub's own API serves these from Redis):
+  for s in seed-weather-alerts seed-earthquakes seed-crypto-quotes seed-fear-greed; do run_seed "$s"; done
   if [ ! -f "$STAMP_DIR/daily-$today" ]; then
     touch "$STAMP_DIR/daily-$today"
     if [ -n "${EIA_API_KEY:-}" ]; then
@@ -53,6 +55,9 @@ pass() {
     if [ -n "${FRED_API_KEY:-}" ] && [ -n "${EIA_API_KEY:-}" ]; then
       run_seed seed-economy
     fi
+    # Keyless slow-moving sources once a day (all public/official; aggregate data only):
+    for s in seed-fx-rates seed-gdelt-intel seed-disease-outbreaks seed-displacement-summary seed-energy-disruptions \
+             seed-fuel-shortages seed-market-breadth seed-climate-anomalies seed-cross-source-signals; do run_seed "$s"; done
   fi
 }
 
