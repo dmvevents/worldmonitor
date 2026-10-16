@@ -2,7 +2,33 @@
 
 Local-only site variant that turns World Monitor into a Trinidad & Tobago / southern Caribbean monitor. Branch `tt-focus`; not intended for the upstream koala73 repo.
 
-## Run
+## Run (GA: production build as a login service)
+
+```bash
+npm run build:full                          # SPA → dist/
+node scripts/build-sidecar-handlers.mjs     # bundles api/<domain>/v1/[rpc].ts → .js for the local API server (gitignored)
+bash scripts/tt-install-service.sh install  # launchd agent com.worldmonitor.tt-hub: starts at login, restarts on crash
+open http://127.0.0.1:3100/dashboard
+bash scripts/tt-install-service.sh status|restart|uninstall
+```
+
+The agent runs `scripts/tt-hub-serve.sh`, which mirrors the upstream Docker self-host (nginx + sidecar) without
+Docker: `scripts/tt-hub-server.mjs` serves `dist/` (index `dashboard.html`, SPA fallback, long-cache assets) and
+reverse-proxies `/api/*` to `src-tauri/sidecar/local-api-server.mjs` running in `docker` mode (every `api/` handler
+executes locally, no fallback to api.worldmonitor.app). The sidecar default-denies without `LOCAL_API_TOKEN`, so the
+runner mints one per start and the front door injects it as a Bearer header, exactly like `docker/entrypoint.sh` +
+nginx. The browser authenticates with an anonymous session from `/api/wm-session`, signed with `WM_SESSION_SECRET`,
+which the runner persists in `~/.config/worldmonitor/local-secrets.env`. The Claude shim (:8788) and the seed loop
+run alongside; logs: `~/Library/Logs/worldmonitor-hub/hub.log`. Rebuild (`npm run build:full` + handler bundles) and
+`restart` after pulling code. After a fresh Redis the seed loop fills markets / weather / quakes / crypto within a
+minute and the daily keyless bundles (FX, GDELT, disease, displacement, energy disruptions, climate) on first pass.
+
+Known empty states on the GA hub: *AI Forecasts* needs `seed-forecasts.mjs`, which generates predictions with
+OpenRouter/Groq models (no keyless path), and *Strategic Posture* needs the ADS-B relay; both show their own
+waiting states. Country briefs, Insights, summaries and the analyst chat are unlocked by the instance
+operator key and run on Claude; a brief takes 12-15 s the first time and is cached for 6 h per country.
+
+## Run (development)
 
 ```bash
 npm run dev:hub:claude  # RECOMMENDED: the global World Monitor dashboard on http://localhost:3100 with Trinidad & Tobago,
