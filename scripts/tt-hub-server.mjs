@@ -44,6 +44,13 @@ function sendFile(res, filePath, reqPath, head = false) {
     'x-content-type-options': 'nosniff',
     'referrer-policy': 'strict-origin-when-cross-origin',
   };
+  if (ext === '.html' && OPERATOR_KEY) {
+    // Unlock the Pro-tier panels for the local user: the SPA treats a readable
+    // `wm-pro-key` cookie as a legacy Pro key, flips its Pro state, exchanges it
+    // for an HttpOnly session via POST /api/wm-session (validated against
+    // WORLDMONITOR_VALID_KEYS) and clears this cookie. Same key the proxy sends.
+    headers['set-cookie'] = `wm-pro-key=${encodeURIComponent(OPERATOR_KEY)}; Path=/; Max-Age=600; SameSite=Lax`;
+  }
   res.writeHead(200, headers);
   if (head) return res.end();
   createReadStream(filePath).pipe(res);
