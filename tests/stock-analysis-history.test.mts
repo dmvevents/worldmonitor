@@ -150,7 +150,8 @@ function createRedisAwareFetch() {
             const items = [...(sortedSets.get(key) ?? [])].sort((a, b) => b.score - a.score || a.member.localeCompare(b.member));
             const start = Number(args[0] || 0);
             const stop = Number(args[1] || 0);
-            return { result: items.slice(start, stop + 1).map((item) => item.member) };
+            const end = stop < 0 ? Math.max(0, items.length + stop + 1) : stop + 1;
+            return { result: items.slice(start, end).map((item) => item.member) };
           }
           if (verb === 'ZREM') {
             const removals = new Set(args);
@@ -608,25 +609,30 @@ describe('server-backed stock analysis history', () => {
     assert.equal(snapshot.name, 'Private display label');
   });
 
-  it('deletes evicted run blobs while retaining the latest 32 snapshots', async () => {
+  for (const concurrent of [false, true]) it(`deletes evicted run blobs with concurrent=${concurrent}`, async () => {
     process.env.UPSTASH_REDIS_REST_URL = 'https://redis.example';
     process.env.UPSTASH_REDIS_REST_TOKEN = 'token';
     const state = createRedisAwareFetch();
     globalThis.fetch = state.fetch;
     const start = Date.parse('2026-10-17T12:00:00Z');
-    for (let index = 0; index < 35; index += 1) {
+    const writes: Array<Promise<void>> = [];
+    for (let index = 0; index < 100; index += 1) {
       const snapshot = makeSnapshot('AAPL', new Date(start + index * 1_000).toISOString(), 70);
       snapshot.analysisAt = start;
-      await storeStockAnalysisSnapshot(snapshot, false);
+      const write = storeStockAnalysisSnapshot(snapshot, false);
+      if (concurrent) writes.push(write);
+      else await write;
     }
+    await Promise.all(writes);
     const blobs = [...state.redis.keys()].filter(key => key.startsWith('market:stock-analysis-history:item:'));
     assert.equal(blobs.length, 32, 'evicted runs must not leave orphaned response blobs');
+    assert.equal(state.sortedSets.get('market:stock-analysis-history:index:v6:AAPL:core')?.length, 32);
     const history = await getStockAnalysisHistory({} as never, {
       symbols: ['AAPL'], limitPerSymbol: 32, includeNews: false,
     });
     assert.equal(history.items[0]?.snapshots.length, 32);
-    assert.equal(history.items[0]?.snapshots[0]?.generatedAt, new Date(start + 34_000).toISOString());
-    assert.equal(history.items[0]?.snapshots[31]?.generatedAt, new Date(start + 3_000).toISOString());
+    assert.equal(history.items[0]?.snapshots[0]?.generatedAt, new Date(start + 99_000).toISOString());
+    assert.equal(history.items[0]?.snapshots[31]?.generatedAt, new Date(start + 68_000).toISOString());
   });
 
   it('stores fresh analysis snapshots in Redis and serves them back in batch', async () => {

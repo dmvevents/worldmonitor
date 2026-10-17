@@ -88,10 +88,10 @@ function normalizeLedgerRecord(snapshot: AnalyzeStockResponse): AnalyzeStockResp
   };
 }
 
-async function zrevrange(key: string, limit: number): Promise<string[]> {
-  if (limit <= 0) return [];
+async function zrevrange(key: string, limit?: number): Promise<string[]> {
+  if (limit !== undefined && limit <= 0) return [];
   const data = await runRedisPipeline([
-    ['ZREVRANGE', key, 0, Math.max(0, limit - 1)],
+    ['ZREVRANGE', key, 0, limit === undefined ? -1 : Math.max(0, limit - 1)],
   ]);
   return Array.isArray(data[0]?.result)
     ? data[0]!.result!.map((item) => String(item))
@@ -138,7 +138,7 @@ export async function storeStockAnalysisSnapshot(
     ['EXPIRE', indexKey, ANALYSIS_HISTORY_TTL_SECONDS],
   ]);
 
-  const ids = await zrevrange(indexKey, ANALYSIS_HISTORY_LIMIT + 4);
+  const ids = await zrevrange(indexKey);
   await trimIndexTail(indexKey, ids, ANALYSIS_HISTORY_LIMIT, analysisItemKey);
 }
 
