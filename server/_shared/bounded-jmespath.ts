@@ -35,17 +35,30 @@ export function searchBoundedJmespath(value: unknown, expression: string): unkno
     throw new Error(`Unsafe JMESPath: ${reason}`);
   }
 
+  function expand(width: number): void {
+    fanout *= Math.max(1, width);
+    if (fanout > MAX_FANOUT) reject('too much expression expansion');
+  }
+
+  function visitLiteral(literal: unknown): void {
+    if (literal === null || typeof literal !== 'object') return;
+    const values = Object.values(literal);
+    expand(values.length);
+    for (const child of values) visitLiteral(child);
+  }
+
   function visit(node: AstNode, depth: number): void {
     nodes += 1;
     if (nodes > MAX_NODES || depth > MAX_DEPTH) reject('expression is too complex');
     if (node.type === 'Pipe' && ++pipes > MAX_PIPES) reject('too many pipe stages');
     if (node.type === 'MultiSelectList' || node.type === 'MultiSelectHash') {
       multiselects += 1;
-      // Multiplying all widths is conservative, including independent branches.
-      // Counting stages alone would still admit a few very wide duplications.
-      fanout *= Math.max(1, node.children?.length ?? 0);
-      if (multiselects > MAX_MULTISELECTS || fanout > MAX_FANOUT) reject('too much multiselect expansion');
+      if (multiselects > MAX_MULTISELECTS) reject('too many multiselects');
+      expand(node.children?.length ?? 0);
     }
+    // Literal containers can be rebuilt on every map/projection iteration.
+    // Multiply all widths, including independent branches, to bound that work.
+    if (node.type === 'Literal') visitLiteral(node.value);
     if (node.type === 'Function') {
       if (node.name === 'to_string') reject('to_string() is not supported');
       // A caller-derived separator can multiply input-sized strings and arrays.

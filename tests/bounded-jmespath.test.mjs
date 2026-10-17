@@ -12,6 +12,14 @@ describe('searchBoundedJmespath', () => {
     let calls = 0;
     jmespath.search = () => { calls += 1; throw new Error('evaluator reached'); };
     try {
+      let nestedMap = '@';
+      let nestedProjection = '@';
+      let nestedValues = '@';
+      for (let i = 0; i < 8; i += 1) {
+        nestedMap = `map(&${nestedMap}, \`[0,0,0,0,0,0,0,0,0,0]\`)`;
+        nestedProjection = `\`[0,0,0,0,0,0,0,0,0,0]\`[*].{nested: ${nestedProjection}}`;
+        nestedValues = `map(&${nestedValues}, values(\`{"a":0,"b":0,"c":0,"d":0}\`))`;
+      }
       for (const expression of [
         `${doubled(30)}|to_string(@)`,
         `{x:(${doubled(40)}),y:(${doubled(40)})}|x==y`,
@@ -19,6 +27,9 @@ describe('searchBoundedJmespath', () => {
         `map(&to_string(@), [@,@])`,
         `sort_by(@, &to_string(@))`,
         `{hidden: to_string(@)}`,
+        `length(${nestedMap})`,
+        `length(${nestedProjection})`,
+        `length(${nestedValues})`,
       ]) {
         assert.throws(() => searchBoundedJmespath({ x: 1 }, expression), /Unsafe JMESPath:/, expression);
       }
@@ -55,6 +66,9 @@ describe('searchBoundedJmespath', () => {
 
   it('caps multiplicative fanout, including wide and nested hash selections', () => {
     assert.equal(searchBoundedJmespath(1, `${doubled(6)}|length(@)`), 2);
+    assert.equal(searchBoundedJmespath(1, `length(\`${JSON.stringify(Array(64).fill(0))}\`)`), 64);
+    assert.throws(() => searchBoundedJmespath(1, `length(\`${JSON.stringify(Array(65).fill(0))}\`)`), /expression expansion/);
+    assert.deepEqual(searchBoundedJmespath(1, '`{"a":[],"b":{}}`'), { a: [], b: {} });
     for (const expression of [
       `${doubled(7)}|length(@)`,
       `[${Array(65).fill('@').join(',')}]|length(@)`,
@@ -69,7 +83,7 @@ describe('searchBoundedJmespath', () => {
     assert.equal(searchBoundedJmespath(1, Array(9).fill('@').join('|')), 1);
     assert.throws(() => searchBoundedJmespath(1, Array(10).fill('@').join('|')), /too many pipe stages/);
     assert.deepEqual(searchBoundedJmespath(1, '['.repeat(8) + '@' + ']'.repeat(8)), [[[[[[[[1]]]]]]]]);
-    assert.throws(() => searchBoundedJmespath(1, '['.repeat(9) + '@' + ']'.repeat(9)), /multiselect expansion/);
+    assert.throws(() => searchBoundedJmespath(1, '['.repeat(9) + '@' + ']'.repeat(9)), /too many multiselects/);
     assert.equal(searchBoundedJmespath(1, '!'.repeat(31) + '@'), false);
     assert.throws(() => searchBoundedJmespath(1, '!'.repeat(32) + '@'), /too complex/);
     assert.equal(searchBoundedJmespath({}, `not_null(${Array(127).fill('a').join(',')})`), null);
