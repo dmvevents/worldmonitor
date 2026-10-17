@@ -1,0 +1,70 @@
+import jmespath from 'jmespath';
+
+interface AstNode {
+  type: string;
+  name?: string;
+  value?: unknown;
+  children?: (AstNode | number | null)[];
+}
+
+// The package exposes compile() at runtime but its type declaration only lists search().
+const compiler = jmespath as typeof jmespath & { compile(expression: string): AstNode };
+
+const MAX_NODES = 128;
+const MAX_DEPTH = 32;
+const MAX_PIPES = 8;
+const MAX_MULTISELECTS = 8;
+const MAX_FANOUT = 64;
+
+function scalarLiteral(node: AstNode | number | null | undefined): node is AstNode {
+  return node !== null && typeof node === 'object' && node.type === 'Literal'
+    && (node.value === null || ['string', 'number', 'boolean'].includes(typeof node.value));
+}
+
+// Limits expression-driven duplication before the library can traverse shared
+// values in to_string(), comparisons, or implicit array-to-string coercion.
+// The byte limit remains at each caller, before compilation.
+export function searchBoundedJmespath(value: unknown, expression: string): unknown {
+  const ast = compiler.compile(expression);
+  let nodes = 0;
+  let pipes = 0;
+  let multiselects = 0;
+  let fanout = 1;
+
+  function reject(reason: string): never {
+    throw new Error(`Unsafe JMESPath: ${reason}`);
+  }
+
+  function visit(node: AstNode, depth: number): void {
+    nodes += 1;
+    if (nodes > MAX_NODES || depth > MAX_DEPTH) reject('expression is too complex');
+    if (node.type === 'Pipe' && ++pipes > MAX_PIPES) reject('too many pipe stages');
+    if (node.type === 'MultiSelectList' || node.type === 'MultiSelectHash') {
+      multiselects += 1;
+      // Multiplying all widths is conservative, including independent branches.
+      // Counting stages alone would still admit a few very wide duplications.
+      fanout *= Math.max(1, node.children?.length ?? 0);
+      if (multiselects > MAX_MULTISELECTS || fanout > MAX_FANOUT) reject('too much multiselect expansion');
+    }
+    if (node.type === 'Function') {
+      if (node.name === 'to_string') reject('to_string() is not supported');
+      // A caller-derived separator can multiply input-sized strings and arrays.
+      if (node.name === 'join') {
+        const separator = node.children?.[0];
+        if (!scalarLiteral(separator) || typeof separator.value !== 'string') {
+          reject('join() requires a literal string separator');
+        }
+      }
+    }
+    if (node.type === 'Comparator' && (node.name === 'EQ' || node.name === 'NE')) {
+      if (!node.children?.some(scalarLiteral)) reject('equality requires a scalar literal operand');
+    }
+    for (const child of node.children ?? []) {
+      if (child !== null && typeof child === 'object') visit(child, depth + 1);
+    }
+    if (node.type === 'KeyValuePair') visit(node.value as AstNode, depth + 1);
+  }
+
+  visit(ast, 1);
+  return jmespath.search(value, expression);
+}
