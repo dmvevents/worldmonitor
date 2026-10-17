@@ -505,6 +505,7 @@ export const VARIANT_FEEDS: Record<string, Record<string, ServerFeed[]>> = {
       { name: 'EBC', url: 'https://ebctt.com/feed/' },
       { name: 'Central Bank of T&T', url: 'https://www.central-bank.org.tt/feed/' },
       { name: 'iGovTT', url: 'https://igovtt.tt/feed/' },
+      { name: 'Central Statistical Office', url: 'https://cso.gov.tt/feed/' },
       { name: 'Tobago House of Assembly', url: 'https://www.tha.gov.tt/feed/' },
       { name: 'Ministry of National Security TT', url: gn('("Ministry of National Security" OR "Ministry of Homeland Security") Trinidad when:3d') },
     ],

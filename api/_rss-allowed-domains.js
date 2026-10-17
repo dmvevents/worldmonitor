@@ -351,7 +351,7 @@ export default [
   "www.central-bank.org.tt",
   "www.energy.gov.tt",
   "ngc.co.tt",
-  "igovtt.tt",
+  "igovtt.tt", "cso.gov.tt",
   "www.nhc.noaa.gov",
   "today.caricom.org",
   "caribbeannewsglobal.com",
