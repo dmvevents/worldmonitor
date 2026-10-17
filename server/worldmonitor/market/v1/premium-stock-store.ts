@@ -109,12 +109,17 @@ async function loadAnalysisRecords(ids: string[], itemKeyFor: (analysisId: strin
     .sort(compareAnalysisDesc);
 }
 
-async function trimIndexTail(indexKey: string, ids: string[], keepLimit: number): Promise<void> {
+async function trimIndexTail(
+  indexKey: string,
+  ids: string[],
+  keepLimit: number,
+  itemKeyFor?: (analysisId: string) => string,
+): Promise<void> {
   if (ids.length <= keepLimit) return;
   const overflow = ids.slice(keepLimit);
-  await runRedisPipeline([
-    ['ZREM', indexKey, ...overflow],
-  ]);
+  const commands: Array<Array<string | number>> = [['ZREM', indexKey, ...overflow]];
+  if (itemKeyFor) commands.push(['DEL', ...overflow.map(itemKeyFor)]);
+  await runRedisPipeline(commands);
 }
 
 export async function storeStockAnalysisSnapshot(
@@ -134,7 +139,7 @@ export async function storeStockAnalysisSnapshot(
   ]);
 
   const ids = await zrevrange(indexKey, ANALYSIS_HISTORY_LIMIT + 4);
-  await trimIndexTail(indexKey, ids, ANALYSIS_HISTORY_LIMIT);
+  await trimIndexTail(indexKey, ids, ANALYSIS_HISTORY_LIMIT, analysisItemKey);
 }
 
 export async function getStoredStockAnalysisHistory(

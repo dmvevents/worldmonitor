@@ -157,6 +157,9 @@ function createRedisAwareFetch() {
             sortedSets.set(key, (sortedSets.get(key) ?? []).filter((item) => !removals.has(item.member)));
             return { result: removals.size };
           }
+          if (verb === 'DEL') {
+            return { result: [key, ...args].filter(itemKey => redis.delete(itemKey)).length };
+          }
           if (verb === 'EXPIRE') {
             return { result: 1 };
           }
@@ -531,7 +534,7 @@ describe('server-backed stock analysis history', () => {
           assert.ok(!value.includes(injectedName), 'caller text must never be persisted');
           assert.ok(!value.includes('My Apple label'));
         }
-        const upstream = state.requests.filter(({ url }) => !url.startsWith('https://redis.example'));
+        const upstream = state.requests.filter(({ url }) => new URL(url).origin !== 'https://redis.example');
         assert.ok(!JSON.stringify(upstream).includes('SYSTEM NOTE'));
         assert.ok(!JSON.stringify(upstream).includes('My Apple label'));
         const llmRequests = upstream.filter(({ url }) => url.endsWith('/chat/completions'));
@@ -603,6 +606,27 @@ describe('server-backed stock analysis history', () => {
     });
     assert.equal(history.items[0]?.snapshots[0]?.name, 'AAPL');
     assert.equal(snapshot.name, 'Private display label');
+  });
+
+  it('deletes evicted run blobs while retaining the latest 32 snapshots', async () => {
+    process.env.UPSTASH_REDIS_REST_URL = 'https://redis.example';
+    process.env.UPSTASH_REDIS_REST_TOKEN = 'token';
+    const state = createRedisAwareFetch();
+    globalThis.fetch = state.fetch;
+    const start = Date.parse('2026-10-17T12:00:00Z');
+    for (let index = 0; index < 35; index += 1) {
+      const snapshot = makeSnapshot('AAPL', new Date(start + index * 1_000).toISOString(), 70);
+      snapshot.analysisAt = start;
+      await storeStockAnalysisSnapshot(snapshot, false);
+    }
+    const blobs = [...state.redis.keys()].filter(key => key.startsWith('market:stock-analysis-history:item:'));
+    assert.equal(blobs.length, 32, 'evicted runs must not leave orphaned response blobs');
+    const history = await getStockAnalysisHistory({} as never, {
+      symbols: ['AAPL'], limitPerSymbol: 32, includeNews: false,
+    });
+    assert.equal(history.items[0]?.snapshots.length, 32);
+    assert.equal(history.items[0]?.snapshots[0]?.generatedAt, new Date(start + 34_000).toISOString());
+    assert.equal(history.items[0]?.snapshots[31]?.generatedAt, new Date(start + 3_000).toISOString());
   });
 
   it('stores fresh analysis snapshots in Redis and serves them back in batch', async () => {
