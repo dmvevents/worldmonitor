@@ -90,3 +90,13 @@ tmp/
 docs/plans/
 docs/brainstorms/
 playground-pricing.html
+
+# tt-focus: ship the hub skill and agents (the rest of .claude/ stays local)
+!.claude/
+.claude/*
+!.claude/skills/
+.claude/skills/*
+!.claude/skills/tt-hub/
+!.claude/agents/
+.claude/agents/*
+!.claude/agents/tt-*.md
