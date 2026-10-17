@@ -15,20 +15,18 @@ const BACKTEST_STORE_TTL_SECONDS = 30 * 24 * 60 * 60;
 type AnalysisHistoryRecord = Record<string, AnalyzeStockResponse[]>;
 
 function compareAnalysisDesc<T extends { analysisAt: number; generatedAt: string }>(a: T, b: T): number {
-  const aTime = a.analysisAt || Date.parse(a.generatedAt || '') || 0;
-  const bTime = b.analysisAt || Date.parse(b.generatedAt || '') || 0;
+  const aTime = Date.parse(a.generatedAt || '') || a.analysisAt || 0;
+  const bTime = Date.parse(b.generatedAt || '') || b.analysisAt || 0;
   return bTime - aTime;
 }
 
 function analysisHistoryIndexKey(symbol: string, includeNews: boolean): string {
-  // v5: rotate retained snapshots written before the backward-compatible
-  // ratingSignal/compositeScore pair became the surfaced rating contract.
-  return `market:stock-analysis-history:index:v5:${sanitizeSymbol(symbol)}:${includeNews ? 'news' : 'core'}`;
+  // v6 excludes snapshots whose narratives could contain caller labels (#9287).
+  return `market:stock-analysis-history:index:v6:${sanitizeSymbol(symbol)}:${includeNews ? 'news' : 'core'}`;
 }
 
 function analysisItemKey(analysisId: string): string {
-  // v5: see analysisHistoryIndexKey note.
-  return `market:stock-analysis-history:item:v5:${analysisId}`;
+  return `market:stock-analysis-history:item:v6:${analysisId}`;
 }
 
 function backtestSnapshotKey(symbol: string, evalWindowDays: number): string {
@@ -64,6 +62,7 @@ function normalizeAnalysisRecord(
   return {
     ...snapshot,
     symbol,
+    name: symbol,
     analysisId,
     analysisAt,
     engineVersion,
@@ -130,7 +129,7 @@ export async function storeStockAnalysisSnapshot(
 
   await runRedisPipeline([
     ['SET', itemKey, JSON.stringify(record), 'EX', ANALYSIS_HISTORY_TTL_SECONDS],
-    ['ZADD', indexKey, record.analysisAt, record.analysisId],
+    ['ZADD', indexKey, Date.parse(record.generatedAt) || record.analysisAt, record.analysisId],
     ['EXPIRE', indexKey, ANALYSIS_HISTORY_TTL_SECONDS],
   ]);
 
