@@ -59,6 +59,25 @@ pass() {
     for s in seed-fx-rates seed-gdelt-intel seed-disease-outbreaks seed-displacement-summary seed-energy-disruptions \
              seed-fuel-shortages seed-market-breadth seed-climate-anomalies seed-cross-source-signals; do run_seed "$s"; done
   fi
+  # Weekly sweep of EVERY keyless seed script (upstream runs these on Railway cron). This is what
+  # fills the global Main-tab panels — CII, Strategic Risk, Threat Timeline, climate, cyber, trade,
+  # IMF/ECB/Eurostat macro — on a self-hosted Redis. ~70 scripts, 5-minute cap each.
+  local week; week="$(date +%G-W%V)"
+  if [ ! -f "$STAMP_DIR/sweep-$week" ]; then
+    touch "$STAMP_DIR/sweep-$week"
+    log "weekly keyless sweep ($week) starting"
+    for f in scripts/seed-*.mjs; do
+      local name; name="$(basename "$f" .mjs)"
+      case "$name" in seed-commodity-quotes|seed-market-quotes|seed-forecasts|seed-forecast-resolutions) continue;; esac
+      # ERE on purpose: launchd runs /usr/bin/grep (BSD), which has no \| alternation.
+      if /usr/bin/grep -oE 'process\.env\.[A-Z_0-9]+' "$f" | sort -u \
+         | /usr/bin/grep -qvE 'UPSTASH|REDIS|NODE_ENV|CI$|DEBUG|SEED_|DRY_RUN|VERBOSE|LOG|PROXY_URL|RAILWAY|VERCEL|TZ$|TIMEOUT|LIMIT|CONCURRENCY|FORCE|SKIP|USER_AGENT|ALPHA_VANTAGE'; then
+        continue   # needs a credential we may not have; the daily/pass lists cover the keyed ones explicitly
+      fi
+      run_seed "$name" ALPHA_VANTAGE_API_KEY=
+    done
+    log "weekly keyless sweep done"
+  fi
 }
 
 if [ "${1:-}" = "--once" ]; then pass; exit 0; fi
