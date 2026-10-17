@@ -23,6 +23,18 @@ run alongside; logs: `~/Library/Logs/worldmonitor-hub/hub.log`. Rebuild (`npm ru
 `restart` after pulling code. After a fresh Redis the seed loop fills markets / weather / quakes / crypto within a
 minute and the daily keyless bundles (FX, GDELT, disease, displacement, energy disruptions, climate) on first pass.
 
+Pro-tier panels (Country Instability, Strategic Risk, Threat Timeline, Insights, Forecasts) are unlocked
+for the local user: the front door hands the browser the instance operator key as a short-lived readable
+`wm-pro-key` cookie, which the SPA exchanges for an HttpOnly session. Their data comes from the seed loop's
+weekly sweep of every keyless seed script (~70, the same jobs upstream runs on Railway cron), so after a
+fresh Redis the global Main-tab panels fill within the first sweep (about an hour).
+
+Weather alerts now merge the WMO Severe Weather Information Centre CAP feed for the Caribbean and Guiana
+Shield met services (T&T Met Service, Barbados, Guyana, Jamaica, Belize, Venezuela, …) into
+`weather:alerts:v1`, so a Met Office "Hot Spell" or hurricane alert shows in the Weather panel and on the
+map next to NWS alerts. The IPTV directory now carries iptv-org logos and the "Not 24/7" / "Geo-blocked"
+labels (◷ in the list), and the Central Statistical Office RSS feed joined the T&T government lens.
+
 Known empty states on the GA hub: *AI Forecasts* needs `seed-forecasts.mjs`, which generates predictions with
 OpenRouter/Groq models (no keyless path), and *Strategic Posture* needs the ADS-B relay; both show their own
 waiting states. Country briefs, Insights, summaries and the analyst chat are unlocked by the instance

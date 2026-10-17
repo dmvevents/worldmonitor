@@ -2,7 +2,7 @@
   "_generated": "scripts/docs-stats.mjs — do not edit by hand; run `npm run docs:stats`",
   "layerDefinitions": 58,
   "variantLayers": {
-    "full": 37,
+    "full": 39,
     "tech": 13,
     "finance": 17,
     "happy": 6,
@@ -75,7 +75,7 @@
   "workflowCount": 20,
   "freshnessSources": 35,
   "freshnessRequiredForRisk": 2,
-  "feedDefinitions": 713,
+  "feedDefinitions": 714,
   "airportCount": 111,
   "stockExchangeCount": 29,
   "centralBankInstitutionCount": 14,

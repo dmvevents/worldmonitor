@@ -215,3 +215,19 @@ A complete T&T intelligence hub built from the World Monitor SPA: four variants 
 
 - **Upstream main:** ~3,700 commits ahead of tt-focus; merging is a separate project (likely breaking due to world-monitor internal refactors)
 - **Dev gap:** `/api/bootstrap` not executed by Vite dev server (returns source); weather alerts/forecast panels stay "Loading..." locally (upstream issue, not tt-specific)
+
+## Round 8: Fill the Main tab, integrations and publishing (2026-10-17)
+
+**Goal:** Answer "some panels aren't showing", pick the quick wins from the integration research, document everything and publish.
+
+**What was done:**
+
+- Pro-tier panels unlocked locally: the front door sets a short-lived readable `wm-pro-key` cookie with the instance operator key; the SPA exchanges it for an HttpOnly session (`/api/wm-session`, validated against `WORLDMONITOR_VALID_KEYS`). Country Instability, Strategic Risk, Threat Timeline, Insights and Forecasts render instead of upgrade gates.
+- Data for those panels: a one-off sweep of every keyless seed script (69 of ~75 succeeded; the rest are refresh-only or LLM-keyed jobs) plus a weekly sweep in `scripts/tt-seed-loop.sh`.
+- WMO SWIC CAP alerts merged into `weather:alerts:v1` by `scripts/seed-weather-alerts.mjs` (Caribbean and Guiana Shield met services; verified live with a Trinidad and Tobago Meteorological Service alert).
+- IPTV directory: logos from iptv-org `logos.json` (991 of 998 entries), "Not 24/7" and "Geo-blocked" labels surfaced in the channel manager.
+- Central Statistical Office RSS feed added to the T&T government lens (both catalogs, three allowlists).
+- Documentation set: this worklog, `docs/tt/HOW-IT-WORKS.md`, `docs/tt/INTEGRATION-OPTIONS.md`, the `tt-hub` Claude Code skill and three agents (`.claude/` exceptions in `.gitignore`).
+- Published to Anton's own fork `dmvevents/worldmonitor` (branch `tt-focus`, now the fork's default branch); the upstream remote's push URL is disabled.
+
+**Not done, with reasons:** the upstream WMO commit (#6924) does not cherry-pick onto this base (its helper files post-date the fork), so the merge was re-implemented minimally; yt-dlp/streamlink for YouTube stations rejected (no CORS on googlevideo, ToS); RSSHub/RSS-Bridge for CNC3/Newsday deferred (CNC3 is Cloudflare-gated; see INTEGRATION-OPTIONS).
