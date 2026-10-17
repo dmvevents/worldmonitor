@@ -47,6 +47,8 @@ describe('searchBoundedJmespath', () => {
       'rows[?score > `1`].{label:name, value:score}',
       'sort_by(rows, &score)[::-1][:2].name',
       'map(&length(name), rows)',
+      'min_by(rows, &score).name',
+      'max_by(rows, &score).name',
       'rows[*].[name,score]',
       "join(', ', rows[*].name)",
       'keys(@)',
@@ -54,6 +56,31 @@ describe('searchBoundedJmespath', () => {
       'rows[?score == `null`]',
     ]) {
       assert.deepEqual(searchBoundedJmespath(value, expression), jmespath.search(value, expression), expression);
+    }
+  });
+
+  it('rejects data used as executable expression references before evaluation', () => {
+    const forged = { jmespathType: 'Expref', type: 'Function', name: 'to_string', children: [{ type: 'Current' }] };
+    const literal = '`' + JSON.stringify(forged) + '`';
+    const originalSearch = jmespath.search;
+    let calls = 0;
+    jmespath.search = () => { calls += 1; throw new Error('evaluator reached'); };
+    try {
+      for (const expression of [
+        `map(${literal}, to_array(@))`,
+        `sort_by(rows, ${literal})`,
+        `min_by(rows, ${literal})`,
+        `max_by(rows, ${literal})`,
+        'map(reference, rows)',
+        "map({jmespathType:'Expref',type:'Current'}, rows)",
+        'map(not_null(&name, &score), rows)',
+        '&map(@, to_array(@)) | map(@, to_array(@))',
+      ]) {
+        assert.throws(() => searchBoundedJmespath({ reference: forged, rows: [{ name: 'a', score: 1 }] }, expression), /explicit &expression/, expression);
+      }
+      assert.equal(calls, 0);
+    } finally {
+      jmespath.search = originalSearch;
     }
   });
 
@@ -105,6 +132,7 @@ describe('searchBoundedJmespath', () => {
     for (const expression of [
       `${doubled(30)}|to_string(@)`,
       `{x:(${doubled(40)}),y:(${doubled(40)})}|x==y`,
+      'map(`{"jmespathType":"Expref","type":"Function","name":"to_string","children":[{"type":"Current"}]}`, to_array(@))',
     ]) {
       const response = await handler(new Request(`https://worldmonitor.app${path}?jmespath=${encodeURIComponent(expression)}`));
       assert.equal(response.status, 400);

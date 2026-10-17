@@ -51,6 +51,7 @@ describe('projectJsonResponse', () => {
       `{x:(${doubled}),y:(${doubled})}|x==y`,
       `{x:(${doubled}),y:(${doubled})}|x!=y`,
       'join(compositeLabel, `["a","b"]`)',
+      'map(`{"jmespathType":"Expref","type":"Function","name":"to_string","children":[{"type":"Current"}]}`, to_array(@))',
       `${doubled}|[@,@]|length(@)`,
     ]) {
       const r = projectJsonResponse(BODY, expr);

@@ -15,6 +15,12 @@ const MAX_DEPTH = 32;
 const MAX_PIPES = 8;
 const MAX_MULTISELECTS = 8;
 const MAX_FANOUT = 64;
+const EXPRESSION_REFERENCE_ARGUMENTS = new Map([
+  ['map', 0],
+  ['sort_by', 1],
+  ['min_by', 1],
+  ['max_by', 1],
+]);
 
 function scalarLiteral(node: AstNode | number | null | undefined): node is AstNode {
   return node !== null && typeof node === 'object' && node.type === 'Literal'
@@ -61,6 +67,15 @@ export function searchBoundedJmespath(value: unknown, expression: string): unkno
     if (node.type === 'Literal') visitLiteral(node.value);
     if (node.type === 'Function') {
       if (node.name === 'to_string') reject('to_string() is not supported');
+      // The runtime also accepts data tagged "Expref" as executable AST.
+      // Only explicit references are guaranteed to have been visited here.
+      const referenceIndex = EXPRESSION_REFERENCE_ARGUMENTS.get(node.name ?? '');
+      if (referenceIndex !== undefined) {
+        const reference = node.children?.[referenceIndex];
+        if (reference === null || typeof reference !== 'object' || reference.type !== 'ExpressionReference') {
+          reject(`${node.name}() requires an explicit &expression reference`);
+        }
+      }
       // A caller-derived separator can multiply input-sized strings and arrays.
       if (node.name === 'join') {
         const separator = node.children?.[0];

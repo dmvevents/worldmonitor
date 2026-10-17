@@ -129,6 +129,7 @@ describe('api/mcp.ts — JMESPath projection (v1.7.0)', () => {
         `{x:(${doubled}),y:(${doubled})}|x==y`,
         `{x:(${doubled}),y:(${doubled})}|x!=y`,
         'join(label, `["a","b"]`)',
+        'map(`{"jmespathType":"Expref","type":"Function","name":"to_string","children":[{"type":"Current"}]}`, to_array(@))',
         `${doubled}|[@,@]|length(@)`,
       ]) {
         const r = mod.applyJmespath({ label: 'hello' }, expr);
@@ -611,6 +612,7 @@ describe('api/mcp.ts — JMESPath projection (v1.7.0)', () => {
         'data.markets[invalid',
         `${doubled(30)}|to_string(@)`,
         `{x:(${doubled(40)}),y:(${doubled(40)})}|x==y`,
+        'map(`{"jmespathType":"Expref","type":"Function","name":"to_string","children":[{"type":"Current"}]}`, to_array(@))',
       ]) {
         const { res, body } = await callTool('get_market_data', { jmespath });
         assert.equal(res.status, 200);
