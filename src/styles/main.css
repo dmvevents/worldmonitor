@@ -2627,6 +2627,16 @@ body.panel-resize-active iframe {
   cursor: default;
 }
 
+.live-news-iptv-logo {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  margin-right: 6px;
+  vertical-align: middle;
+  background: #fff;
+  border-radius: 3px;
+}
+
 .live-channel-btn {
   cursor: grab;
 }

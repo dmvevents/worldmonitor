@@ -29,6 +29,8 @@ interface IptvDirectoryEntry {
   hlsUrl: string;
   quality?: string;
   logo?: string;
+  notNonStop?: boolean;
+  geoBlocked?: boolean;
 }
 
 interface IptvDirectory {
@@ -391,10 +393,21 @@ export async function initLiveChannelsWindow(containerEl?: HTMLElement): Promise
         const added = currentIds.has(e.id);
         const label = document.createElement('span');
         label.className = 'live-news-manage-available-name';
-        label.textContent = e.name;
+        if (e.logo) {
+          const img = document.createElement('img');
+          img.className = 'live-news-iptv-logo';
+          img.src = e.logo;
+          img.alt = '';
+          img.loading = 'lazy';
+          img.referrerPolicy = 'no-referrer';
+          img.addEventListener('error', () => img.remove());
+          label.appendChild(img);
+        }
+        label.appendChild(document.createTextNode((e.notNonStop ? '◷ ' : '') + e.name));
+        if (e.notNonStop) label.title = t('components.liveNews.scheduledHint') ?? 'Streams during newscasts only — may be off air';
         const meta = document.createElement('span');
         meta.className = 'live-news-iptv-meta';
-        meta.textContent = [e.countryName, e.categories.slice(0, 2).join(', '), e.quality].filter(Boolean).join(' · ');
+        meta.textContent = [e.countryName, e.categories.slice(0, 2).join(', '), e.quality, e.geoBlocked ? 'geo-blocked' : ''].filter(Boolean).join(' · ');
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'live-news-manage-add-btn live-news-iptv-add' + (added ? ' added' : '');

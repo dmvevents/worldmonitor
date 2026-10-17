@@ -55,7 +55,10 @@ async function mapLimit(items, limit, fn) {
   return out;
 }
 
-const [channels, streams, countries, categories] = await Promise.all([getJson('channels'), getJson('streams'), getJson('countries'), getJson('categories')]);
+const [channels, streams, countries, categories, logos] = await Promise.all([getJson('channels'), getJson('streams'), getJson('countries'), getJson('categories'), getJson('logos').catch(() => [])]);
+// channels.json carries no logo field any more; logos live in logos.json (one or more per channel).
+const logoByChannel = new Map();
+for (const l of logos) if (l?.channel && l?.url && !logoByChannel.has(l.channel)) logoByChannel.set(l.channel, l.url);
 const countryName = new Map(countries.map((c) => [c.code, c.name]));
 const categoryName = new Map(categories.map((c) => [c.id, c.name]));
 const byId = new Map(channels.map((c) => [c.id, c]));
@@ -90,10 +93,13 @@ const directory = [...best.values()].map((s) => {
     country: c.country,
     countryName: countryName.get(c.country) || c.country,
     categories: (c.categories || []).map((id) => categoryName.get(id) || id),
-    logo: c.logo || undefined,
+    logo: logoByChannel.get(s.channel) || c.logo || undefined,
     website: c.website || undefined,
     hlsUrl: s.url,
     quality: s.quality || undefined,
+    // iptv-org labels: "Not 24/7" (station signs off) and "Geo-blocked" (plays only in-region).
+    notNonStop: Array.isArray(s.labels) && s.labels.some((x) => /not 24\/7/i.test(x)) ? true : undefined,
+    geoBlocked: Array.isArray(s.labels) && s.labels.some((x) => /geo-?blocked/i.test(x)) ? true : undefined,
     cors: s.probe.cors,
   };
 }).sort((a, b) => a.countryName.localeCompare(b.countryName) || a.name.localeCompare(b.name));
