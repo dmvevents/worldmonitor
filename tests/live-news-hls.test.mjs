@@ -255,9 +255,10 @@ describe('player decision tree', () => {
       liveNewsSrc.indexOf('private async initializePlayer'),
       liveNewsSrc.indexOf('private startBotCheckTimeout'),
     );
-    const hlsPos = initMethod.indexOf('getDirectHlsUrl(this.activeChannel.id)');
+    // hasHlsSource() wraps getDirectHlsUrl/getProxiedHlsUrl/hlsUrl/tegoChannel.
+    const hlsPos = initMethod.indexOf('this.hasHlsSource(this.activeChannel)');
     const videoIdPos = initMethod.indexOf("!/^[\\w-]{10,12}$/.test(this.activeChannel.videoId)");
-    assert.ok(hlsPos > 0, 'getDirectHlsUrl not found in initializePlayer');
+    assert.ok(hlsPos > 0, 'hasHlsSource not found in initializePlayer');
     assert.ok(videoIdPos > 0, 'videoId validation not found in initializePlayer');
     assert.ok(hlsPos < videoIdPos,
       'Direct HLS check must come BEFORE videoId validation in initializePlayer');
@@ -272,9 +273,9 @@ describe('resolveChannelVideo optimization', () => {
       liveNewsSrc.indexOf('private async resolveChannelVideo'),
       liveNewsSrc.indexOf('private async switchChannel'),
     );
-    const directHlsPos = resolve.indexOf('getDirectHlsUrl(channel.id)');
+    const directHlsPos = resolve.indexOf('this.hasHlsSource(channel)');
     const fetchPos = resolve.indexOf('fetchLiveVideoInfo');
-    assert.ok(directHlsPos > 0, 'getDirectHlsUrl not in resolveChannelVideo');
+    assert.ok(directHlsPos > 0, 'hasHlsSource not in resolveChannelVideo');
     assert.ok(fetchPos > 0, 'fetchLiveVideoInfo not in resolveChannelVideo');
     assert.ok(directHlsPos < fetchPos,
       'Direct HLS early return must come before fetchLiveVideoInfo call');
@@ -437,8 +438,9 @@ describe('optional channels fallback coverage', () => {
       const channelId = m[1];
       const hasFallback = /fallbackVideoId:\s*'[^']+'/.test(m[0]);
       const hasHlsUrl = /hlsUrl:\s*'[^']+'/.test(m[0]);
-      assert.ok(hasFallback || hasHlsUrl,
-        `Channel '${channelId}' has useFallbackOnly but no fallbackVideoId or hlsUrl`);
+      const hasTego = /tegoChannel:\s*\d+/.test(m[0]); // resolved to an HLS URL at play time
+      assert.ok(hasFallback || hasHlsUrl || hasTego,
+        `Channel '${channelId}' has useFallbackOnly but no fallbackVideoId, hlsUrl or tegoChannel`);
     }
   });
 });

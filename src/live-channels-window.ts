@@ -566,7 +566,8 @@ export async function initLiveChannelsWindow(containerEl?: HTMLElement): Promise
     nameEl.textContent = ch.name;
     const handleEl = document.createElement('span');
     handleEl.className = 'live-news-manage-card-handle';
-    handleEl.textContent = ch.handle ?? '';
+    // Sub-label: YouTube handle, or the stream source for HLS-only stations.
+    handleEl.textContent = ch.handle ?? (ch.tegoChannel ? 'live TV · TegoTV' : ch.hlsUrl ? 'live TV · HLS' : '');
     info.appendChild(nameEl);
     info.appendChild(handleEl);
 

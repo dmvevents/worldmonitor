@@ -171,5 +171,60 @@ supplies an exit they are entitled to use; never read `.env*` files; never push 
 - Does DTV-8 have an official YouTube/Facebook live that could serve as fallback? Its site 403s from here.
 - Has HGPTV's Dacast ingest URL rotated (Dacast ids change) rather than the station going dark? iptv-org
   may update it; a re-sync picks that up.
-- Is there any T&T station with a browser-playable HLS beyond the five niche channels? None found in
-  iptv-org as of 2026-10-18.
+- ~~Is there any T&T station with a browser-playable HLS beyond the five niche channels?~~ **Answered
+  2026-10-18, see §9.**
+
+## 9. Resolution: T&T free-to-air stations via TegoTV (2026-10-18, Hermes takeover)
+
+**What was actually failing.** Every surface in §1 worked when re-verified (the five iptv-org T&T
+streams play, the directory filter and proxy behave, the Trinidad tab renders). The visible failure was
+that the T&T strip's headline stations — TTT, CNC3, TV6, Parliament — were YouTube-handle channels that
+are almost never live, so the panel showed off-air cards and the hub had no live T&T television.
+
+**Where TTT's stream really lives.** `https://www.ttt.live/stream/` embeds
+`https://player.tegotv.com/player.php?channel=1` (Radiant Media Player + hls.js). Reading its `player.js`
+shows a public guest flow with no credentials:
+
+1. `GET https://api.siberapi.com/sso/get_guest_token.php?app_id=1` → guest JWT (24 h, `CORS: *`).
+2. `GET https://mw.siberapi.com/api/ui/stb/v3/Channels/<id>?device_id=AA:AA:AA:AA:AA:AA&device=web&application_id=1`
+   with `Authorization: Bearer <jwt>` → `tv_channel[0].streaming_url`.
+3. That URL is a Flussonic HLS manifest on `tego-cdn{1a,2a}.sibercdn.com` with a signed `token=` whose
+   lifetime is 24 h and which is **not bound to the client IP** (resolved over IPv6, played over IPv4).
+   Manifest, variants and `.ts` segments all answer `Access-Control-Allow-Origin: *`, so hls.js plays
+   them directly; the hub proxies no media.
+
+This is exactly what the broadcaster's own public player does for an anonymous visitor: same endpoints,
+guest account, the free "TegoTV - Free TV Channels" package only. No header spoofing, no circumvention,
+no region change. The TegoTV category "Trinidad and Tobago Local Stations" (cat 11) plus TTT's category
+(36) list 12 stations; 10 play end to end from here (TTT 1, Synergy TV 2, Gayelle The Caribbean 3,
+TV Jaagriti 5, Trinity TV 6, Bhakti TV 7, IBN 8, WACK 90.1 Visual Radio 9, ieTV 11, Plus TV 13; also
+WPG 10 (4) from "Caribbean TV Channels"). Universal Church (27) and Real TV (16) 404 upstream.
+
+**Still not solvable in a browser.** CNC3's site sits behind a Cloudflare JS challenge (403 to curl,
+"Just a moment" in headless Chrome). TV6's watch-live page embeds Dailymotion video `x7x3klh`, whose
+metadata API answers `DM016 "TV6TNT has limited its access"` — owner-restricted to their own site. Both
+stay YouTube/off-air-card channels.
+
+**What was built** (branch `hermes/hermes-63de1a95`):
+
+| File | Change |
+|---|---|
+| `scripts/tt-tego-resolver.mjs` | New. Guest token (cached to JWT exp), `resolveTegoStream(id)` (cached until 10 min before the Flussonic token expires, in-flight coalescing, only `*.sibercdn.com` https URLs accepted), `listTegoChannels()` for cats 36/11. |
+| `scripts/tt-hub-server.mjs` | `GET /api/tego/stream?channel=N[&force=1]` → `{ id, name, provider, logo, url, expiresAt }`; `GET /api/tego/channels` catalogue. Both served by the front door, like `/api/iptv-proxy`. |
+| `src/services/tego-live.ts` | New. Browser-side `resolveTegoStreamUrl(channel, force)` with the same expiry-aware cache. |
+| `src/components/LiveNewsPanel.ts` | `LiveChannel.tegoChannel?: number`; `hasHlsSource()` treats it as an always-live HLS source; `renderNativeHlsPlayer` resolves the URL at play time and, on the first fatal hls.js error, re-resolves once with `force=1` (expired token) before the usual 5-min cooldown. TTT (1) and IETV (11) keep their YouTube handles as fallback; nine more stations added to `OPTIONAL_LIVE_CHANNELS` and the Caribbean picker. |
+| `src/config/live-channel-defaults.ts` | `tt` strip now opens with TTT, IETV, Synergy TV, Gayelle, then the previous set. |
+| `src/live-channels-window.ts` | Picker cards show "live TV · TegoTV" / "live TV · HLS" where there is no YouTube handle; custom channels may carry `tegoChannel`. |
+| `scripts/validate-live-channels.mjs` | Resolves `tegoChannel` entries through the resolver before probing (11/11 OK on 2026-10-18). |
+| `tests/tt-tego-resolver.test.mjs` | 7 unit tests with a mocked fetch (token reuse, caching, expiry, host allowlist, coalescing). `tests/live-news-hls.test.mjs` updated for `hasHlsSource` / `tegoChannel`. |
+
+**Verified.** `tsc --noEmit` clean; `tests/live-news-hls.test.mjs` + `live-news-panel-guard` 61/61;
+resolver tests 7/7; validator 11/11 TegoTV entries OK. A second front door
+(`HUB_PORT=3199 SIDECAR_PORT=3100 node scripts/tt-hub-server.mjs`, `/api/*` passed through to the running
+hub) served the rebuilt SPA: on the Trinidad & Tobago tab TTT, IETV, Synergy TV and Gayelle each played
+in headless Chrome (1280×720 / 1024×576, hls.js, `currentTime` advancing) within ~10 s of a click.
+
+**Operational notes.** The token endpoint is anonymous today; if TegoTV adds Origin/Referer checks the
+resolver (which sends only a browser UA) needs a re-look. Tokens are per resolve, so one hub resolve is
+shared by every browser tab for up to 24 h. Rebuild + restart the GA hub to ship:
+`npm run build:full && node scripts/build-sidecar-handlers.mjs && bash scripts/tt-install-service.sh restart`.
