@@ -35,6 +35,18 @@ Shield met services (T&T Met Service, Barbados, Guyana, Jamaica, Belize, Venezue
 map next to NWS alerts. The IPTV directory now carries iptv-org logos and the "Not 24/7" / "Geo-blocked"
 labels (◷ in the list), and the Central Statistical Office RSS feed joined the T&T government lens.
 
+IPTV and geo-blocking (see `docs/tt/IPTV-GEO-BLOCKING.md`): the directory now keeps streams whose manifest
+has no CORS header and flags them `needsProxy`; the front door plays those through `/api/iptv-proxy`, a
+same-origin HLS proxy restricted to hostnames present in the directory file (https only, no header
+spoofing). That fixes browser CORS, not geography: a CDN that geo-blocks sees this Mac's IP either way, so
+"Geo-blocked" entries are labelled and may not play here. Probing the 47 flagged entries from this network
+showed 20 play, 10 are dead and only one is truly IP-blocked; the label is advisory. The hub does not ship
+circumvention; if you need a licensed-region stream, that is a network decision (your own VPN or VPS exit
+in that region), not a hub feature.
+
+Live Intelligence (GDELT) has a Caribbean & Guiana Shield topic; the seed loop runs that seed with a
+longer budget (`GDELT_SOFT_BUDGET_MS=540000`) because GDELT rate-limits to about one request per five seconds.
+
 Known empty states on the GA hub: *AI Forecasts* needs `seed-forecasts.mjs`, which generates predictions with
 OpenRouter/Groq models (no keyless path), and *Strategic Posture* needs the ADS-B relay; both show their own
 waiting states. Country briefs, Insights, summaries and the analyst chat are unlocked by the instance

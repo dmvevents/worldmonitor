@@ -231,3 +231,17 @@ A complete T&T intelligence hub built from the World Monitor SPA: four variants 
 - Published to Anton's own fork `dmvevents/worldmonitor` (branch `tt-focus`, now the fork's default branch); the upstream remote's push URL is disabled.
 
 **Not done, with reasons:** the upstream WMO commit (#6924) does not cherry-pick onto this base (its helper files post-date the fork), so the merge was re-implemented minimally; yt-dlp/streamlink for YouTube stations rejected (no CORS on googlevideo, ToS); RSSHub/RSS-Bridge for CNC3/Newsday deferred (CNC3 is Cloudflare-gated; see INTEGRATION-OPTIONS).
+
+## Round 9: main branch, IPTV geo deep dive, more integrations (2026-10-18)
+
+**Goal:** Make the hub the fork's main branch, settle the geo-blocking question honestly, and land the next integrations end to end.
+
+**What was done:**
+
+- Fork branches renamed through the GitHub API: the old `main` (upstream copy) became `upstream-main`, `tt-focus` became `main` and is the default branch. Local branch renamed to `main`, tracking `fork/main`. No force-push.
+- IPTV: `scripts/iptv-sync.mjs` keeps no-CORS https streams flagged `needsProxy`; the front door gained `/api/iptv-proxy` (closed allowlist = hostnames in the directory, https only, manifest rewriting, streamed segments); the channel manager routes such entries through it and labels them "via hub proxy". The player accepts same-origin HLS URLs.
+- Geo-blocking deep dive (`docs/tt/IPTV-GEO-BLOCKING.md`): of 47 "Geo-blocked" entries probed from this network, 20 play, 10 are dead, 1 is IP-blocked on segments; the label is advisory. Only 4 of 444 Caribbean https streams lack CORS. Position: no circumvention shipped; a proxy changes the fetching origin, not the location.
+- Live Intelligence: Caribbean & Guiana Shield GDELT topic (seed, client, strings); `GDELT_SOFT_BUDGET_MS` override so self-hosted runs can finish all topics.
+- Docs regenerated and the runbook updated.
+
+**Verified:** typecheck, locale sync, proxy allow/deny probes against the service, headless channel-manager check.
