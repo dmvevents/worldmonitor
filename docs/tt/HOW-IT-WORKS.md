@@ -157,27 +157,27 @@ Channel has live stream?
 
 ## IPTV Directory Pipeline
 
-**Source:** iptv-org public index (github.com/iptv-org/iptv), 1,946 Caribbean + worldwide news streams.
+**Source:** iptv-org public index (github.com/iptv-org/iptv): channels.json, streams.json, feeds.json (broadcast areas), logos.json. 2,126 Caribbean / Guiana Shield + worldwide news streams probed on 2026-10-18.
 
 **Refresh:**
 
 ```bash
 npm run iptv:sync
 # → scripts/iptv-sync.mjs
-#   Probe each stream: manifest 200, #EXTM3U header, CORS OK
+#   Scope: channel country in the Caribbean list, OR a feed whose broadcast_area
+#          names one of those countries (diaspora stations in iptv-org's gy.m3u etc.),
+#          OR category "news" anywhere
+#   Probe each stream: manifest 200 + #EXTM3U; no CORS header → needsProxy
 #   Skip streams needing Referer / User-Agent spoofing
-#   → public/data/iptv-directory.json (985 verified entries, 2026-10-15)
+#   → public/data/iptv-directory.json (1,038 verified entries, 2026-10-18)
 ```
 
 **Probe criteria:**
 
-- HTTP GET stream URL with `-I` (head request)
-- Check 200 status
-
-- Check `#EXTM3U` magic in response body
-- Check CORS headers (Access-Control-Allow-Origin present or permissive)
-
-- Timeout: 30 s per stream, max 20 in flight
+- HTTP GET of the stream URL with a browser User-Agent and an Origin header
+- 200 status and `#EXTM3U` in the first 4 KB of the body
+- `Access-Control-Allow-Origin` present → plays directly; absent → kept with `needsProxy: true` (plays through the front door's `/api/iptv-proxy`, whose allowlist is derived from this file)
+- Timeout: 12 s per stream, 16 in flight by default (`--concurrency`)
 
 **Directory structure in public/data/iptv-directory.json:**
 
@@ -185,19 +185,24 @@ npm run iptv:sync
 {
   "channels": [
     {
-      "id": "bizz-tv",
-      "name": "Bizz TV",
-      "country": "TT",
-      "url": "https://live.bizztv.net/live/bizztv.m3u8",
-      "verified": true,
-      "probeTime": "2026-10-15T14:30:00Z"
+      "id": "iptv-littleguyanatv-us",
+      "iptvId": "LittleGuyanaTV.us",
+      "name": "Little Guyana TV",
+      "country": "US",
+      "countryName": "United States",
+      "broadcastTo": [{ "code": "GY", "name": "Guyana" }],
+      "categories": ["General"],
+      "logo": "https://i.imgur.com/b475xOT.jpg",
+      "hlsUrl": "https://video1.getstreamhosting.com:1936/8122/8122/playlist.m3u8",
+      "quality": "1080p",
+      "cors": "*"
     },
-    ...
+    ...   // optional flags: notNonStop, geoBlocked (iptv-org labels, advisory), needsProxy
   ]
 }
 ```
 
-**UI:** Live News panel → **Manage channels** → **IPTV directory** → filter by country or search → add any entry to the strip (stored like custom channels, persisted in localStorage).
+**UI:** Live News panel → **Manage channels** → **IPTV directory** → filter by country or search → add any entry to the strip (stored like custom channels, persisted in localStorage). The country filter matches the home country *and* `broadcastTo`, so Little Guyana TV and GTN Canada list under Guyana with the meta line "United States → Guyana".
 
 **Maintenance:** Re-run sync occasionally (streams come and go).
 
@@ -305,7 +310,7 @@ bash scripts/tt-seed-loop.sh --once   # single pass
 
 ```bash
 ./node_modules/.bin/tsx scripts/tt-daily-digest.mts          # Generate daily digest
-npm run iptv:sync                                             # Refresh IPTV directory (985 channels)
+npm run iptv:sync                                             # Refresh IPTV directory (~1,000 channels)
 node scripts/validate-live-channels.mjs                       # Probe all HLS + YouTube channels
 ```
 

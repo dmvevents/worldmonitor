@@ -279,3 +279,22 @@ Follow-ups in the same round: the restored active tab is re-applied at boot when
 boot set never created (switching tabs is a no-op for the active tab), and the repair also covers a preset
 tab whose snapshot was overwritten by an older build with shared panels only (none of its own panels
 enabled). Verified headless in four scenarios: fresh profile, old seed, restore-at-boot, overwritten snapshot.
+
+Final follow-up (2026-10-18): the restore-at-boot check compared key presence, but an older build had persisted
+the preset's panels into the boot set as *disabled* entries, so it never fired; it now compares enabled state.
+Anton's Chrome tab on `127.0.0.1:3100` shows all eight `tt-*` panels on the Trinidad tab after reload.
+
+## Round 12: Guyana providers in the iptv-org playlist (2026-10-18)
+
+Anton pointed at `https://iptv-org.github.io/iptv/countries/gy.m3u`. Probed from this machine, its seven entries
+split into: MTV Guyana, Little Guyana TV and GTN Canada answering with a manifest and CORS (GTN with iptv-org's
+advisory "Geo-blocked" label); HGPTV (Dacast), Ignite Television (bozztv) and GMTV (Akamai) 404; DTV-8 403
+(geo-blocked). Only HGPTV and MTV Guyana had been in the hub's directory because `iptv-sync` scoped channels by
+their *home country* while iptv-org's country playlists use the feed's `broadcast_area`: Little Guyana TV is a
+US channel and GTN Canada a Canadian one, both broadcasting to Guyana. The sync now also reads `feeds.json`,
+keeps channels whose feeds broadcast into a scoped country, records `broadcastTo` (46 diaspora channels, mostly
+for Puerto Rico, Venezuela, the Dominican Republic and Haiti) and counts them in `byCountry`; the directory UI's
+country filter and search match `broadcastTo`, and the meta line reads "United States → Guyana". Directory
+rebuilt: 1,038 verified of 2,126 probed (HGPTV dropped out while its Dacast URL is down; it stays in the Guyana
+strip as a YouTube-fallback channel). No circumvention added: the geo-blocked label stays advisory
+(`docs/tt/IPTV-GEO-BLOCKING.md`).

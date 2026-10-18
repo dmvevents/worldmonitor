@@ -246,7 +246,7 @@ npm run dev:tt
 
 ## How to Refresh the IPTV Directory
 
-The IPTV directory is a curated list of 985 verified Caribbean and worldwide news streams from the iptv-org project.
+The IPTV directory is a curated list of about 1,000 verified Caribbean and worldwide news streams from the iptv-org project (channels in the Caribbean, channels broadcasting into it per feeds.json `broadcast_area`, and worldwide news).
 
 ```bash
 npm run iptv:sync
@@ -255,7 +255,7 @@ npm run iptv:sync
 
 # Check the output
 ls -lh public/data/iptv-directory.json
-cat public/data/iptv-directory.json | jq '.channels | length'  # Should be ~985
+cat public/data/iptv-directory.json | jq '.channels | length'  # Should be ~1,000
 
 # Test the UI
 npm run dev:tt

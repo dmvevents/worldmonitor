@@ -29,6 +29,17 @@ for the local user: the front door hands the browser the instance operator key a
 weekly sweep of every keyless seed script (~70, the same jobs upstream runs on Railway cron), so after a
 fresh Redis the global Main-tab panels fill within the first sweep (about an hour).
 
+"Pro" in this codebase is only a key check (`isProUser()` / `hasPremiumAccess()` in `src/services/`): a
+tester key, a desktop API key, or the Clerk/Convex entitlement all pass it, and the operator key the hub
+mints is ours, so nothing of worldmonitor.app's paid service is used. What stays hosted-only because it
+lives behind their relay or accounts: the "Create interactive widget" agent (`RELAY_BASE` →
+proxy.worldmonitor.app), Latest Brief / brief sharing (Clerk + Convex + `BRIEF_URL_SIGNING_SECRET`), the MCP
+server (`api/mcp.ts`, not bundled into the sidecar, "No local handler"), Wingbits ADS-B (paid). Open
+replacements already wired: Claude via Bedrock or Ollama for insights, briefs and forecasts; GDELT, UCDP,
+ReliefWeb, USGS, NWS + WMO SWIC for the intelligence and hazard panels; OpenSky through `scripts/ais-relay.cjs`
+for aircraft; the iptv-org index for live TV; `scripts/tt-daily-digest.mts` for a local digest instead of the
+hosted brief. See `docs/tt/INTEGRATION-OPTIONS.md` for what else is worth adding.
+
 Weather alerts now merge the WMO Severe Weather Information Centre CAP feed for the Caribbean and Guiana
 Shield met services (T&T Met Service, Barbados, Guyana, Jamaica, Belize, Venezuela, …) into
 `weather:alerts:v1`, so a Met Office "Hot Spell" or hurricane alert shows in the Weather panel and on the
@@ -133,7 +144,9 @@ You do not need the extra servers to use them: each dashboard seeds the other tw
 
 Live IPTV: the Live News panel also carries broadcasters' public HLS feeds (CORS-verified 2026-10-15) for Bizz TV, Sankhya TV, Scorch TV, Riddim & Hope TV and The Islamic Network (T&T), ZIZ TV and Nevis Television (St Kitts & Nevis), Caribbean Hot 7 TV (St Lucia), Guardian Talk Radio (Bahamas), Fame 95 FM (Jamaica), HGPTV, MTV Guyana and Little Guyana TV, CBC TV8 Barbados, TVJ and GNN Jamaica, DBS St Lucia, Pointe TV Antigua, ZNS Bahamas, Antena 7 and Noticias 16 (Dominican Republic), Radio y TV Martí and Prensa Latina TV (Cuba), Haiti News Channel and RTH TV1, Telemundo Puerto Rico, and for Venezuela teleSUR (Spanish and English HD), Venevisión Internacional and Canal I. Per-variant default channel sets live in `src/config/live-channel-defaults.ts`. The main T&T news stations publish no HLS; they stay on YouTube with the off-air card and explicit replay.
 
-IPTV directory: `npm run iptv:sync` (`scripts/iptv-sync.mjs`) pulls the public iptv-org index (github.com/iptv-org/iptv), keeps every Caribbean / Guiana Shield channel plus worldwide news channels, probes each https stream from this machine (manifest 200 + `#EXTM3U` + CORS header; streams that need a Referer or User-Agent are skipped) and writes `public/data/iptv-directory.json` (2026-10-15: 985 verified of 1,946 probed; 177 Dominican Republic, 39 Venezuela, 18 Puerto Rico, all seven T&T/Guyana HLS stations). In the Live News panel, *Manage channels* → **IPTV directory (iptv-org)** lets you filter by country or search and add any entry to the strip with one click; it is stored like a custom channel. Re-run the sync now and then: streams come and go.
+IPTV directory: `npm run iptv:sync` (`scripts/iptv-sync.mjs`) pulls the public iptv-org index (github.com/iptv-org/iptv), keeps every Caribbean / Guiana Shield channel, every channel whose feed *broadcasts into* one of those countries (iptv-org's `countries/gy.m3u` lists diaspora stations such as Little Guyana TV from New York and GTN Canada; `feeds.json` carries the `broadcast_area`), plus worldwide news channels. It probes each https stream from this machine (manifest 200 + `#EXTM3U`; a missing CORS header flags `needsProxy`; streams that need a Referer or User-Agent are skipped) and writes `public/data/iptv-directory.json` (2026-10-18: 1,038 verified of 2,126 probed; 46 diaspora channels carry `broadcastTo`). In the Live News panel, *Manage channels* → **IPTV directory (iptv-org)** lets you filter by country (diaspora stations appear under the country they serve, labelled "United States → Guyana") or search, and add any entry to the strip with one click; it is stored like a custom channel. Re-run the sync now and then: streams come and go (HGPTV's Dacast URL was 404 on 2026-10-18, so it dropped out until it is back).
+
+Guyana on 2026-10-18, from the seven entries in iptv-org's `gy.m3u`: MTV Guyana, Little Guyana TV and GTN Canada verified (GTN carries iptv-org's advisory "Geo-blocked" label but answered from here); HGPTV 404 (Dacast), Ignite Television 404 (bozztv), GMTV 404 (Akamai), DTV-8 403 (geo-blocked). NCN Guyana streams only on YouTube and stays a YouTube channel in the strip.
 
 ## Testing and validation
 

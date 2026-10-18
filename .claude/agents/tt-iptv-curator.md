@@ -14,9 +14,10 @@ tools:
 
 ## What Is the IPTV Directory
 
-The IPTV directory (`public/data/iptv-directory.json`) is a curated list of 985 verified HLS and live streams from the iptv-org project. It covers:
+The IPTV directory (`public/data/iptv-directory.json`) is a curated list of about 1,000 verified HLS and live streams from the iptv-org project (1,038 on 2026-10-18). It covers:
 
 - Caribbean countries (Trinidad & Tobago, Guyana, Jamaica, Barbados, St. Lucia, Dominican Republic, Cuba, Haiti, Venezuela, etc.)
+- Diaspora stations whose iptv-org feed `broadcast_area` names one of those countries (e.g. Little Guyana TV from the US, GTN Canada) — they get `broadcastTo` and list under the country they serve, matching iptv-org's `countries/<cc>.m3u` playlists
 - Worldwide news channels (Bloomberg, CNBC, BBC, France24, AJE, teleSUR, etc.)
 
 Users can search and add any stream to the Live News panel's strip via the **Manage channels** UI.
