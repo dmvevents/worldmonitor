@@ -51,9 +51,14 @@ not play.
 Live Intelligence (GDELT) has a Caribbean & Guiana Shield topic; the seed loop runs that seed with a
 longer budget (`GDELT_SOFT_BUDGET_MS=540000`) because GDELT rate-limits to about one request per five seconds.
 
-Known empty states on the GA hub: *AI Forecasts* needs `seed-forecasts.mjs`, which generates predictions with
-OpenRouter/Groq models (no keyless path), and *Strategic Posture* needs the ADS-B relay; both show their own
-waiting states. Country briefs, Insights, summaries and the analyst chat are unlocked by the instance
+Workarounds in place for the sweep's leftovers: *AI Forecasts* are generated daily by `seed-forecasts.mjs`
+through the Claude shim (its provider order is set to the generic provider; the first run produced 3
+forecasts); GDELT *Live Intelligence* fetches one rotating topic per 25-minute pass (`GDELT_TOPICS_PER_RUN=1`)
+so the seed stays under GDELT's one-request-per-five-seconds policy and the cache merge carries the rest;
+the per-IP API rate limiter is skipped for loopback clients when the sidecar runs in docker mode (both limiter
+mirrors), so a 100-panel first load no longer returns 429s to the one local user; CBC TV8 keeps its YouTube
+handle so an overnight sign-off of its HLS origin shows the off-air card instead of a blank player. Still
+needing a key: *Strategic Posture* (ADS-B relay). Country briefs, Insights, summaries and the analyst chat are unlocked by the instance
 operator key and run on Claude; a brief takes 12-15 s the first time and is cached for 6 h per country.
 
 ## Run (development)

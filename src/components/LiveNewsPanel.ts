@@ -218,7 +218,9 @@ export const OPTIONAL_LIVE_CHANNELS: LiveChannel[] = [
   { id: 'hgptv', name: 'HGPTV (Guyana)', hlsUrl: 'https://cdn-us-east-prod-ingest-infra-dacast-com.akamaized.net/8424fb7f-99a9-87ae-3861-f0620849d11c/source/index.m3u8', useFallbackOnly: true },
   { id: 'mtv-guyana', name: 'MTV Guyana', hlsUrl: 'https://stream.mtvgy.com/mtvguyana/index.fmp4.m3u8', useFallbackOnly: true },
   { id: 'little-guyana-tv', name: 'Little Guyana TV', hlsUrl: 'https://video1.getstreamhosting.com:1936/8122/8122/playlist.m3u8', useFallbackOnly: true },
-  { id: 'cbc-tv8', name: 'CBC TV8 (Barbados)', hlsUrl: 'https://1740288887.rsc.cdn77.org/1740288887/index.m3u8', useFallbackOnly: true },
+  // CBC's HLS origin signs off overnight (iptv-org: Not 24/7); keep the YouTube handle so a dead manifest
+  // falls back to the live check / off-air card instead of a blank player.
+  { id: 'cbc-tv8', name: 'CBC TV8 (Barbados)', handle: '@cbcbarbados246', hlsUrl: 'https://1740288887.rsc.cdn77.org/1740288887/index.m3u8' },
   { id: 'tvj-hls', name: 'TVJ (Jamaica)', hlsUrl: 'https://vod2live.univtec.com/manifest/a99a1804-dc83-411f-8c1c-b62f08cdfa59.m3u8', useFallbackOnly: true },
   { id: 'gnn-tv', name: 'GNN TV (Jamaica)', hlsUrl: 'https://na.linear.zype.com/bf94f9f4-383c-40e0-9d49-279a4f33ab8d/f29b8836-d990-4c8d-b421-192a8f43edc4-zype/live.m3u8', useFallbackOnly: true },
   { id: 'dbs-tv', name: 'DBS TV (St Lucia)', hlsUrl: 'https://stream.dbstvstlucia.com/hls/dbstv_main.m3u8', useFallbackOnly: true },

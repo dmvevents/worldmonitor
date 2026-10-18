@@ -46,6 +46,8 @@ pass() {
   run_seed seed-market-quotes ${av_override[@]+"${av_override[@]}"}
   # Keyless fast-moving sources every pass (the hub's own API serves these from Redis):
   for s in seed-weather-alerts seed-earthquakes seed-crypto-quotes seed-fear-greed; do run_seed "$s"; done
+  # GDELT throttles this network hard; one topic per pass (rotating) keeps us under its 1 req / 5 s policy.
+  run_seed seed-gdelt-intel GDELT_TOPICS_PER_RUN=1 GDELT_SOFT_BUDGET_MS=200000
   if [ ! -f "$STAMP_DIR/daily-$today" ]; then
     touch "$STAMP_DIR/daily-$today"
     if [ -n "${EIA_API_KEY:-}" ]; then
@@ -55,8 +57,14 @@ pass() {
     if [ -n "${FRED_API_KEY:-}" ] && [ -n "${EIA_API_KEY:-}" ]; then
       run_seed seed-economy
     fi
+    # AI Forecasts on the hub's own LLM (Claude via the shim): the seed accepts a provider order, so
+    # point every stage at the generic provider the runner already configured.
+    if [ -n "${LLM_API_URL:-}" ]; then
+      run_seed seed-forecasts FORECAST_LLM_PROVIDER_ORDER=generic FORECAST_LLM_COMBINED_PROVIDER_ORDER=generic \
+        FORECAST_LLM_CRITICAL_PROVIDER_ORDER=generic FORECAST_LLM_IMPACT_PROVIDER_ORDER=generic \
+        FORECAST_LLM_MARKET_IMPLICATIONS_PROVIDER_ORDER=generic
+    fi
     # Keyless slow-moving sources once a day (all public/official; aggregate data only):
-    run_seed seed-gdelt-intel GDELT_SOFT_BUDGET_MS=200000   # stays under the runner's 240 s hard deadline; GDELT allows ~1 req/5 s
     for s in seed-fx-rates seed-disease-outbreaks seed-displacement-summary seed-energy-disruptions \
              seed-fuel-shortages seed-market-breadth seed-climate-anomalies seed-cross-source-signals; do run_seed "$s"; done
   fi

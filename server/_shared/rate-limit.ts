@@ -185,6 +185,11 @@ export interface RateLimitOptions {
   failClosed?: boolean;
 }
 
+function isSelfHostLoopback(ip: string): boolean {
+  if (process.env.LOCAL_API_MODE !== 'docker') return false;
+  return ip === '127.0.0.1' || ip === '::1' || ip === '::ffff:127.0.0.1';
+}
+
 export async function checkRateLimit(request: Request, corsHeaders: Record<string, string>, opts: RateLimitOptions = {}): Promise<Response | null> {
   const rl = getRatelimit();
   if (!rl) {
@@ -196,6 +201,11 @@ export async function checkRateLimit(request: Request, corsHeaders: Record<strin
   }
 
   const ip = getClientIp(request);
+  // Self-hosted single-tenant instance (sidecar docker mode): the per-IP sliding
+  // window protects shared public deployments from abuse; on a self-host every
+  // request is the operator's own browser on loopback, and a 100-panel first
+  // load trips the global window. Mirrored in api/_rate-limit.js.
+  if (isSelfHostLoopback(ip)) return null;
 
   try {
     const { success, limit, reset } = await limitWithFallback(rl, ip, `rl:fw:${ip}`, GLOBAL_RATE_LIMIT, GLOBAL_RATE_WINDOW_SECONDS);

@@ -160,6 +160,17 @@ function withBudget(promise, budgetMs, fallback, onTimeout) {
 
 // Exported for tests. Deps are injectable so the soft-budget + cache-merge
 // behaviour can be driven without a real GDELT/Redis.
+// Self-hosted runs behind one throttled IP can rotate through the catalogue instead of
+// fetching every topic each run: GDELT_TOPICS_PER_RUN=1 fetches one topic per invocation
+// (advancing every 30 minutes); the cache-merge below keeps the other topics from the
+// previous snapshot, so a 25-minute loop refreshes all seven within about three hours
+// while staying far under GDELT's one-request-per-five-seconds policy.
+export function selectRunTopics(all = INTEL_TOPICS, perRun = Number(process.env.GDELT_TOPICS_PER_RUN), now = Date.now()) {
+  if (!(perRun > 0) || perRun >= all.length) return all;
+  const start = Math.floor(now / 1_800_000) % all.length;
+  return Array.from({ length: perRun }, (_, k) => all[(start + k) % all.length]);
+}
+
 export async function fetchAllTopics(deps = {}) {
   const {
     _now = () => Date.now(),
@@ -171,42 +182,44 @@ export async function fetchAllTopics(deps = {}) {
     _minTopicBudgetMs = MIN_TOPIC_BUDGET_MS,
     _interTopicDelayMs = INTER_TOPIC_DELAY_MS,
     _postExhaustDelayMs = POST_EXHAUST_DELAY_MS,
+    _runTopics = selectRunTopics(),
   } = deps;
   const deadlineAt = _now() + _softBudgetMs;
   const remaining = () => deadlineAt - _now();
 
   const topics = [];
-  for (let i = 0; i < INTEL_TOPICS.length; i++) {
+  const run = _runTopics;
+  for (let i = 0; i < run.length; i++) {
     // Stop fetching once we can't plausibly finish another topic in time — the
     // cache-merge below backfills every topic we skip from the prior snapshot,
     // so the run publishes partial+cached data and exits 0 instead of churning
     // past the hard #4786 deadline into a graceful exit-75 crash (issue #4864).
     if (remaining() < _minTopicBudgetMs) {
-      console.log(`  Soft budget (${Math.round(_softBudgetMs / 1000)}s) reached after ${i}/${INTEL_TOPICS.length} topic(s) — remaining ${INTEL_TOPICS.length - i} will fall back to cached snapshot`);
+      console.log(`  Soft budget (${Math.round(_softBudgetMs / 1000)}s) reached after ${i}/${run.length} topic(s) — remaining ${run.length - i} will fall back to cached snapshot`);
       break;
     }
     if (i > 0) await _sleep(Math.min(_interTopicDelayMs, Math.max(0, remaining() - _minTopicBudgetMs)));
-    console.log(`  Fetching ${INTEL_TOPICS[i].id}...`);
+    console.log(`  Fetching ${run[i].id}...`);
     // Bound this single topic against the remaining budget: its own retry ladder
     // can reach ~3.5min under a 429 storm, which alone would blow the phase.
-    const emptyTopic = () => ({ id: INTEL_TOPICS[i].id, articles: [], fetchedAt: new Date().toISOString() });
+    const emptyTopic = () => ({ id: run[i].id, articles: [], fetchedAt: new Date().toISOString() });
     const result = await withBudget(
-      _fetchArticles(INTEL_TOPICS[i]),
+      _fetchArticles(run[i]),
       remaining(),
       { ...emptyTopic(), budgetExceeded: true },
-      () => console.warn(`    ${INTEL_TOPICS[i].id}: article budget reached — falling back to cached`),
+      () => console.warn(`    ${run[i].id}: article budget reached — falling back to cached`),
     );
     console.log(`    ${result.articles.length} articles`);
     // Fetch tone/vol timelines in parallel — best-effort, 429s silently return [].
     // Also bounded so a slow timeline pair can't overrun the phase.
     const [tone, vol] = await withBudget(
       Promise.all([
-        _fetchTimeline(INTEL_TOPICS[i], 'TimelineTone'),
-        _fetchTimeline(INTEL_TOPICS[i], 'TimelineVol'),
+        _fetchTimeline(run[i], 'TimelineTone'),
+        _fetchTimeline(run[i], 'TimelineVol'),
       ]),
       remaining(),
       [[], []],
-      () => console.warn(`    ${INTEL_TOPICS[i].id}: timeline budget reached — skipping timelines`),
+      () => console.warn(`    ${run[i].id}: timeline budget reached — skipping timelines`),
     );
     result._tone = tone;
     result._vol = vol;
@@ -215,7 +228,7 @@ export async function fetchAllTopics(deps = {}) {
     // After a topic exhausts all retries, give GDELT a longer cooldown before hitting
     // it again with the next topic — the rate limit window for popular queries exceeds 50s.
     // Skip the cooldown when it would eat the remaining budget.
-    if (result.exhausted && i < INTEL_TOPICS.length - 1 && remaining() - _postExhaustDelayMs >= _minTopicBudgetMs) {
+    if (result.exhausted && i < run.length - 1 && remaining() - _postExhaustDelayMs >= _minTopicBudgetMs) {
       console.log(`    Rate-limit cooldown: waiting ${_postExhaustDelayMs / 1000}s before next topic...`);
       await _sleep(_postExhaustDelayMs);
     }

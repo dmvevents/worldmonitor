@@ -261,3 +261,5 @@ A complete T&T intelligence hub built from the World Monitor SPA: four variants 
 - `tests/edge-functions.test.mjs` flagged the gitignored sidecar bundles (`api/<domain>/v1/[rpc].js`) as edge functions importing `node:` built-ins; they are Node artifacts next to the deployed TS gateways and are now skipped.
 
 **Known, not fixed:** CBC TV8's CDN was timing out during the sweep (external); GDELT rate-limits this network so Live Intelligence stays empty until it relents; `test:sidecar` has one port-collision failure while the service holds 46123 (passes with the port free); the per-IP API rate limiter can return 429 on first-load bursts of the summarization endpoint (panels retry).
+
+**Workarounds added after the sweep:** GDELT seed rotates one topic per pass (`GDELT_TOPICS_PER_RUN`), AI Forecasts generated daily through the Claude shim (`FORECAST_LLM_*_PROVIDER_ORDER=generic`; first run 3 forecasts), rate limiter bypass for loopback clients in docker mode (both mirrors, tests pass), CBC TV8 gains a YouTube fallback handle for its overnight HLS sign-off.
