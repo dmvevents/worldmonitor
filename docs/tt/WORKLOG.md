@@ -263,3 +263,14 @@ A complete T&T intelligence hub built from the World Monitor SPA: four variants 
 **Known, not fixed:** CBC TV8's CDN was timing out during the sweep (external); GDELT rate-limits this network so Live Intelligence stays empty until it relents; `test:sidecar` has one port-collision failure while the service holds 46123 (passes with the port free); the per-IP API rate limiter can return 429 on first-load bursts of the summarization endpoint (panels retry).
 
 **Workarounds added after the sweep:** GDELT seed rotates one topic per pass (`GDELT_TOPICS_PER_RUN`), AI Forecasts generated daily through the Claude shim (`FORECAST_LLM_*_PROVIDER_ORDER=generic`; first run 3 forecasts), rate limiter bypass for loopback clients in docker mode (both mirrors, tests pass), CBC TV8 gains a YouTube fallback handle for its overnight HLS sign-off.
+
+## Round 11: the missing panels (2026-10-18)
+
+Anton's screenshots of the GA hub on `127.0.0.1:3100` showed the Trinidad and Guyana tabs with only the
+shared panels (Latin America, World News, Energy, World Clock, My Monitors) and none of their own. Root
+cause: `buildPresetTab` only toggled keys already present in the host variant's panel settings, and the
+full variant's defaults never list `tt-*` / `gy-*` panels. It had worked in development only because that
+browser origin carried leftover settings from running the `tt` variant on the same port. Fix: preset tabs
+now add their panels from the cross-variant registry with the source variant's config, and `healPresetTabs`
+repairs already-seeded preset tabs whose enabled set is a strict subset of the preset. The "TECH" pill in
+the header is the variant switcher, not the active variant.

@@ -106,6 +106,20 @@ Live TV first. The strip opens on a channel that is live around the clock (an HL
 
 Trinidad Express rate-limits bursts (HTTP 429) if the same host fetches its three feeds repeatedly within minutes; the dashboard's per-feed cache keeps this from mattering in normal use.
 
+## What each tab is for
+
+| Tab | Objective | Default panels | Map | Live strip |
+| --- | --- | --- | --- | --- |
+| Main | World Monitor's global situation picture: the upstream dashboard as shipped (world news by region, markets, AI insights, risk scores, threat timeline, climate, cyber) with the Caribbean broadcasters added to the strip | full-variant defaults | global | world news channels + Caribbean HLS |
+| Trinidad & Tobago | Public-source monitor for T&T: national and official news, energy/LNG, education, telecoms, public-sector IT, aggregate public safety, weather/hurricanes/outages, Caribbean geopolitics (Venezuela, Guyana, CARICOM), plus the T&T Met Service alerts and EBC constituency layer | `tt` defaults | trinidad | Bizz TV first, then TTT, CNC3, TV6, Parliament, Tobago Updates, CBC TV8, ZIZ TV, teleSUR, Sky, Al Jazeera |
+| Guyana | Guyana and the Guiana Shield: national and official news, Stabroek oil and gas, Essequibo and regional geopolitics, economy and infrastructure, aggregate public safety, flooding/hurricane weather | `gy` defaults | guyana | HGPTV first, then NCN, MTV Guyana, Little Guyana TV, teleSUR, Canal I, Venevisión, TVJ, Sky, Al Jazeera |
+| Chips & AI | AI compute and semiconductors: chip and accelerator news, data centres and power, AI labs, export controls and chip policy, semiconductor tickers; data-centre, cloud-region and tech-HQ layers | `chips` defaults | global | Bloomberg, CNBC, Yahoo Finance, NASA, Sky, Al Jazeera |
+
+A preset tab brings its own panels even when the host variant's defaults do not list them (they are
+added from the cross-variant registry), and a tab seeded by an earlier build without them is repaired on
+the next load as long as it has not been customised. Tabs persist per browser origin, so
+`localhost:3100` and `127.0.0.1:3100` keep separate tab state.
+
 ## Sibling monitors and dashboard tabs
 
 Two more variants ship alongside `tt`, built the same way:
