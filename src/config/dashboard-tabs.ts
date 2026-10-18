@@ -33,6 +33,33 @@ const PRESETS: Record<string, PresetTabSource> = {
   chips: { id: 'preset-chips', name: 'Chips & AI', variant: 'chips', mapTitle: 'AI Compute: Data Centres, Fabs and Cloud Regions' },
 };
 
+// Panels a variant's own default tab gains on the hub beyond the variant defaults
+// ("the general default, with some improvements"): the global tab adds the Caribbean
+// lens (where the hub is run from) and a world clock. Keys must exist in ALL_PANELS.
+const PRESET_EXTRA_PANELS: Partial<Record<string, string[]>> = {
+  full: ['caribbean', 'world-clock'],
+};
+
+/**
+ * News leads every tab: the map and the live strip first, then every panel the
+ * predicate marks as a news lens (the caller passes `key in CANONICAL_FEEDS`; the
+ * feed catalog is not imported here because it pulls the Vite runtime into tests),
+ * then everything else — each group in the variant's own order.
+ */
+export function orderNewsFirst(keys: string[], isNews: (key: string) => boolean): string[] {
+  const isLead = (k: string) => k === 'map' || k === 'live-news';
+  const lead = keys.filter(isLead);
+  const news = keys.filter((k) => !isLead(k) && isNews(k));
+  const rest = keys.filter((k) => !isLead(k) && !isNews(k));
+  return [...lead, ...news, ...rest];
+}
+
+function presetPanelKeys(variant: string): string[] {
+  const base = getVariantEnabledPanelKeys(variant);
+  const extras = (PRESET_EXTRA_PANELS[variant] ?? []).filter((k) => !base.includes(k));
+  return [...base, ...extras];
+}
+
 // Which presets each variant offers besides its own default tab.
 const VARIANT_PRESET_TABS: Partial<Record<string, string[]>> = {
   // The global dashboard keeps its default tab and gains the regional/topic monitors as tabs.
@@ -54,7 +81,7 @@ function toPresetTab(p: PresetTabSource): PresetTab {
     id: p.id,
     name: p.name,
     variant: p.variant,
-    panelKeys: getVariantEnabledPanelKeys(p.variant),
+    panelKeys: presetPanelKeys(p.variant),
     mapView: getDefaultMapView(p.variant, 'global'),
     mapTitle: p.mapTitle,
     liveChannelIds: VARIANT_LIVE_CHANNEL_IDS[p.variant] ?? [],

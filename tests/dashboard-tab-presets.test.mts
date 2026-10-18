@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { getPresetTabs, getOwnVariantPreset } from '../src/config/dashboard-tabs';
+import { getPresetTabs, getOwnVariantPreset, orderNewsFirst } from '../src/config/dashboard-tabs';
 import { VARIANT_LIVE_CHANNEL_IDS } from '../src/config/live-channel-defaults';
 import { VARIANT_FEEDS } from '../server/worldmonitor/news/v1/_feeds';
 import { ALL_PANELS } from '../src/config/panels';
@@ -66,5 +66,21 @@ describe('dashboard tab presets (regional / topic monitors)', () => {
     assert.equal(getOwnVariantPreset('gy')?.mapView, 'guyana');
     assert.equal(getOwnVariantPreset('full')?.mapView, 'global');
     assert.deepEqual(getOwnVariantPreset('tt')?.liveChannelIds, VARIANT_LIVE_CHANNEL_IDS.tt);
+  });
+
+  it('the global default tab gains the hub extras (Caribbean lens, world clock) and they are real panels', () => {
+    const full = getOwnVariantPreset('full');
+    assert.ok(full);
+    for (const key of ['caribbean', 'world-clock', 'politics', 'intel', 'markets', 'strategic-risk']) {
+      assert.ok(full.panelKeys.includes(key), `full preset should enable "${key}"`);
+      assert.ok(ALL_PANELS[key], `"${key}" must exist in ALL_PANELS`);
+    }
+    assert.ok(!full.panelKeys.includes('chips-semis'), 'the global default must not carry the Chips & AI lenses');
+  });
+
+  it('orderNewsFirst keeps map and live strip first, then news lenses, then the rest, each in source order', () => {
+    const news = new Set(['tt-news', 'caribbean', 'politics']);
+    const ordered = orderNewsFirst(['map', 'live-news', 'monitors', 'tt-news', 'world-clock', 'caribbean', 'energy-complex', 'politics'], (k) => news.has(k));
+    assert.deepEqual(ordered, ['map', 'live-news', 'tt-news', 'caribbean', 'politics', 'monitors', 'world-clock', 'energy-complex']);
   });
 });

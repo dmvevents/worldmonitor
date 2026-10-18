@@ -39,7 +39,7 @@ import {
 import { resolveNewsCategories, enabledNewsCategoryKeys } from '@/config/feed-resolution';
 import { getDefaultMapView } from '@/config/map-view';
 import type { MapView } from '@/components/MapContainer';
-import { getPresetTabs, getOwnVariantPreset, type PresetTab } from '@/config/dashboard-tabs';
+import { getPresetTabs, getOwnVariantPreset, orderNewsFirst, type PresetTab } from '@/config/dashboard-tabs';
 import { BETA_MODE } from '@/config/beta';
 import { t } from '@/services/i18n';
 import { getCurrentTheme } from '@/utils';
@@ -1004,6 +1004,7 @@ export class PanelLayoutManager implements AppModule {
     // dashboard) once; a user who deletes one keeps it deleted.
     if (this.seedPresetTabs(state)) saveTabsState(state);
     if (this.healPresetTabs(state)) saveTabsState(state);
+    if (this.reseedDefaultTab(state)) saveTabsState(state);
     this.tabsState = state;
     // The boot-time panel set comes from the last persisted selection, which an
     // older build wrote without the regional preset's own panels. If the tab we
@@ -1012,8 +1013,10 @@ export class PanelLayoutManager implements AppModule {
     // for the already-active tab, so nothing else would do it).
     const restoring = state.tabs.find((tab) => tab.id === state.activeTabId);
     // Compare enabled state, not key presence: an older build persisted the
-    // preset's panels into the boot set as disabled entries.
-    if (restoring && Object.entries(restoring.panelSettings).some(([key, cfg]) => cfg.enabled && this.ctx.panelSettings[key]?.enabled !== true)) {
+    // preset's panels into the boot set as disabled entries. Both directions
+    // matter: a boot set that enables panels the tab does not (e.g. after the
+    // default tab was re-seeded) must be narrowed to the tab as well.
+    if (restoring && this.panelSettingsEnabledStateChanged(this.ctx.panelSettings, restoring.panelSettings)) {
       this.applyTabPanelState(restoring.panelSettings, restoring.panelOrder, restoring.bottomSet);
     }
 
@@ -1086,12 +1089,49 @@ export class PanelLayoutManager implements AppModule {
       const own = preset.panelKeys.filter((key) => ALL_PANELS[key] && !isPanelInVariantDefaults(key));
       const lostOwnPanels = own.length > 0 && own.every((key) => !tab.panelSettings[key]?.enabled);
       const strictSubset = current.length < target.size && current.every((key) => target.has(key));
+      // An untouched preset (same enabled set) follows the preset's panel order,
+      // so an order change in the preset definition (news first) reaches
+      // already-seeded tabs; a customised set keeps the user's order.
+      const untouched = current.length === target.size && current.every((key) => target.has(key));
+      if (untouched) {
+        if (tab.panelOrder.join('|') !== expected.panelOrder.join('|')) {
+          tab.panelOrder = expected.panelOrder;
+          changed = true;
+        }
+        continue;
+      }
       if (!lostOwnPanels && !strictSubset) continue;
       tab.panelSettings = expected.panelSettings;
       tab.panelOrder = expected.panelOrder;
       changed = true;
     }
     return changed;
+  }
+
+  /**
+   * One-time repair of the variant's own default tab (the first non-preset tab):
+   * rebuild it from the variant's default panel set, news first. The hub's "Main"
+   * tab had drifted to a handful of AI/tech panels (seeded while another variant
+   * was active) and a fresh profile captured every panel the boot set enabled,
+   * so neither matched "the general World Monitor default". Runs once per
+   * variant (marker in localStorage); later customisations stick.
+   */
+  private reseedDefaultTab(state: TabsState): boolean {
+    const marker = `worldmonitor-tabs-default-reseed-v1:${SITE_VARIANT}`;
+    try {
+      if (localStorage.getItem(marker)) return false;
+    } catch {
+      return false;
+    }
+    const own = getOwnVariantPreset(SITE_VARIANT);
+    const tab = state.tabs.find((candidate) => !candidate.id.startsWith('preset-'));
+    if (!own || !tab) return false;
+    const rebuilt = this.buildPresetTab(own);
+    tab.panelSettings = rebuilt.panelSettings;
+    tab.panelOrder = rebuilt.panelOrder;
+    tab.bottomSet = [];
+    try { localStorage.setItem(marker, new Date().toISOString()); } catch { /* storage unavailable: retry next boot */ }
+    return true;
   }
 
   private buildPresetTab(preset: PresetTab): PanelTab {
@@ -1114,7 +1154,8 @@ export class PanelLayoutManager implements AppModule {
       id: preset.id,
       name: preset.name,
       panelSettings: enforceFreePanelLimit(panelSettings, isProUser()),
-      panelOrder: preset.panelKeys.filter((key) => key !== 'map' && key in panelSettings),
+      // News leads: lenses with a feed category right after the live strip, the rest after.
+      panelOrder: orderNewsFirst(preset.panelKeys, (key) => key in CANONICAL_FEEDS).filter((key) => key !== 'map' && key in panelSettings),
       bottomSet: [],
     };
   }
