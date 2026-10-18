@@ -950,6 +950,10 @@ export class PanelLayoutManager implements AppModule {
       }
     });
 
+    // Must run before the panels are created so the boot set already matches the
+    // re-seeded default tab (applying a tab after boot leaves later lazily mounted
+    // shells unmounted; see reseedDefaultTabBeforeBoot).
+    this.reseedDefaultTabBeforeBoot();
     await this.createPanels();
 
     this.initPanelTabs();
@@ -1004,7 +1008,6 @@ export class PanelLayoutManager implements AppModule {
     // dashboard) once; a user who deletes one keeps it deleted.
     if (this.seedPresetTabs(state)) saveTabsState(state);
     if (this.healPresetTabs(state)) saveTabsState(state);
-    if (this.reseedDefaultTab(state)) saveTabsState(state);
     this.tabsState = state;
     // The boot-time panel set comes from the last persisted selection, which an
     // older build wrote without the regional preset's own panels. If the tab we
@@ -1112,27 +1115,45 @@ export class PanelLayoutManager implements AppModule {
    * One-time repair of the variant's own default tab (the first non-preset tab):
    * rebuild it from the variant's default panel set, news first. The hub's "Main"
    * tab had drifted to a handful of AI/tech panels (seeded while another variant
-   * was active) and a fresh profile captured every panel the boot set enabled,
-   * so neither matched "the general World Monitor default". Runs once per
-   * variant (marker in localStorage); later customisations stick.
+   * was active) and a fresh profile captured the boot set in registry order, so
+   * neither matched "the general World Monitor default". Runs once per variant
+   * (marker in localStorage); later customisations stick.
+   *
+   * Runs BEFORE createPanels(): when the default tab is the active one, the boot
+   * panel set and saved order are rewritten here so the panels are created from
+   * the repaired set directly. Applying the tab after boot instead
+   * (applyTabPanelState) left the deferred shells created on later tab switches
+   * unmounted until the next reload.
    */
-  private reseedDefaultTab(state: TabsState): boolean {
+  private reseedDefaultTabBeforeBoot(): void {
     const marker = `worldmonitor-tabs-default-reseed-v1:${SITE_VARIANT}`;
     try {
-      if (localStorage.getItem(marker)) return false;
+      if (localStorage.getItem(marker)) return;
     } catch {
-      return false;
+      return;
     }
     const own = getOwnVariantPreset(SITE_VARIANT);
-    const tab = state.tabs.find((candidate) => !candidate.id.startsWith('preset-'));
-    if (!own || !tab) return false;
+    if (!own) return;
     const rebuilt = this.buildPresetTab(own);
-    tab.panelSettings = rebuilt.panelSettings;
-    tab.panelOrder = rebuilt.panelOrder;
-    tab.bottomSet = [];
+    const state = loadTabsState();
+    const tab = state?.tabs.find((candidate) => !candidate.id.startsWith('preset-'));
+    if (state && tab) {
+      tab.panelSettings = rebuilt.panelSettings;
+      tab.panelOrder = rebuilt.panelOrder;
+      tab.bottomSet = [];
+      saveTabsState(state);
+    }
+    // No tabs yet (first run) or the default tab is the one being restored: boot
+    // straight into the repaired set. A preset tab active at boot keeps its own set.
+    if (!state || !tab || state.activeTabId === tab.id) {
+      this.ctx.panelSettings = rebuilt.panelSettings;
+      saveToStorage(STORAGE_KEYS.panels, rebuilt.panelSettings);
+      saveToStorage(this.ctx.PANEL_ORDER_KEY, rebuilt.panelOrder);
+      saveToStorage(this.ctx.PANEL_ORDER_KEY + '-bottom-set', []);
+    }
     try { localStorage.setItem(marker, new Date().toISOString()); } catch { /* storage unavailable: retry next boot */ }
-    return true;
   }
+
 
   private buildPresetTab(preset: PresetTab): PanelTab {
     const wanted = new Set(preset.panelKeys);
