@@ -136,7 +136,12 @@ async function serveIptvProxy(res, url) {
     const len = r.headers.get('content-length'); if (len) headers['content-length'] = len;
     res.writeHead(200, headers);
     const { Readable } = await import('node:stream');
-    Readable.fromWeb(r.body).pipe(res);
+    const body = Readable.fromWeb(r.body);
+    // An upstream stall or the 20 s abort must end this response, never the process:
+    // an unhandled 'error' on the Readable took the front door down once (launchd restarted it).
+    body.on('error', () => { if (!res.destroyed) res.destroy(); });
+    res.on('close', () => body.destroy());
+    body.pipe(res);
   } catch (err) {
     if (!res.headersSent) res.writeHead(502, { 'content-type': 'text/plain' });
     res.end(`iptv proxy error: ${String(err?.message || err).slice(0, 160)}`);
