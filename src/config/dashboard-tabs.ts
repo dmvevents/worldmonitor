@@ -13,6 +13,8 @@ export interface PresetTab {
   /** Stable id so the seeding logic can tell whether a preset already exists. */
   id: string;
   name: string;
+  /** Variant whose panel defaults this preset mirrors (its panels may not exist in the host variant's defaults). */
+  variant: string;
   panelKeys: string[];
   /** Map region the tab opens on (see map-view.ts). */
   mapView: string;
@@ -51,6 +53,7 @@ function toPresetTab(p: PresetTabSource): PresetTab {
   return {
     id: p.id,
     name: p.name,
+    variant: p.variant,
     panelKeys: getVariantEnabledPanelKeys(p.variant),
     mapView: getDefaultMapView(p.variant, 'global'),
     mapTitle: p.mapTitle,

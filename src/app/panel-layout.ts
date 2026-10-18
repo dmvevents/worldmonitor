@@ -1003,6 +1003,7 @@ export class PanelLayoutManager implements AppModule {
     // Seed the variant's preset tabs (e.g. Guyana / Chips & AI on the T&T
     // dashboard) once; a user who deletes one keeps it deleted.
     if (this.seedPresetTabs(state)) saveTabsState(state);
+    if (this.healPresetTabs(state)) saveTabsState(state);
     this.tabsState = state;
 
     this.panelTabBar = new PanelTabBar(() => this.tabsState!, {
@@ -1051,12 +1052,45 @@ export class PanelLayoutManager implements AppModule {
     return changed;
   }
 
+  /**
+   * Repair preset tabs that were seeded without their own panels (earlier
+   * builds only enabled keys already present in the host variant's settings).
+   * A tab is healed only when everything it enables is part of the preset and
+   * the preset enables more, so a tab the user customised is left alone.
+   */
+  private healPresetTabs(state: TabsState): boolean {
+    let changed = false;
+    for (const preset of getPresetTabs(SITE_VARIANT)) {
+      const tab = state.tabs.find((candidate) => candidate.id === preset.id);
+      if (!tab) continue;
+      const expected = this.buildPresetTab(preset);
+      const enabledOf = (settings: Record<string, PanelConfig>) =>
+        Object.entries(settings).filter(([key, cfg]) => cfg.enabled && key !== 'map').map(([key]) => key);
+      const current = enabledOf(tab.panelSettings);
+      const target = new Set(enabledOf(expected.panelSettings));
+      if (current.length >= target.size || !current.every((key) => target.has(key))) continue;
+      tab.panelSettings = expected.panelSettings;
+      tab.panelOrder = expected.panelOrder;
+      changed = true;
+    }
+    return changed;
+  }
+
   private buildPresetTab(preset: PresetTab): PanelTab {
     const wanted = new Set(preset.panelKeys);
     const panelSettings: Record<string, PanelConfig> = {};
     for (const [key, config] of Object.entries(this.ctx.panelSettings)) {
       const dynamic = !ALL_PANELS[key] && (key === 'runtime-config' || key.startsWith('cw-') || key.startsWith('mcp-'));
       panelSettings[key] = dynamic ? { ...config } : { ...config, enabled: key === 'map' ? true : wanted.has(key) };
+    }
+    // The host variant's settings only carry its own default panels. A regional
+    // preset (Trinidad & Tobago on the global hub) brings panels the host never
+    // lists, so add them from the cross-variant registry with the source
+    // variant's config; without this a fresh browser profile got a preset tab
+    // with none of its own panels.
+    for (const key of preset.panelKeys) {
+      if (key in panelSettings || !ALL_PANELS[key]) continue;
+      panelSettings[key] = { ...getEffectivePanelConfig(key, preset.variant), enabled: true };
     }
     return {
       id: preset.id,
@@ -1251,6 +1285,17 @@ export class PanelLayoutManager implements AppModule {
     saveToStorage(STORAGE_KEYS.panels, capped);
     saveToStorage(this.ctx.PANEL_ORDER_KEY, panelOrder);
     saveToStorage(this.ctx.PANEL_ORDER_KEY + '-bottom-set', bottomSet);
+
+    // Panels this tab enables that did not exist at boot (regional preset
+    // categories): register them and give each a deferred shell so
+    // applyPanelSettings mounts them like any other lazily loaded panel.
+    this.ensureCanonicalNewsPanels();
+    const grid = document.getElementById('panelsGrid');
+    for (const [key, config] of Object.entries(capped)) {
+      if (!config.enabled || key === 'map' || this.ctx.panels[key] || this.deferredPanelMounts.has(key)) continue;
+      if (!this.lazyPanelRegistrations.has(key)) continue;
+      this.deferPanelMount(key, null, grid, true);
+    }
 
     this.applyPanelSettings();
     this.applySavedPanelOrder();
@@ -1475,6 +1520,45 @@ export class PanelLayoutManager implements AppModule {
   private static readonly NEWS_PANEL_TOOLTIPS: Record<string, string> = {
     centralbanks: t('components.centralBankWatch.infoTooltip'),
   };
+
+  /**
+   * Register a NewsPanel for every CANONICAL_FEEDS category the current panel
+   * settings know about. Runs at boot and again on every tab switch: a preset
+   * tab (Trinidad & Tobago on the global hub) enables categories the host
+   * variant never had settings for at boot, so their panels must be created
+   * then — otherwise the tab stores them enabled but nothing renders.
+   */
+  private ensureCanonicalNewsPanels(): void {
+    // Iterate CANONICAL_FEEDS (union of all variants), not just the active
+    // variant's FEEDS preset — so a news panel the user customized in from
+    // another variant (e.g. Finance `forex` added to a `full` session) still
+    // gets a NewsPanel created. The panelSettings gate below ensures only
+    // panels the user actually enabled are instantiated.
+    for (const key of Object.keys(CANONICAL_FEEDS)) {
+      if (this.ctx.newsPanels[key]) continue;
+      if (!Array.isArray((CANONICAL_FEEDS as Record<string, unknown>)[key])) continue;
+      // 'live-news' is the dedicated LiveNewsPanel (24/7 video) key, registered
+      // lazily below — NOT a generic RSS feed panel. CANONICAL_FEEDS['live-news']
+      // exists only to feed the energy variant's headlines; if we let it spawn a
+      // NewsPanel here it registers first and lazyPanel()'s dedup guard then
+      // blocks the real video panel (regression #4382 → "LIVE NEWS / No items in
+      // the last 7 days" on the live dashboard). Skip it so the video panel owns
+      // the key on every variant (happy has no 'live-news' panel at all).
+      if (key === 'live-news') continue;
+      const panelKey = COLLIDING_NEWS_PANEL_KEYS.has(key) && !this.ctx.newsPanels[key] ? `${key}-news` : key;
+      if (this.ctx.panels[panelKey]) continue;
+      // Gate on panelKey, NOT key. When `key` collided with a non-news data
+      // panel (panelKey became `${key}-news` — e.g. `markets`/`crypto`/`economic`
+      // in the full variant), that data panel's own settings entry must NOT
+      // spawn a phantom news panel: the remapped key has to be explicitly
+      // enabled. When there's no collision, panelKey === key so this is unchanged.
+      const panelConfig = this.ctx.panelSettings[panelKey];
+      if (!panelConfig) continue;
+      const label = panelConfig.name ?? key.charAt(0).toUpperCase() + key.slice(1);
+      const tooltip = PanelLayoutManager.NEWS_PANEL_TOOLTIPS[panelKey] ?? PanelLayoutManager.NEWS_PANEL_TOOLTIPS[key];
+      this.createNewsPanelWithLabel(panelKey, label, tooltip, key);
+    }
+  }
 
   private createNewsPanel(key: string, labelKey: string): void {
     this.createNewsPanelWithLabel(key, t(labelKey), PanelLayoutManager.NEWS_PANEL_TOOLTIPS[key], key);
@@ -1886,35 +1970,7 @@ export class PanelLayoutManager implements AppModule {
     this.createNewsPanel('asia', 'panels.asia');
     this.createNewsPanel('energy', 'panels.energy');
 
-    // Iterate CANONICAL_FEEDS (union of all variants), not just the active
-    // variant's FEEDS preset — so a news panel the user customized in from
-    // another variant (e.g. Finance `forex` added to a `full` session) still
-    // gets a NewsPanel created. The panelSettings gate below ensures only
-    // panels the user actually enabled are instantiated.
-    for (const key of Object.keys(CANONICAL_FEEDS)) {
-      if (this.ctx.newsPanels[key]) continue;
-      if (!Array.isArray((CANONICAL_FEEDS as Record<string, unknown>)[key])) continue;
-      // 'live-news' is the dedicated LiveNewsPanel (24/7 video) key, registered
-      // lazily below — NOT a generic RSS feed panel. CANONICAL_FEEDS['live-news']
-      // exists only to feed the energy variant's headlines; if we let it spawn a
-      // NewsPanel here it registers first and lazyPanel()'s dedup guard then
-      // blocks the real video panel (regression #4382 → "LIVE NEWS / No items in
-      // the last 7 days" on the live dashboard). Skip it so the video panel owns
-      // the key on every variant (happy has no 'live-news' panel at all).
-      if (key === 'live-news') continue;
-      const panelKey = COLLIDING_NEWS_PANEL_KEYS.has(key) && !this.ctx.newsPanels[key] ? `${key}-news` : key;
-      if (this.ctx.panels[panelKey]) continue;
-      // Gate on panelKey, NOT key. When `key` collided with a non-news data
-      // panel (panelKey became `${key}-news` — e.g. `markets`/`crypto`/`economic`
-      // in the full variant), that data panel's own settings entry must NOT
-      // spawn a phantom news panel: the remapped key has to be explicitly
-      // enabled. When there's no collision, panelKey === key so this is unchanged.
-      const panelConfig = this.ctx.panelSettings[panelKey];
-      if (!panelConfig) continue;
-      const label = panelConfig.name ?? key.charAt(0).toUpperCase() + key.slice(1);
-      const tooltip = PanelLayoutManager.NEWS_PANEL_TOOLTIPS[panelKey] ?? PanelLayoutManager.NEWS_PANEL_TOOLTIPS[key];
-      this.createNewsPanelWithLabel(panelKey, label, tooltip, key);
-    }
+    this.ensureCanonicalNewsPanels();
 
     this.lazyDefaultPanel('gdelt-intel', () => import('@/components/GdeltIntelPanel'), 'GdeltIntelPanel');
 
