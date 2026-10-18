@@ -36,6 +36,11 @@ function walkApi(dir, relPrefix = '') {
     const rel = relPrefix ? `${relPrefix}/${entry}` : entry;
     if (statSync(full).isDirectory()) {
       out.push(...walkApi(full, rel));
+    } else if (entry === '[rpc].js' && existsSync(join(dir, '[rpc].ts'))) {
+      // Local sidecar bundle emitted next to the TS gateway by
+      // scripts/build-sidecar-handlers.mjs (gitignored; runs in Node, not on
+      // the Edge). Vercel deploys the .ts, so the bundle is not an edge function.
+      continue;
     } else if (entry.endsWith('.js') || entry.endsWith('.ts')) {
       out.push({ name: rel, path: full });
     }
