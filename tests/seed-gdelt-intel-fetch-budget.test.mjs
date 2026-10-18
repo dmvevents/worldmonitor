@@ -20,7 +20,7 @@ import { readFileSync } from 'node:fs';
 
 import { fetchAllTopics } from '../scripts/seed-gdelt-intel.mjs';
 
-const TOPIC_IDS = ['military', 'cyber', 'nuclear', 'sanctions', 'intelligence', 'maritime'];
+const TOPIC_IDS = ['military', 'cyber', 'nuclear', 'sanctions', 'intelligence', 'maritime', 'caribbean'];
 const cachedSnapshot = () => ({
   topics: TOPIC_IDS.map((id) => ({
     id,
@@ -51,7 +51,7 @@ describe('seed-gdelt-intel fetchAllTopics soft budget (issue #4864)', () => {
     const elapsed = Date.now() - started;
 
     assert.ok(elapsed < 3000, `should be bounded by the soft budget, took ${elapsed}ms`);
-    assert.deepEqual(out.topics.map((t) => t.id), TOPIC_IDS, 'all 6 topics represented, in canonical order');
+    assert.deepEqual(out.topics.map((t) => t.id), TOPIC_IDS, 'all topics represented, in canonical order');
     for (const t of out.topics) {
       assert.equal(t.articles[0]?.title, `cached ${t.id}`, `${t.id} carries cached articles`);
     }

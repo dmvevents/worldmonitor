@@ -247,3 +247,17 @@ A complete T&T intelligence hub built from the World Monitor SPA: four variants 
 **Verified:** typecheck, locale sync, proxy allow/deny probes against the service, headless channel-manager check.
 
 - Follow-up: `IPTV_EGRESS_PROXY` egress setting for operator-controlled network exits (Node `NODE_USE_ENV_PROXY`); public proxy lists explicitly not supported.
+
+## Round 10: end-to-end test sweep (2026-10-18)
+
+**Goal:** Exercise every surface of the GA hub and fix what the sweep found.
+
+**Gates run:** frontend and API typecheck, repository lint, boundary lint, docs-stats check, safe-HTML guard, `test:data`, `test:sidecar`, live-channel validator, production build plus sidecar bundles, GA service probes (health, session mint, market and commodity quotes, bootstrap weather alerts, YouTube resolver, RSS proxy, IPTV proxy allow and deny, Claude brief), headless audits (four tabs with wheel zoom, live TV direct and proxied, IPTV manager add-and-play).
+
+**Found and fixed:**
+
+- The IPTV proxy could crash the front door on an upstream stream error (one unhandled `error` event on the piped Readable in the service log); the response is now destroyed instead and launchd no longer has to restart the stack.
+- `cso.gov.tt` returns 403 to browser user agents, which the sidecar's RSS proxy sends, so the direct CSO feed never loaded; it now goes through a Google News `site:` query like the other blocked official sites, and the server inventory docs list it.
+- `tests/edge-functions.test.mjs` flagged the gitignored sidecar bundles (`api/<domain>/v1/[rpc].js`) as edge functions importing `node:` built-ins; they are Node artifacts next to the deployed TS gateways and are now skipped.
+
+**Known, not fixed:** CBC TV8's CDN was timing out during the sweep (external); GDELT rate-limits this network so Live Intelligence stays empty until it relents; `test:sidecar` has one port-collision failure while the service holds 46123 (passes with the port free); the per-IP API rate limiter can return 429 on first-load bursts of the summarization endpoint (panels retry).

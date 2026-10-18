@@ -22,10 +22,10 @@ const POST_EXHAUST_DELAY_MS = 120_000; // 2min extra cooldown after a topic exha
 //      exhaustion (4×15s direct + 60s backoff + 5×15s proxy + 20s backoff);
 //   2. the inter-topic (20s×5) + post-exhaust (120s) cooldowns alone exceed 240s.
 // The 24h CACHE_TTL guarantees a prior snapshot exists to merge from.
-// 2.5min default — >80s headroom under Railway's 240s hard deadline for merge + publish.
-// Self-hosted runs without that deadline can raise it (GDELT rate-limits to ~1 req/5s, so seven
-// topics rarely finish in 150s): GDELT_SOFT_BUDGET_MS=200000 (the runner has a 240s hard deadline).
-const FETCH_SOFT_BUDGET_MS = Number(process.env.GDELT_SOFT_BUDGET_MS) > 0 ? Number(process.env.GDELT_SOFT_BUDGET_MS) : 150_000;
+const FETCH_SOFT_BUDGET_MS = 150_000; // 2.5min — >80s headroom under the 240s hard deadline for merge + publish
+// Self-hosted runs can raise the soft budget (GDELT rate-limits to ~1 req/5s, so seven topics rarely
+// finish in 150s): GDELT_SOFT_BUDGET_MS=200000 keeps it under the runner's 240s hard deadline.
+const EFFECTIVE_SOFT_BUDGET_MS = Number(process.env.GDELT_SOFT_BUDGET_MS) > 0 ? Number(process.env.GDELT_SOFT_BUDGET_MS) : FETCH_SOFT_BUDGET_MS;
 const MIN_TOPIC_BUDGET_MS = 25_000;   // don't start a topic we can't plausibly finish before the budget
 
 const INTEL_TOPICS = [
@@ -167,7 +167,7 @@ export async function fetchAllTopics(deps = {}) {
     _fetchArticles = fetchWithRetry,
     _fetchTimeline = fetchTopicTimeline,
     _loadPrevious = () => verifySeedKey(CANONICAL_KEY).catch(() => null),
-    _softBudgetMs = FETCH_SOFT_BUDGET_MS,
+    _softBudgetMs = EFFECTIVE_SOFT_BUDGET_MS,
     _minTopicBudgetMs = MIN_TOPIC_BUDGET_MS,
     _interTopicDelayMs = INTER_TOPIC_DELAY_MS,
     _postExhaustDelayMs = POST_EXHAUST_DELAY_MS,
