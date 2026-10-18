@@ -521,3 +521,37 @@ describe('TegoTV channels and official live-page links', () => {
     assert.match(hub, /\/\^\\d\{1,6\}\$\/\.test\(id\)/, 'channel id must be validated as numeric');
   });
 });
+
+// ── 13. Guyana strip ──
+
+describe('Guyana live channels', () => {
+  const channelDef = (id) => liveNewsSrc.match(new RegExp(`\\{\\s*id:\\s*'${id}'[^}]*\\}`))?.[0] ?? '';
+  const defaults = readSrc('src/config/live-channel-defaults.ts');
+  const gyList = defaults.match(/gy:\s*\[[^\]]*\]/)?.[0] ?? '';
+
+  it('opens on always-live HLS stations before newscast-only YouTube channels', () => {
+    const order = [...gyList.matchAll(/'([a-z0-9-]+)'/g)].map((m) => m[1]);
+    assert.deepEqual(order.slice(0, 4), ['hgptv', 'mtv-guyana', 'little-guyana-tv', 'gtn-canada']);
+    for (const id of ['ncn-guyana', 'dtv8-guyana', 'ignite-news-gy', 'gy-parliament']) assert.ok(order.includes(id), `${id} in gy strip`);
+  });
+
+  it('NCN uses the handle its own live page links (@ncn.guyana) and offers the official page when off air', () => {
+    assert.match(channelDef('ncn-guyana'), /handle:\s*'@ncn\.guyana'/);
+    assert.match(channelDef('ncn-guyana'), /officialLiveUrl:\s*'https:\/\/www\.ncnguyana\.com\/live\/'/);
+  });
+
+  it('DTV-8 is YouTube + official link only (its HLS host is a Cloudflare country rule), never a hard-coded davestv8 URL', () => {
+    assert.match(channelDef('dtv8-guyana'), /handle:\s*'@DavesTV8'/);
+    assert.doesNotMatch(liveNewsSrc, /hlsUrl:\s*'https:\/\/watch\.davestv8\.com/);
+  });
+
+  it('GTN Canada is a direct CORS HLS entry in the Caribbean picker', () => {
+    assert.match(channelDef('gtn-canada'), /hlsUrl:\s*'https:\/\/streamer12\.vdn\.dstreamone\.net\//);
+    const caribbean = liveNewsSrc.match(/key:\s*'caribbean'[^\]]*\]/)?.[0] ?? '';
+    for (const id of ['gtn-canada', 'dtv8-guyana', 'ignite-news-gy', 'gy-parliament']) assert.ok(caribbean.includes(`'${id}'`), `${id} in Caribbean picker`);
+  });
+
+  it('every officialLiveUrl is https', () => {
+    for (const m of liveNewsSrc.matchAll(/officialLiveUrl:\s*'([^']+)'/g)) assert.match(m[1], /^https:\/\//, m[1]);
+  });
+});
