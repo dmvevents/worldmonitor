@@ -354,6 +354,15 @@ export async function initLiveChannelsWindow(containerEl?: HTMLElement): Promise
       return;
     }
     const entries = Array.isArray(directory.channels) ? directory.channels : [];
+    // GA front door only: when it routes its stream fetches through a region exit (IPTV_EGRESS_PROXY,
+    // reported by /healthz as iptvEgress), geo-blocked channels are added through the hub proxy so the
+    // broadcaster sees the exit's address. The dev server and the cloud have no /healthz → direct URLs.
+    let egressHost: string | null = null;
+    try {
+      const h = await fetch('/healthz', { signal: AbortSignal.timeout(2500) });
+      if (h.ok) egressHost = ((await h.json()) as { iptvEgress?: string | null }).iptvEgress ?? null;
+    } catch { /* not the GA front door */ }
+    const viaHub = (e: IptvDirectoryEntry): boolean => !!e.needsProxy || (!!egressHost && !!e.geoBlocked);
     const countries = new Map<string, string>();
     for (const e of entries) {
       countries.set(e.country, e.countryName || e.country);
@@ -417,7 +426,8 @@ export async function initLiveChannelsWindow(containerEl?: HTMLElement): Promise
         const meta = document.createElement('span');
         meta.className = 'live-news-iptv-meta';
         const reach = e.broadcastTo?.length ? `${e.countryName} → ${e.broadcastTo.map((b) => b.name).join(', ')}` : e.countryName;
-        meta.textContent = [reach, e.categories.slice(0, 2).join(', '), e.quality, e.needsProxy ? 'via hub proxy' : '', e.geoBlocked ? 'geo-blocked' : ''].filter(Boolean).join(' · ');
+        const route = e.needsProxy ? 'via hub proxy' : (e.geoBlocked && egressHost ? `via hub egress (${egressHost})` : '');
+        meta.textContent = [reach, e.categories.slice(0, 2).join(', '), e.quality, e.geoBlocked ? 'geo-blocked' : '', route].filter(Boolean).join(' · ');
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'live-news-manage-add-btn live-news-iptv-add' + (added ? ' added' : '');
@@ -425,9 +435,9 @@ export async function initLiveChannelsWindow(containerEl?: HTMLElement): Promise
         btn.disabled = added;
         btn.addEventListener('click', () => {
           if (channels.some((c) => c.id === e.id)) return;
-          // No-CORS streams play through the hub's same-origin proxy (GA front door); absolute so the
-          // panel's https/local-origin check accepts it.
-          const hlsUrl = e.needsProxy ? `${window.location.origin}/api/iptv-proxy?url=${encodeURIComponent(e.hlsUrl)}` : e.hlsUrl;
+          // No-CORS streams (and geo-blocked ones when the hub has an egress) play through the hub's
+          // same-origin proxy (GA front door); absolute so the panel's https/local-origin check accepts it.
+          const hlsUrl = viaHub(e) ? `${window.location.origin}/api/iptv-proxy?url=${encodeURIComponent(e.hlsUrl)}` : e.hlsUrl;
           channels.push({ id: e.id, name: e.name, hlsUrl, useFallbackOnly: true });
           saveChannelsToStorage(channels);
           renderList(listEl);
