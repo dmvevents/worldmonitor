@@ -321,3 +321,18 @@ For the VPN route, the providers' public server lists were checked: NordVPN expo
 Barbados and Jamaica as virtual locations; Surfshark has none of GY/TT. Added
 `scripts/tt-egress-vpn.compose.example.yml` (gluetun with its HTTP proxy on loopback :8888) so a subscribed
 VPN plugs into `IPTV_EGRESS_PROXY` without routing the rest of the Mac; runbook extended.
+
+## Round 14: free, open-source egress through Docker (2026-10-18)
+
+Anton asked for a free and open-source way to route around the Guyana geo-blocks through Docker. Checked
+the free techniques first: Tor has zero running relays in GY/TT/BB/JM/SR (Onionoo); the monosans open-proxy
+list (1,219 entries with geolocation) has zero GY/TT/BB/JM proxies (counted, never connected); free VPN tiers
+have no Caribbean exits; no cloud has a region there. The viable free route is a device someone you know runs
+in the region as a Tailscale exit node (free Personal plan, open-source clients, Headscale for a self-hosted
+control server; Android, Apple TV, Linux, macOS, Windows can advertise exit nodes, iOS cannot). Added
+`scripts/tt-egress-tailscale.compose.example.yml`: Tailscale container (kernel mode, TUN) plus the hub's
+`tt-egress-proxy.mjs` sidecar sharing its network namespace, published on `127.0.0.1:8888` for
+`IPTV_EGRESS_PROXY`. Trial on this Mac without a tailnet login: stack starts on Docker Desktop, tailscaled
+comes up in kernel/TUN mode and waits for login (first trial exposed that containerboot defaults to userspace
+networking, which would have left the sidecar outside the tunnel; `TS_USERSPACE=false` fixes it), proxy answers on the published port through Docker's egress. The exit-node hop
+is untested until a device in the region joins. Runbook extended with the viability table and bandwidth note.

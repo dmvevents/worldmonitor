@@ -230,6 +230,56 @@ else is required on it.
    "via hub egress"; playback goes browser → front door → tunnel → remote → broadcaster. The remote's log
    (`~/tt-egress.log`) shows one `CONNECT host:443` line per stream host.
 
+### Free and open source: a relative's device as the exit, in Docker (2026-10-18)
+
+What was checked first, so nobody wastes time on it:
+
+| Free technique | Result from this network, 2026-10-18 |
+|---|---|
+| Tor exit in the region | Onionoo lists **0** running relays in GY, TT, BB, JM, SR. Not possible. |
+| Open proxy lists (e.g. monosans/proxy-list, 1,219 proxies with geolocation) | **0** entries in GY, TT, BB or JM. Counted only, never connected. Even if there were any, they are strangers' machines: unreliable, often compromised, and in a position to alter the stream. Not used. |
+| Free VPN tiers | Caribbean exits are not offered on free plans (Windscribe free ≈ 10 locations, Proton free 5 countries). Unverified beyond their public plan pages. |
+| Cloud free tiers | No provider has a Guyana or Trinidad region. |
+
+What is left is the honest free option: **somebody you know in the region runs a device on their own
+connection and lets your hub exit through it.** Tailscale makes that work through home NAT with no port
+forwarding and no server: its Personal plan is free (3 users, 100 devices), the clients are open source
+(BSD-3), and the control server can be self-hosted with Headscale if you want nothing proprietary in the
+path. Per Tailscale's docs, Android, Apple TV, Linux, macOS and Windows can all *advertise* as an exit
+node (Android in userspace mode, "still undergoing optimization"); iOS cannot. A spare Android phone left
+plugged in on their Wi-Fi, an Apple TV, a Raspberry Pi or an old laptop all qualify.
+
+`scripts/tt-egress-tailscale.compose.example.yml` is the Docker side on the hub Mac: a Tailscale container
+that joins your tailnet and uses the remote device as exit node, plus the hub's own `tt-egress-proxy.mjs`
+in the same network namespace, published on `127.0.0.1:8888` for `IPTV_EGRESS_PROXY`. Only stream fetches
+leave through the relative's connection.
+
+1. **Remote device** (with their consent; they see no content, only encrypted tunnel traffic): install
+   Tailscale, sign in to your tailnet (or they sign in to theirs and share the node with you), enable
+   *Run as exit node* (Android: Exit Node → Run as exit node; Linux: `tailscale up --advertise-exit-node`).
+   In the admin console → Machines → that device → Edit route settings → allow "Use as exit node".
+2. **Hub Mac**: copy the example to `~/.config/worldmonitor/egress-tailscale.compose.yml` together with
+   `scripts/tt-egress-proxy.mjs`, then `docker compose -f … up -d`.
+3. `docker exec tt-egress-tailscale tailscale login` prints a URL; open it once and sign in. (Or put an
+   auth key from Settings → Keys into `TS_AUTHKEY`.)
+4. `docker exec tt-egress-tailscale tailscale status` must list the remote device with "offers exit node";
+   then `docker exec tt-egress-tailscale tailscale set --exit-node=<its-name>`.
+5. `curl -x http://127.0.0.1:8888 https://api.ipify.org` must print the relative's public address, not
+   yours. Then `IPTV_EGRESS_PROXY=http://127.0.0.1:8888` in the keys file, restart the hub service, check
+   `/healthz`, add the geo-blocked channel from the directory.
+
+Bandwidth: one HLS stream is 2–5 Mbit/s upstream *from their connection*. Guyanese and Trinidadian home
+plans usually have 5–20 Mbit/s up, so one viewer is fine, two or three are not. Tell them before enabling.
+
+Verified here on 2026-10-18 **without a tailnet login** (no account available in this session): the stack
+starts on Docker Desktop, tailscaled starts in kernel/TUN mode (`TS_USERSPACE=false`; the default userspace mode would leave the sidecar's traffic outside the tunnel) and waits for login, the proxy sidecar
+answers on the published port and relays through Docker's normal egress. The exit-node hop itself is
+untested until a device in the region joins.
+
+Fully account-free alternative: plain WireGuard (open source) between the hub Mac and a Linux box at the
+relative's home, with the box doing NAT. It needs one side reachable from the internet (a port forward on
+either router), which is exactly what Tailscale removes; use it only if you refuse any coordination server.
+
 ### Step by step: a VPN you subscribe to, in Docker
 
 No machine in the region needed. The VPN runs inside one container (gluetun) that exposes an HTTP

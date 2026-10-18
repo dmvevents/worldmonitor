@@ -61,7 +61,10 @@ reports `iptvEgress`, and the directory UI then adds "Geo-blocked" channels thro
 their direct URL (remove and re-add them). `scripts/tt-egress-proxy.mjs` is a dependency-free HTTP proxy to
 run on the remote machine and `scripts/tt-install-egress-tunnel.sh` keeps the SSH tunnel to it alive as a
 launchd agent; `scripts/tt-egress-vpn.compose.example.yml` runs a subscribed VPN (gluetun) in Docker as the
-exit instead (NordVPN lists Guyana and Trinidad as virtual locations); the full step-by-step for both is in
+exit instead (NordVPN lists Guyana and Trinidad as virtual locations), and `scripts/tt-egress-tailscale.compose.example.yml`
+is the free route: a relative's Android phone / Apple TV / Pi in the region as a Tailscale exit node (free personal plan,
+open-source clients, Headscale optional) with the hub's proxy sidecar in the same container network. Tor has no relays in
+the region and open proxy lists have no GY/TT entries, so those are not options. The full step-by-step for all three is in
 `docs/tt/IPTV-GEO-BLOCKING.md` ("Egress setting"). Public proxy
 lists are deliberately not supported: they are mostly dead or hostile endpoints that see and can alter the
 traffic, and video through them does not play.

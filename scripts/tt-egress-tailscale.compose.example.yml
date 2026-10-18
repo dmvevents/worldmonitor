@@ -1,0 +1,65 @@
+# FREE egress for geo-blocked streams: a device someone you know runs in the region (an Android
+# phone, Apple TV, Raspberry Pi or old laptop in Guyana / Trinidad) becomes a Tailscale "exit node";
+# this stack on the hub Mac joins the same tailnet, routes through that exit node, and exposes an
+# HTTP proxy on 127.0.0.1:8888 that only the hub's IPTV proxy uses (IPTV_EGRESS_PROXY).
+# Tailscale's Personal plan is free (3 users, 100 devices); clients are open source (BSD-3) and the
+# control server can be self-hosted with Headscale (github.com/juanfont/headscale) if wanted.
+#
+# On the remote device (their consent, their connection): install Tailscale, sign in to YOUR tailnet
+# (or share the node), then "Run as exit node" (Android: Exit Node → Run as exit node; Linux:
+# `tailscale up --advertise-exit-node`), and approve it in the admin console → Machines → Edit route settings.
+#
+# Here:
+#   cp scripts/tt-egress-tailscale.compose.example.yml ~/.config/worldmonitor/egress-tailscale.compose.yml
+#   docker compose -f ~/.config/worldmonitor/egress-tailscale.compose.yml up -d
+#   docker exec tt-egress-tailscale tailscale login            # prints a URL: open it once, sign in
+#   docker exec tt-egress-tailscale tailscale status           # the remote device must show "offers exit node"
+#   docker exec tt-egress-tailscale tailscale set --exit-node=<remote-device-name>
+#   curl -x http://127.0.0.1:8888 https://api.ipify.org       # must print the remote connection's address
+#   echo 'IPTV_EGRESS_PROXY=http://127.0.0.1:8888' >> ~/.config/worldmonitor/keys.env
+#   bash scripts/tt-install-service.sh restart
+# Instead of `tailscale login`, an auth key (admin console → Settings → Keys) can go in TS_AUTHKEY.
+#
+# The proxy container shares the Tailscale container's network namespace, so every byte it fetches
+# leaves through the exit node; nothing else on the Mac is affected.
+services:
+  tailscale:
+    image: tailscale/tailscale:latest
+    container_name: tt-egress-tailscale
+    hostname: tt-hub-egress
+    cap_add: [NET_ADMIN, SYS_MODULE]
+    devices: ["/dev/net/tun:/dev/net/tun"]
+    sysctls:
+      net.ipv4.ip_forward: "1"
+      net.ipv6.conf.all.forwarding: "1"
+    environment:
+      TS_STATE_DIR: /var/lib/tailscale
+      TS_HOSTNAME: tt-hub-egress
+      TS_USERSPACE: "false"      # kernel/TUN mode: REQUIRED so the proxy sidecar's traffic takes the exit node
+                                 # (containerboot defaults to userspace networking, which routes only tailscaled's own sockets)
+      TS_ACCEPT_DNS: "false"
+      TS_AUTH_ONCE: "true"
+      # TS_AUTHKEY: tskey-auth-...             # optional, instead of `tailscale login`
+      # TS_EXTRA_ARGS: --exit-node=guyana-pi   # optional, instead of `tailscale set --exit-node`
+    volumes:
+      - tailscale-state:/var/lib/tailscale
+    ports:
+      - "127.0.0.1:${EGRESS_LOCAL_PORT:-8888}:8888"    # loopback only: the hub is the only client
+    restart: unless-stopped
+
+  egress-proxy:
+    image: node:22-alpine
+    container_name: tt-egress-proxy
+    network_mode: "service:tailscale"               # same network namespace → exits via the exit node
+    depends_on: [tailscale]
+    volumes:
+      - ./tt-egress-proxy.mjs:/app/tt-egress-proxy.mjs:ro   # scripts/tt-egress-proxy.mjs (copy it next to this file)
+    environment:
+      EGRESS_BIND: 0.0.0.0                          # inside the shared namespace only; published above on 127.0.0.1
+      EGRESS_PORT: "8888"
+      # EGRESS_ALLOW: davestv8.com,bozztv.com       # optional: restrict destinations
+    command: ["node", "/app/tt-egress-proxy.mjs"]
+    restart: unless-stopped
+
+volumes:
+  tailscale-state:
