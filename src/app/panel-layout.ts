@@ -1005,6 +1005,15 @@ export class PanelLayoutManager implements AppModule {
     if (this.seedPresetTabs(state)) saveTabsState(state);
     if (this.healPresetTabs(state)) saveTabsState(state);
     this.tabsState = state;
+    // The boot-time panel set comes from the last persisted selection, which an
+    // older build wrote without the regional preset's own panels. If the tab we
+    // are restoring enables panels the boot set never created, apply the tab
+    // now so those panels are registered and mounted (switchToTab is a no-op
+    // for the already-active tab, so nothing else would do it).
+    const restoring = state.tabs.find((tab) => tab.id === state.activeTabId);
+    if (restoring && Object.entries(restoring.panelSettings).some(([key, cfg]) => cfg.enabled && !(key in this.ctx.panelSettings))) {
+      this.applyTabPanelState(restoring.panelSettings, restoring.panelOrder, restoring.bottomSet);
+    }
 
     this.panelTabBar = new PanelTabBar(() => this.tabsState!, {
       onSelect: (id) => this.switchToTab(id),
