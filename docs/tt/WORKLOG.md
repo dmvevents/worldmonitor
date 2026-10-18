@@ -351,3 +351,10 @@ Bhakti TV, IBN, WACK Visual Radio, Plus TV); the `tt` strip opens with TTT. CNC3
 TV6 (owner-restricted Dailymotion) remain YouTube-only. Verified: typecheck, 61 + 7 tests, validator 11/11,
 TTT/IETV/Synergy/Gayelle playing in headless Chrome on a second front door (:3199). Details and the exact
 endpoint flow: `docs/tt/IPTV-HANDOFF.md` §9.
+
+Follow-up (2026-10-18, shipped): searched iptv-org and GitHub IPTV repos for CNC3/TV6 — both broadcasters
+stream live only through Dailymotion embeds locked to their own domains (DM016 elsewhere), and the only
+third-party CNC3 sources are dead relays or pirate re-servers; nothing legitimate to wire in. Their off-air
+cards now link to the official live pages in a new tab (never framed). ABS TV Antigua added via TegoTV. Merged
+to main (198851903), built and restarted the hub; verified on :3100 (TTT 1280×720, `/api/tego/channels` 12
+entries). Full `test:data`: 14,568/14,575 pass, one pre-existing unrelated failure. Details: IPTV-HANDOFF §9.1.
