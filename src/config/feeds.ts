@@ -1084,7 +1084,7 @@ const TT_FEEDS: Record<string, Feed[]> = {
     { name: 'EBC', url: rss('https://ebctt.com/feed/') },
     { name: 'Central Bank of T&T', url: rss('https://www.central-bank.org.tt/feed/') },
     { name: 'iGovTT', url: rss('https://igovtt.tt/feed/') },
-    { name: 'Central Statistical Office', url: rss('https://cso.gov.tt/feed/') },
+    { name: 'Central Statistical Office', url: rss('https://news.google.com/rss/search?q=site:cso.gov.tt+when:30d&hl=en-US&gl=US&ceid=US:en') },
     { name: 'Tobago House of Assembly', url: rss('https://www.tha.gov.tt/feed/') },
     { name: 'Ministry of National Security TT', url: rss('https://news.google.com/rss/search?q=("Ministry+of+National+Security"+OR+"Ministry+of+Homeland+Security")+Trinidad+when:3d&hl=en-US&gl=US&ceid=US:en') },
   ],

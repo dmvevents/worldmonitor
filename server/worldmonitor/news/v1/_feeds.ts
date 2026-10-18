@@ -505,7 +505,8 @@ export const VARIANT_FEEDS: Record<string, Record<string, ServerFeed[]>> = {
       { name: 'EBC', url: 'https://ebctt.com/feed/' },
       { name: 'Central Bank of T&T', url: 'https://www.central-bank.org.tt/feed/' },
       { name: 'iGovTT', url: 'https://igovtt.tt/feed/' },
-      { name: 'Central Statistical Office', url: 'https://cso.gov.tt/feed/' },
+      // cso.gov.tt's WAF rejects browser user agents, so the CSO goes through Google News like the other blocked official sites.
+      { name: 'Central Statistical Office', url: gn('site:cso.gov.tt when:30d') },
       { name: 'Tobago House of Assembly', url: 'https://www.tha.gov.tt/feed/' },
       { name: 'Ministry of National Security TT', url: gn('("Ministry of National Security" OR "Ministry of Homeland Security") Trinidad when:3d') },
     ],
