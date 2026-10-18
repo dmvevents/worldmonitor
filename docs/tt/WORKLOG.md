@@ -358,3 +358,32 @@ third-party CNC3 sources are dead relays or pirate re-servers; nothing legitimat
 cards now link to the official live pages in a new tab (never framed). ABS TV Antigua added via TegoTV. Merged
 to main (198851903), built and restarted the hub; verified on :3100 (TTT 1280×720, `/api/tego/channels` 12
 entries). Full `test:data`: 14,568/14,575 pass, one pre-existing unrelated failure. Details: IPTV-HANDOFF §9.1.
+
+## Round 15: tabs structured for their purpose (2026-10-18)
+
+Brief from Anton via the lead: the main tab felt like an AI dashboard; Guyana should show Guyana news; most
+tabs should lead with news. Audit (`docs/tt/TABS-AUDIT.md`): Anton's Main tab had 8 panels (AI Insights,
+AI/ML, Technology, Tech Readiness, Markets, map, live strip, monitors) — a layout seeded while another variant
+was active; a fresh profile captured 80 panels in registry order with the intelligence block first. The `full`
+default is `FULL_PANELS` in `src/config/panels.ts` (81 of 102 enabled; the shorter `variants/full.ts` is
+only descriptive). Guyana and T&T tabs already showed national news; the gaps were feed-level.
+
+Changes: (1) `orderNewsFirst` — every preset tab orders map → live strip → news lenses → the rest; untouched
+preset tabs pick the order up on boot. (2) One-time re-seed of the variant's own default tab to the variant
+default plus hub extras (`PRESET_EXTRA_PANELS`: Caribbean lens, world clock for `full`), marker
+`worldmonitor-tabs-default-reseed-v1:<variant>`; runs before `createPanels()` so the boot set matches.
+(3) Boot restore compares enabled state in both directions. (4) Feeds: `tt-news` leads Guardian, Express,
+Newsday, CNC3, TV6, TTT, adds Wired868 (Google News site query; its feed 403s), drops Power 102 (feed
+stopped 2023), no Loop TT (closed); `gy-news` leads Stabroek, Kaieteur, Chronicle, News Room, Demerara Waves,
+iNews, Guyana Times, Village Voice, with Kaieteur on its direct feed `https://kaieteurnewsonline.com/feed/`
+(the www host 301s and the RSS proxy does not follow redirects). Client, server and `docs/data-sources.mdx`
+rows kept in sync (parity tests).
+
+Verification: tsc clean; 71 tests across dashboard-tab-presets, feeds-client-server-parity,
+news-digest-methodology-parity, news-feed-key-parity, docs-signal-alignment, completeness-measurement,
+feeds-time-gate (plus 2 new preset tests); Biome, boundaries and `sync:locales:check` clean; 147 feeds probed
+(137 with items), added/changed URLs fetched and counted; hub rebuilt and restarted twice; headless
+first-boot check of all four tabs (table in the audit). Regression caught in the first build: applying the
+re-seeded tab after boot left other tabs' lazily mounted lenses as shells until reload — fixed by moving the
+re-seed before panel creation. Open item: the post-boot `applyTabPanelState` path may have the same effect
+when a restored tab differs from the boot set; not changed here.
