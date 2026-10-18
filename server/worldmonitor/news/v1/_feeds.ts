@@ -483,15 +483,18 @@ export const VARIANT_FEEDS: Record<string, Record<string, ServerFeed[]>> = {
 
   // ── Trinidad & Tobago variant (public news + official sources; mirrors src/config/feeds.ts TT_FEEDS) ──
   tt: {
+    // National outlets first. Guardian, Newsday, CNC3 and Wired868 publish no reachable RSS
+    // (404 / WAF 403 / timeouts, probed 2026-10-18) so they go through Google News site queries;
+    // Loop TT shut down and Power 102's feed stopped in 2023, so neither is listed.
     'tt-news': [
-      { name: 'Trinidad Express', url: 'https://trinidadexpress.com/search/?f=rss&t=article&l=25&s=start_time&sd=desc' },
-      { name: 'Express Local News', url: 'https://trinidadexpress.com/search/?f=rss&t=article&c[]=news/local&l=25&s=start_time&sd=desc' },
       { name: 'TT Guardian', url: gn('site:guardian.co.tt when:1d') },
+      { name: 'Trinidad Express', url: 'https://trinidadexpress.com/search/?f=rss&t=article&l=25&s=start_time&sd=desc' },
       { name: 'Newsday', url: gn('site:newsday.co.tt when:1d') },
       { name: 'CNC3', url: gn('site:cnc3.co.tt when:1d') },
-      { name: 'TTT', url: 'https://www.ttt.live/feed/' },
       { name: 'TV6 News', url: 'https://www.tv6tnt.com/search/?f=rss&t=article&l=25&s=start_time&sd=desc' },
-      { name: 'Power 102', url: 'https://power102fm.com/feed/' },
+      { name: 'TTT', url: 'https://www.ttt.live/feed/' },
+      { name: 'Wired868', url: gn('site:wired868.com when:2d') },
+      { name: 'Express Local News', url: 'https://trinidadexpress.com/search/?f=rss&t=article&c[]=news/local&l=25&s=start_time&sd=desc' },
       { name: 'Tobago Updates', url: 'https://tobagoupdates.com/feed/' },
       { name: 'Tobago Headlines', url: gn('Tobago when:1d') },
       { name: 'T&T Headlines', url: gn('("Trinidad and Tobago" OR Trinidad OR Tobago) when:1d') },
@@ -576,14 +579,16 @@ export const VARIANT_FEEDS: Record<string, Record<string, ServerFeed[]>> = {
 
   // ── Guyana variant (mirrors src/config/feeds.ts GY_FEEDS) ──
   gy: {
+    // National outlets first. Stabroek News (feed 404/522) and News Room (WAF 403) have no
+    // reachable RSS (probed 2026-10-18) and use Google News site queries; the rest are direct.
     'gy-news': [
       { name: 'Stabroek News', url: gn('site:stabroeknews.com when:1d') },
-      { name: 'Kaieteur News', url: gn('site:kaieteurnewsonline.com when:1d') },
-      { name: 'News Room Guyana', url: gn('site:newsroom.gy when:1d') },
-      { name: 'iNews Guyana', url: 'https://inewsguyana.com/feed/' },
+      { name: 'Kaieteur News', url: 'https://www.kaieteurnewsonline.com/feed/' },
       { name: 'Guyana Chronicle', url: 'https://guyanachronicle.com/feed/' },
-      { name: 'Guyana Times', url: 'https://guyanatimesgy.com/feed/' },
+      { name: 'News Room Guyana', url: gn('site:newsroom.gy when:1d') },
       { name: 'Demerara Waves', url: 'https://demerarawaves.com/feed/' },
+      { name: 'iNews Guyana', url: 'https://inewsguyana.com/feed/' },
+      { name: 'Guyana Times', url: 'https://guyanatimesgy.com/feed/' },
       { name: 'Village Voice GY', url: 'https://villagevoicenews.com/feed/' },
       { name: 'Guyana Headlines', url: gn('Guyana when:1d') },
     ],

@@ -1062,15 +1062,16 @@ const ENERGY_FEEDS: Record<string, Feed[]> = {
 // same pattern the other variants use. Mirror: server/worldmonitor/news/v1/_feeds.ts
 // ─────────────────────────────────────────────────────────────────────────────
 const TT_FEEDS: Record<string, Feed[]> = {
+  // National outlets first; mirrors server/worldmonitor/news/v1/_feeds.ts (see notes there).
   'tt-news': [
-    { name: 'Trinidad Express', url: rss('https://trinidadexpress.com/search/?f=rss&t=article&l=25&s=start_time&sd=desc') },
-    { name: 'Express Local News', url: rss('https://trinidadexpress.com/search/?f=rss&t=article&c[]=news/local&l=25&s=start_time&sd=desc') },
     { name: 'TT Guardian', url: rss('https://news.google.com/rss/search?q=site:guardian.co.tt+when:1d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Trinidad Express', url: rss('https://trinidadexpress.com/search/?f=rss&t=article&l=25&s=start_time&sd=desc') },
     { name: 'Newsday', url: rss('https://news.google.com/rss/search?q=site:newsday.co.tt+when:1d&hl=en-US&gl=US&ceid=US:en') },
     { name: 'CNC3', url: rss('https://news.google.com/rss/search?q=site:cnc3.co.tt+when:1d&hl=en-US&gl=US&ceid=US:en') },
-    { name: 'TTT', url: rss('https://www.ttt.live/feed/') },
     { name: 'TV6 News', url: rss('https://www.tv6tnt.com/search/?f=rss&t=article&l=25&s=start_time&sd=desc') },
-    { name: 'Power 102', url: rss('https://power102fm.com/feed/') },
+    { name: 'TTT', url: rss('https://www.ttt.live/feed/') },
+    { name: 'Wired868', url: rss('https://news.google.com/rss/search?q=site:wired868.com+when:2d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Express Local News', url: rss('https://trinidadexpress.com/search/?f=rss&t=article&c[]=news/local&l=25&s=start_time&sd=desc') },
     { name: 'Tobago Updates', url: rss('https://tobagoupdates.com/feed/') },
     { name: 'Tobago Headlines', url: rss('https://news.google.com/rss/search?q=Tobago+when:1d&hl=en-US&gl=US&ceid=US:en') },
     { name: 'T&T Headlines', url: rss('https://news.google.com/rss/search?q=("Trinidad+and+Tobago"+OR+Trinidad+OR+Tobago)+when:1d&hl=en-US&gl=US&ceid=US:en') },
@@ -1156,14 +1157,15 @@ const TT_FEEDS: Record<string, Feed[]> = {
 // Direct RSS where published (probed 2026-10-15); Google News site-scoped queries where sites block
 // or lack RSS (Stabroek News, Kaieteur News, News Room, OilNOW, GECOM, Parliament). Mirror: server/worldmonitor/news/v1/_feeds.ts
 const GY_FEEDS: Record<string, Feed[]> = {
+  // National outlets first; mirrors server/worldmonitor/news/v1/_feeds.ts (see notes there).
   'gy-news': [
     { name: 'Stabroek News', url: rss('https://news.google.com/rss/search?q=site:stabroeknews.com+when:1d&hl=en-US&gl=US&ceid=US:en') },
-    { name: 'Kaieteur News', url: rss('https://news.google.com/rss/search?q=site:kaieteurnewsonline.com+when:1d&hl=en-US&gl=US&ceid=US:en') },
-    { name: 'News Room Guyana', url: rss('https://news.google.com/rss/search?q=site:newsroom.gy+when:1d&hl=en-US&gl=US&ceid=US:en') },
-    { name: 'iNews Guyana', url: rss('https://inewsguyana.com/feed/') },
+    { name: 'Kaieteur News', url: rss('https://www.kaieteurnewsonline.com/feed/') },
     { name: 'Guyana Chronicle', url: rss('https://guyanachronicle.com/feed/') },
-    { name: 'Guyana Times', url: rss('https://guyanatimesgy.com/feed/') },
+    { name: 'News Room Guyana', url: rss('https://news.google.com/rss/search?q=site:newsroom.gy+when:1d&hl=en-US&gl=US&ceid=US:en') },
     { name: 'Demerara Waves', url: rss('https://demerarawaves.com/feed/') },
+    { name: 'iNews Guyana', url: rss('https://inewsguyana.com/feed/') },
+    { name: 'Guyana Times', url: rss('https://guyanatimesgy.com/feed/') },
     { name: 'Village Voice GY', url: rss('https://villagevoicenews.com/feed/') },
     { name: 'Guyana Headlines', url: rss('https://news.google.com/rss/search?q=Guyana+when:1d&hl=en-US&gl=US&ceid=US:en') },
   ],
