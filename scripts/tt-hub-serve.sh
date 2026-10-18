@@ -76,6 +76,14 @@ if [ -n "${UPSTASH_REDIS_REST_URL:-}" ] && [ "${WM_NO_SEED_LOOP:-}" != "1" ]; th
   PIDS+=($!)
 fi
 
-# 4. front door (foreground)
+# 4. front door (foreground). Optional stream egress: IPTV_EGRESS_PROXY=http[s]://[user:pass@]host:port
+# in keys.env routes the front door's upstream stream fetches (IPTV proxy) through a network exit
+# you are entitled to use — your own VPS or a VPN you subscribe to. Node's fetch honours
+# HTTPS_PROXY when NODE_USE_ENV_PROXY=1; YouTube resolution and local calls stay direct.
+EGRESS_ENV=()
+if [ -n "${IPTV_EGRESS_PROXY:-}" ]; then
+  EGRESS_ENV=(NODE_USE_ENV_PROXY=1 "HTTPS_PROXY=$IPTV_EGRESS_PROXY" "HTTP_PROXY=$IPTV_EGRESS_PROXY" "NO_PROXY=127.0.0.1,localhost,youtube.com,www.youtube.com")
+  log "IPTV egress via ${IPTV_EGRESS_PROXY##*@}"   # host:port only, never credentials
+fi
 log "hub → http://127.0.0.1:${HUB_PORT}/dashboard  (API :${SIDECAR_PORT}, Claude ${MODEL} via :${PROXY_PORT})"
-HUB_PORT="$HUB_PORT" SIDECAR_PORT="$SIDECAR_PORT" node scripts/tt-hub-server.mjs
+env ${EGRESS_ENV[@]+"${EGRESS_ENV[@]}"} HUB_PORT="$HUB_PORT" SIDECAR_PORT="$SIDECAR_PORT" node scripts/tt-hub-server.mjs

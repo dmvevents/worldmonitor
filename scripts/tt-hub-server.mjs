@@ -166,7 +166,7 @@ const server = http.createServer((req, res) => {
   if (url.pathname === '/api/youtube/live') return void serveYoutubeLive(req, res, url);
   if (url.pathname === '/api/iptv-proxy') return void serveIptvProxy(res, url);
   if (url.pathname.startsWith('/api/')) return proxyApi(req, res);
-  if (url.pathname === '/healthz') { res.writeHead(200, { 'content-type': 'application/json' }); return res.end(JSON.stringify({ ok: true, dist: existsSync(path.join(DIST, 'dashboard.html')), sidecarPort: SIDECAR_PORT })); }
+  if (url.pathname === '/healthz') { let egress = null; try { if (process.env.NODE_USE_ENV_PROXY === '1' && process.env.HTTPS_PROXY) egress = new URL(process.env.HTTPS_PROXY).host; } catch {} res.writeHead(200, { 'content-type': 'application/json' }); return res.end(JSON.stringify({ ok: true, dist: existsSync(path.join(DIST, 'dashboard.html')), sidecarPort: SIDECAR_PORT, iptvEgress: egress })); }
   if (req.method !== 'GET' && req.method !== 'HEAD') { res.writeHead(405); return res.end(); }
   let filePath;
   try { filePath = resolveStatic(url.pathname); } catch { filePath = null; }

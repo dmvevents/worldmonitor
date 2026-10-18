@@ -245,3 +245,4 @@ A complete T&T intelligence hub built from the World Monitor SPA: four variants 
 - Docs regenerated and the runbook updated.
 
 **Verified:** typecheck, locale sync, proxy allow/deny probes against the service, headless channel-manager check.
+- Follow-up: `IPTV_EGRESS_PROXY` egress setting for operator-controlled network exits (Node `NODE_USE_ENV_PROXY`); public proxy lists explicitly not supported.

@@ -153,3 +153,10 @@ curl http://127.0.0.1:3100/api/hls-proxy?url=https%3A%2F%2Frd.tvabierta.net%2Fli
 - `/tmp/iptv-work/streams.json` — iptv-org index (18,137 streams)
 
 **Word count (excl. tables/code):** ~580 words
+
+## Egress setting (added 2026-10-18)
+
+`IPTV_EGRESS_PROXY` in the keys file routes the front door's stream fetches through a network exit the
+operator is entitled to use (own VPS, subscribed VPN). It is a standard outbound-proxy setting, applied
+only to the IPTV proxy process; the hub ships no proxy discovery, no public proxy lists and no header
+spoofing. `/healthz` shows the egress host when active.
