@@ -359,6 +359,13 @@ cards now link to the official live pages in a new tab (never framed). ABS TV An
 to main (198851903), built and restarted the hub; verified on :3100 (TTT 1280×720, `/api/tego/channels` 12
 entries). Full `test:data`: 14,568/14,575 pass, one pre-existing unrelated failure. Details: IPTV-HANDOFF §9.1.
 
+Guyana (2026-10-18, shipped): audit showed HGPTV/MTV Guyana/Little Guyana TV playing and NCN never live because
+the strip used `@NCNGuyana` while ncnguyana.com/live links `@ncn.guyana`. Strip now opens on the four always-live
+HLS stations (GTN Canada added), then NCN, DTV-8 (`@DavesTV8`; its HLS is a Cloudflare country rule), Ignite
+News and Parliament of Guyana with YouTube auto-detect and official-page links on the off-air card. E-Networks
+(WAF), GMTV (404), GTN US stations (parked portal) and CTV19 (Twitch) have no usable stream. T&T Parliament and
+Tobago Channel 5 cards also link their sites. 78/78 tests; verified on :3100. Details: IPTV-HANDOFF §9.2.
+
 ## Round 16: tabs structured for their purpose (2026-10-18)
 
 Brief from Anton via the lead: the main tab felt like an AI dashboard; Guyana should show Guyana news; most
