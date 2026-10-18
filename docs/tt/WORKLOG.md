@@ -359,7 +359,7 @@ cards now link to the official live pages in a new tab (never framed). ABS TV An
 to main (198851903), built and restarted the hub; verified on :3100 (TTT 1280×720, `/api/tego/channels` 12
 entries). Full `test:data`: 14,568/14,575 pass, one pre-existing unrelated failure. Details: IPTV-HANDOFF §9.1.
 
-## Round 15: tabs structured for their purpose (2026-10-18)
+## Round 16: tabs structured for their purpose (2026-10-18)
 
 Brief from Anton via the lead: the main tab felt like an AI dashboard; Guyana should show Guyana news; most
 tabs should lead with news. Audit (`docs/tt/TABS-AUDIT.md`): Anton's Main tab had 8 panels (AI Insights,
@@ -387,3 +387,12 @@ first-boot check of all four tabs (table in the audit). Regression caught in the
 re-seeded tab after boot left other tabs' lazily mounted lenses as shells until reload — fixed by moving the
 re-seed before panel creation. Open item: the post-boot `applyTabPanelState` path may have the same effect
 when a restored tab differs from the boot set; not changed here.
+
+Alignment pass after the Hermes merge (2026-10-18 evening): verified on the hub — `/api/tego/channels` lists
+12 stations, `/api/tego/stream?channel=1` returns TTT's signed manifest, the Trinidad tab's strip opens with
+TTT, IETV, Synergy TV and Gayelle and TTT plays at 1280×720 in headless Chrome; Hermes's tests pass with the
+rest (294 across resolver, live-news HLS, edge-function and preset suites); API contract lint and
+`typecheck:api` clean; validator 51/68 (Trinity TV and WACK 404 upstream this evening, CBC TV8 timeout).
+Docs that still said "TTT, CNC3, TV6 are YouTube-only" were updated: TT_FOCUS (Live TV row, strip paragraph,
+IPTV paragraph), HOW-IT-WORKS (front-door routes, decision tree, verified channels), the hub skill, the IPTV
+curator agent, and a supersede note at the top of IPTV-HANDOFF. No code changed in the IPTV lane.

@@ -199,6 +199,12 @@ If you find a public HLS stream that should be in the directory:
 - RTMP or non-HLS protocols
 - Defunct/dead streams (filtered out by probe)
 
+**TegoTV stations (T&T free-to-air) are not directory entries.** They are `tegoChannel: <id>` channels in
+`src/components/LiveNewsPanel.ts`, resolved at play time by the front door (`/api/tego/stream`,
+`scripts/tt-tego-resolver.mjs`) through the broadcasters' own anonymous guest player. `/api/tego/channels`
+lists the catalogue; the validator probes them as `tego:<id>`. Owned by the Hermes IPTV lane
+(`docs/tt/IPTV-HANDOFF.md` §9); do not duplicate them as HLS URLs (the signed token expires after 24 h).
+
 ---
 
 ## Troubleshooting

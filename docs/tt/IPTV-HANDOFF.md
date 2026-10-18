@@ -4,6 +4,12 @@ State dump for whoever picks up the Trinidad & Tobago / Guyana live-TV work. Fac
 steps only. Companion docs: `docs/tt/IPTV-GEO-BLOCKING.md` (geo-blocking deep dive + egress runbook),
 `docs/tt/WORKLOG.md` rounds 9–14, `TT_FOCUS.md` ("IPTV and geo-blocking", "IPTV directory").
 
+> **Update 2026-10-18 (evening):** §9 below supersedes the T&T station statements in §1–§2 (item 3 in
+> particular): TTT, IETV, Synergy TV, Gayelle and six more T&T stations now play live through the
+> broadcasters' TegoTV player; CNC3 and TV6 remain YouTube/off-air cards with official-page links. The
+> merge is on `main` (198851903, cbf1dcd17), the hub runs it, and the hub docs (TT_FOCUS, HOW-IT-WORKS,
+> skill, curator agent) were aligned to it in the tabs round.
+
 ## 1. What works today (verified on this Mac, 2026-10-18)
 
 - **Directory** `public/data/iptv-directory.json`, built by `scripts/iptv-sync.mjs` from the iptv-org API

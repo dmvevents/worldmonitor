@@ -35,6 +35,8 @@ User (http://127.0.0.1:3100)
 Front door (scripts/tt-hub-server.mjs, :3100, pure node:http)
     - Serves dist/ (SPA)
     - Proxies /api/* to sidecar with LOCAL_API_TOKEN
+    - Serves itself: /api/youtube/live (cloud-only route), /api/iptv-proxy (allowlisted HLS proxy),
+      /api/tego/stream + /api/tego/channels (TegoTV resolver, scripts/tt-tego-resolver.mjs), /healthz
     - Injects WM_LOCAL_OPERATOR_KEY for Pro routes
          ↓
 Sidecar (src-tauri/sidecar/local-api-server.mjs, :46123, docker mode)
@@ -118,12 +120,15 @@ The digest endpoint `/api/news/v1/list-feed-digest?variant=tt` loads `VARIANT_FE
 
 ```
 Channel has live stream?
-├─ YES → Play HLS stream (hls.js on Chrome/Firefox, native on Safari)
+├─ tegoChannel (TTT, IETV, Synergy, Gayelle, TV Jaagriti, Trinity, Bhakti, IBN, Plus TV, WACK, ABS Antigua)
+│         → resolve via /api/tego/stream?channel=N (src/services/tego-live.ts, cached until the
+│           24 h token nears expiry, force re-resolve after a playback failure) → play with hls.js
+├─ YES (hlsUrl) → Play HLS stream (hls.js on Chrome/Firefox, native on Safari)
 │         Show channel name in the UI, no badge
 └─ NO
     ├─ Channel is 24/7 (Bizz TV, Sky, AJE, teleSUR)? → OFF-AIR CARD
     │   (This shouldn't happen; 24/7 channels are always live.)
-    └─ Channel is newscast-only (TTT, CNC3, TV6)?
+    └─ Channel is newscast-only (CNC3, TV6, Parliament)?
         ├─ Has latest upload? → REPLAY BADGE, play latest
         │   (TTT publishes daily videos; user knows it's old)
         └─ No recent upload → OFF-AIR CARD
@@ -146,12 +151,17 @@ Channel has live stream?
 - hls.js: `referrerPolicy: 'no-referrer'` to unblock CDN77 / Referer-checking hosts
 - Safari / WKWebView: native HLS (supports `'maybe'` as "I don't know yet")
 
-**Verified channels (2026-10-15):**
+**Verified channels (2026-10-18):**
 
 - Always on: Bizz TV, CBC TV8, Sankhya TV, ZIZ TV, etc. (HLS, 24/7)
-- Newscast-only: TTT Live Online, CNC3, TV6, Parliament (YouTube, ~2 h per day)
-
-- Not available: TTT, CNC3, TV6 do not publish public HLS feeds (YouTube only)
+- Live via TegoTV (the broadcasters' own public guest player, resolved by the front door): TTT, IETV,
+  Synergy TV, Gayelle, TV Jaagriti, Bhakti TV, IBN, Plus TV, ABS Antigua (10/12 of the catalogue; Trinity TV
+  and WACK Visual Radio were 404 upstream on the evening run; Universal Church and Real TV 404 always)
+- Newscast-only, YouTube with off-air card and a link to the station's official live page: CNC3 (Cloudflare
+  JS challenge on its site), TV6 (Dailymotion embed restricted to tv6tnt.com), Parliament (ParlView)
+- `node scripts/validate-live-channels.mjs --hls-only` resolves `tego:<id>` entries through the resolver
+  before probing; 2026-10-18 17:30: 51/68 reachable (failures: upstream non-Caribbean channels, Trinity,
+  WACK, CBC TV8 timeout)
 
 ---
 

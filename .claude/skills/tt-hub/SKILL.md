@@ -169,7 +169,10 @@ Add the feed to the inventory in `TT_FOCUS.md` under "Direct RSS" or "No usable 
 
 ## How to Add a Live TV Channel
 
-Live TV channels stream via HLS (HTTP Live Streaming) or YouTube. Always probe the stream before adding.
+Live TV channels stream via HLS (HTTP Live Streaming), via the TegoTV resolver (`tegoChannel: <id>` on a
+`LiveChannel`; the front door's `/api/tego/stream` resolves the broadcaster's own signed HLS URL — see
+`scripts/tt-tego-resolver.mjs` and `docs/tt/IPTV-HANDOFF.md` §9), or YouTube. Always probe the stream before
+adding; the validator understands all three.
 
 ### 1. Verify the Stream Works
 
