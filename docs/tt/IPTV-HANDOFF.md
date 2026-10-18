@@ -267,3 +267,37 @@ Trinidad & Tobago tab: strip opens TTT, IETV, Synergy TV, Gayelle, Bizz TV, CNC3
 Tobago Updates, CBC TV8, ZIZ TV, teleSUR, SkyNews, AlJazeera; TTT plays at 1280×720 within 10 s; CNC3 card
 reads "CNC3 is off air right now" with the cnc3.co.tt link; TV6 card links tv6tnt.com; ABS TV (Antigua)
 appears in the Caribbean picker as "live TV · TegoTV".
+
+### 9.2 Guyana strip (2026-10-18)
+
+**Audit on the hub (Guyana tab):** HGPTV 1280×720, MTV Guyana 1920×1080, Little Guyana TV 1280×720 and
+teleSUR played; NCN Guyana showed the off-air card. Root cause for NCN: the strip used `@NCNGuyana`, while
+`ncnguyana.com/live` links `@ncn.guyana` — a different channel, and the one that streams the newscasts
+("Streamed 3 weeks ago / 1 month ago" on its Streams tab; `@NCNGuyana` has never streamed).
+
+**Station-by-station source check (iptv-org GY list, 50 channels, 6 with streams):**
+
+| Station | Finding | Result |
+|---|---|---|
+| NCN | own live page → YouTube `@ncn.guyana` | handle fixed; off-air card links ncnguyana.com/live |
+| DTV-8 | `dtv8.net` embeds `watch.davestv8.com/embed.html` — Cloudflare country rule, 403 outside Guyana (also for the embed page); site links YouTube `@DavesTV8` | YouTube auto-detect + official link; HLS deliberately not hard-coded |
+| Ignite TV | bozztv HLS 404; `ignitenews.com` → YouTube `@ignitenewsgy` | YouTube auto-detect + official link |
+| Parliament of Guyana | site → livestream.com + YouTube `@parliamentofguyana1710` | YouTube auto-detect + official link |
+| GTN Canada | dstreamone HLS, CORS *, plays from here despite iptv-org's geo-blocked label; broadcasts into GY | added as direct HLS |
+| GMTV | Akamai URL 404 | not added |
+| E-Networks (E1–E3) | `enetworks.gy/tv` 403 (WAF) | not added |
+| GTN NY/Orlando/SFL, GuyBai, GuySports | `guyanatvnetwork.com` → `kalingo.tv`, a parked/ad page with no player; dstreamone sibling paths 404 | not added |
+| CTV19 | Twitch only | not added |
+| Learning Channel family, HBTV, KTV, NTN Berbice, PCN15, RCA, TVG, WRHM7, etc. | no public stream found | not added |
+
+**Change (c16657b81 merge).** `gy` strip order is now HGPTV, MTV Guyana, Little Guyana TV, GTN Canada
+(always-live HLS, so the tab opens on live TV), then NCN, DTV-8, Ignite News, Parliament of Guyana (YouTube
+auto-detect, official-page link when off air), then teleSUR, Canal I, Venevisión, TVJ, Sky, Al Jazeera. T&T:
+Parliament (ParlView) and Tobago Channel 5 off-air cards also link their official sites. Tests: Guyana
+section in `tests/live-news-hls.test.mjs` (78/78 with the earlier suites); validator 4/4 Guyana HLS OK.
+
+**Shipped and verified on `127.0.0.1:3100`** (service pid 11426): Guyana tab strip = HGPTV, MTV Guyana,
+Little Guyana TV, GTN Canada, NCN, DTV-8, Ignite News, Parliament of Guyana, teleSUR, Canal I, Venevisión,
+TVJ, SkyNews, AlJazeera; opens on HGPTV (1280×720); GTN Canada plays 1280×720; NCN / DTV-8 / Ignite /
+Parliament show the off-air card with links to ncnguyana.com/live, dtv8.net, ignitenews.com and
+parliament.gov.gy respectively (none was streaming at verification time).
