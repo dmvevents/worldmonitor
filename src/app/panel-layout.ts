@@ -1077,7 +1077,14 @@ export class PanelLayoutManager implements AppModule {
         Object.entries(settings).filter(([key, cfg]) => cfg.enabled && key !== 'map').map(([key]) => key);
       const current = enabledOf(tab.panelSettings);
       const target = new Set(enabledOf(expected.panelSettings));
-      if (current.length >= target.size || !current.every((key) => target.has(key))) continue;
+      // The preset's own panels: those the host variant does not list by default.
+      // A preset tab with none of them enabled was seeded or snapshotted by a
+      // build that could not create them — repair it even if it also carries
+      // shared panels the host added (a real customisation keeps at least one).
+      const own = preset.panelKeys.filter((key) => ALL_PANELS[key] && !isPanelInVariantDefaults(key));
+      const lostOwnPanels = own.length > 0 && own.every((key) => !tab.panelSettings[key]?.enabled);
+      const strictSubset = current.length < target.size && current.every((key) => target.has(key));
+      if (!lostOwnPanels && !strictSubset) continue;
       tab.panelSettings = expected.panelSettings;
       tab.panelOrder = expected.panelOrder;
       changed = true;

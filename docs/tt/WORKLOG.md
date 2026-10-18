@@ -274,3 +274,8 @@ browser origin carried leftover settings from running the `tt` variant on the sa
 now add their panels from the cross-variant registry with the source variant's config, and `healPresetTabs`
 repairs already-seeded preset tabs whose enabled set is a strict subset of the preset. The "TECH" pill in
 the header is the variant switcher, not the active variant.
+
+Follow-ups in the same round: the restored active tab is re-applied at boot when it enables panels the
+boot set never created (switching tabs is a no-op for the active tab), and the repair also covers a preset
+tab whose snapshot was overwritten by an older build with shared panels only (none of its own panels
+enabled). Verified headless in four scenarios: fresh profile, old seed, restore-at-boot, overwritten snapshot.
