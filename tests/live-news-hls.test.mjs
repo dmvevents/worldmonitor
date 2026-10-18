@@ -471,3 +471,53 @@ describe('CSP configuration', () => {
       'Tauri CSP media-src must allow localhost sidecar media origins');
   });
 });
+
+// ── 12. TegoTV (T&T free-to-air) and official-page off-air links ──
+
+describe('TegoTV channels and official live-page links', () => {
+  const channelDef = (id) => liveNewsSrc.match(new RegExp(`\\{\\s*id:\\s*'${id}'[^}]*\\}`))?.[0] ?? '';
+
+  it('TegoTV channels resolve at play time (tegoChannel) and are listed in the Caribbean picker', () => {
+    const expected = { 'ttt-live': 1, 'ietv': 11, 'synergy-tv': 2, 'gayelle-tv': 3, 'abs-tv-antigua': 10, 'plus-tv': 13 };
+    const caribbean = liveNewsSrc.match(/key:\s*'caribbean'[^\]]*\]/)?.[0] ?? '';
+    for (const [id, tego] of Object.entries(expected)) {
+      assert.match(channelDef(id), new RegExp(`tegoChannel:\\s*${tego}\\b`), `${id} should carry tegoChannel ${tego}`);
+      assert.ok(caribbean.includes(`'${id}'`), `${id} should be in the Caribbean region list`);
+    }
+    // TTT and IETV keep their YouTube handle as the fallback path.
+    assert.match(channelDef('ttt-live'), /handle:\s*'@TTTLiveOnline'/);
+    assert.match(channelDef('ietv'), /handle:\s*'@IETVTT'/);
+  });
+
+  it('TegoTV URLs are never hard-coded: no sibercdn token URL in source', () => {
+    assert.doesNotMatch(liveNewsSrc, /sibercdn\.com/, 'tokenised TegoTV URLs expire; resolve them via /api/tego/stream');
+  });
+
+  it('the player resolves tegoChannel through the tego-live service and retries once on expiry', () => {
+    assert.match(liveNewsSrc, /import \{ resolveTegoStreamUrl \} from '@\/services\/tego-live'/);
+    assert.match(liveNewsSrc, /resolveTegoStreamUrl\(tegoChannel, this\.tegoRetry\.has\(/);
+    const svc = readSrc('src/services/tego-live.ts');
+    assert.match(svc, /\/api\/tego\/stream\?channel=\$\{channel\}/);
+    assert.match(svc, /data\.url\.startsWith\('https:\/\/'\)/, 'only https manifests are accepted from the hub');
+  });
+
+  it('CNC3 and TV6 off-air cards link to the official live page, in a new tab, never framed', () => {
+    assert.match(channelDef('cnc3'), /officialLiveUrl:\s*'https:\/\/www\.cnc3\.co\.tt\/live-stream\/'/);
+    assert.match(channelDef('tv6-news'), /officialLiveUrl:\s*'https:\/\/www\.tv6tnt\.com\/watch_live\/'/);
+    // YouTube auto-detect stays: both keep their handles.
+    assert.match(channelDef('cnc3'), /handle:\s*'@CNC3Television'/);
+    assert.match(channelDef('tv6-news'), /handle:\s*'@tv6news'/);
+    const offline = liveNewsSrc.slice(liveNewsSrc.indexOf('private showOfflineMessage'), liveNewsSrc.indexOf('private showEmbedError'));
+    assert.match(offline, /live-official-page" href="\$\{officialUrl\}" target="_blank" rel="noopener noreferrer"/);
+    assert.match(offline, /sanitizeUrl\(channel\.officialLiveUrl\)/, 'official URL must be sanitized');
+    assert.doesNotMatch(offline, /<iframe/, 'official pages are linked, not framed');
+    assert.ok(readSrc('src/locales/en.json').includes('"watchOnOfficialSite"'), 'locale key present');
+  });
+
+  it('front door serves /api/tego/stream and /api/tego/channels through the resolver', () => {
+    const hub = readSrc('scripts/tt-hub-server.mjs');
+    assert.match(hub, /url\.pathname === '\/api\/tego\/stream' \|\| url\.pathname === '\/api\/tego\/channels'/);
+    assert.match(hub, /tt-tego-resolver\.mjs/);
+    assert.match(hub, /\/\^\\d\{1,6\}\$\/\.test\(id\)/, 'channel id must be validated as numeric');
+  });
+});

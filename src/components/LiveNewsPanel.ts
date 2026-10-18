@@ -69,6 +69,9 @@ export interface LiveChannel {
   /** TegoTV channel id (T&T free-to-air stations). The hub's /api/tego/stream resolves it to a
    *  short-lived tokenised HLS URL at play time; see scripts/tt-tego-resolver.mjs. */
   tegoChannel?: number;
+  /** Broadcaster's own live page, offered as an external link on the off-air card when the station
+   *  streams only on its site (e.g. a Dailymotion embed locked to that domain). Never framed or proxied. */
+  officialLiveUrl?: string;
   useFallbackOnly?: boolean; // Skip auto-detection, always use fallback
   geoAvailability?: string[]; // ISO 3166-1 alpha-2 codes; undefined = available everywhere
 }
@@ -200,9 +203,9 @@ export const OPTIONAL_LIVE_CHANNELS: LiveChannel[] = [
   // Caribbean (tt variant). Handles verified 2026-10-14; most stream only during newscasts /
   // sittings, so they resolve to live when on air and otherwise show the channel's offline card.
   { id: 'ttt-live', name: 'TTT Live Online', handle: '@TTTLiveOnline', tegoChannel: 1 },  // UCf58CbplZsDbH9wPMYoOTFw; 24/7 HLS via TegoTV, YouTube as fallback
-  { id: 'cnc3', name: 'CNC3', handle: '@CNC3Television' },                             // UChEuHwDYri-GtZJP6Tu1nTw
+  { id: 'cnc3', name: 'CNC3', handle: '@CNC3Television', officialLiveUrl: 'https://www.cnc3.co.tt/live-stream/' },  // UChEuHwDYri-GtZJP6Tu1nTw; live is a Dailymotion embed restricted to cnc3.co.tt
   { id: 'cnc3-prime', name: 'CNC3 Prime', handle: '@CNC3TelevisionPrime' },            // UC4aMlN15zu2pX3fMB4HAsNA
-  { id: 'tv6-news', name: 'TV6 News', handle: '@tv6news' },                            // UC7ukEQ5luwqMorgbxAGKo1Q
+  { id: 'tv6-news', name: 'TV6 News', handle: '@tv6news', officialLiveUrl: 'https://www.tv6tnt.com/watch_live/' },  // UC7ukEQ5luwqMorgbxAGKo1Q; live is a Dailymotion embed restricted to tv6tnt.com
   { id: 'tt-parliament', name: 'Parliament of T&T (ParlView)', handle: '@ParlView' },  // live sittings; @ttparliament is the archive channel
   { id: 'tobago-channel5', name: 'Tobago Channel 5', handle: '@TobagoChannel5' },      // UCj3EKt5lPhsFxc5E9zFDeBQ
   { id: 'tobago-updates', name: 'Tobago Updates', handle: '@TobagoUpdates' },          // UC4TYtHs29DONCkjRFcMXqgw
@@ -218,6 +221,7 @@ export const OPTIONAL_LIVE_CHANNELS: LiveChannel[] = [
   { id: 'ibn-tv', name: 'IBN (T&T)', tegoChannel: 8, useFallbackOnly: true },
   { id: 'wack-visual-radio', name: 'WACK 90.1 FM Visual Radio (T&T)', tegoChannel: 9, useFallbackOnly: true },
   { id: 'plus-tv', name: 'Plus TV (T&T)', tegoChannel: 13, useFallbackOnly: true },
+  { id: 'abs-tv-antigua', name: 'ABS TV (Antigua)', tegoChannel: 10, useFallbackOnly: true },
   { id: 'ncn-guyana', name: 'NCN Guyana', handle: '@NCNGuyana' },                      // UCkA-XjVXNMtLNkgC03F1HBg
   { id: 'tvj', name: 'Television Jamaica', handle: '@TelevisionJamaica' },             // UC1Ga-Hv1-dLz9zoAz81d9tA
   { id: 'cvm-tv', name: 'CVM TV News', handle: '@cvmtvnews' },                          // newscast channel; @CVMTV is the general channel
@@ -272,7 +276,7 @@ const _REGION_ENTRIES: { key: string; labelKey: string; channelIds: string[] }[]
   { key: 'me', labelKey: 'components.liveNews.regionMiddleEast', channelIds: ['alarabiya', 'aljazeera', 'al-hadath', 'sky-news-arabia', 'trt-world', 'iran-intl', 'press-tv', 'cgtn-arabic', 'kan-11', 'i24-news', 'asharq-news', 'aljazeera-arabic', 'aljazeera-mubasher', 'alarabiya-business', 'al-qahera-news', 'dw-arabic', 'rt-arabic', 'rudaw'] },
   { key: 'africa', labelKey: 'components.liveNews.regionAfrica', channelIds: ['africanews', 'channels-tv', 'ktn-news', 'enca', 'sabc-news', 'arise-news'] },
   { key: 'oc', labelKey: 'components.liveNews.regionOceania', channelIds: ['abc-news-au'] },
-  { key: 'caribbean', labelKey: 'components.liveNews.regionCaribbean', channelIds: ['ttt-live', 'cnc3', 'cnc3-prime', 'tv6-news', 'tt-parliament', 'tobago-channel5', 'tobago-updates', 'ietv', 'synergy-tv', 'gayelle-tv', 'wpg10-tv', 'tv-jaagriti', 'trinity-tv', 'bhakti-tv', 'ibn-tv', 'wack-visual-radio', 'plus-tv', 'ncn-guyana', 'tvj', 'cvm-tv', 'abs-antigua', 'cbc-barbados', 'gbn-grenada', 'telesur-english', 'bizz-tv', 'sankhya-tv', 'scorch-tv', 'hgptv', 'mtv-guyana', 'little-guyana-tv', 'cbc-tv8', 'tvj-hls', 'gnn-tv', 'dbs-tv', 'pointe-tv', 'zns-tv', 'ziz-tv', 'nevis-tv', 'caribbean-hot7', 'guardian-talk-radio', 'fame95', 'riddim-hope-tv', 'islamic-network-tt', 'antena7', 'noticias16', 'tv-marti', 'prensa-latina-tv', 'haiti-news-channel', 'rth-tv1', 'telemundo-pr'] },
+  { key: 'caribbean', labelKey: 'components.liveNews.regionCaribbean', channelIds: ['ttt-live', 'cnc3', 'cnc3-prime', 'tv6-news', 'tt-parliament', 'tobago-channel5', 'tobago-updates', 'ietv', 'synergy-tv', 'gayelle-tv', 'wpg10-tv', 'tv-jaagriti', 'trinity-tv', 'bhakti-tv', 'ibn-tv', 'wack-visual-radio', 'plus-tv', 'abs-tv-antigua', 'ncn-guyana', 'tvj', 'cvm-tv', 'abs-antigua', 'cbc-barbados', 'gbn-grenada', 'telesur-english', 'bizz-tv', 'sankhya-tv', 'scorch-tv', 'hgptv', 'mtv-guyana', 'little-guyana-tv', 'cbc-tv8', 'tvj-hls', 'gnn-tv', 'dbs-tv', 'pointe-tv', 'zns-tv', 'ziz-tv', 'nevis-tv', 'caribbean-hot7', 'guardian-talk-radio', 'fame95', 'riddim-hope-tv', 'islamic-network-tt', 'antena7', 'noticias16', 'tv-marti', 'prensa-latina-tv', 'haiti-news-channel', 'rth-tv1', 'telemundo-pr'] },
 ];
 export const OPTIONAL_CHANNEL_REGIONS: { key: string; labelKey: string; channelIds: string[] }[] = [
   ..._REGION_ENTRIES,
@@ -1323,6 +1327,9 @@ export class LiveNewsPanel extends Panel {
     const safeName = escapeHtml(channel.name);
     const canReplay = !!channel.replayVideoId;
     const hasNextLive = this.channels.some((c) => c.id !== channel.id && this.isAlwaysLive(c));
+    const officialUrl = channel.officialLiveUrl && /^https:\/\//.test(channel.officialLiveUrl) ? sanitizeUrl(channel.officialLiveUrl) : '';
+    let officialHost = '';
+    try { officialHost = officialUrl ? new URL(officialUrl).hostname.replace(/^www\./, '') : ''; } catch { officialHost = ''; }
     setTrustedHtml(this.content, trustedHtml(`
       <div class="live-offline live-offline-compact">
         <div class="offline-icon">📺</div>
@@ -1330,6 +1337,7 @@ export class LiveNewsPanel extends Panel {
         <div class="offline-actions">
           ${hasNextLive ? `<button class="offline-retry live-next-live">${t('components.liveNews.nextLive')}</button>` : ''}
           ${canReplay ? `<button class="offline-retry live-play-replay">${t('components.liveNews.playReplay')}</button>` : ''}
+          ${officialUrl ? `<a class="offline-retry live-official-page" href="${officialUrl}" target="_blank" rel="noopener noreferrer">${t('components.liveNews.watchOnOfficialSite', { host: escapeHtml(officialHost) })}</a>` : ''}
           <button class="offline-retry live-retry">${t('common.retry')}</button>
         </div>
       </div>

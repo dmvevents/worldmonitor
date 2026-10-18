@@ -2017,6 +2017,7 @@
       "botCheck": "YouTube is requesting sign-in to play {{name}}",
       "signInToYouTube": "Sign in to YouTube",
       "openOnYouTube": "Open on YouTube",
+      "watchOnOfficialSite": "Watch on {{host}}",
       "playLiveFeed": "Play live feed",
       "readyStatus": "Ready when you are",
       "manage": "Manage channels",

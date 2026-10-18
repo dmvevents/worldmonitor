@@ -2040,7 +2040,8 @@
       "iptvHint": "Live TV streams from the public iptv-org index, verified for browser playback. Pick a country or search, then add to your strip.",
       "iptvPrompt": "Choose a country or type to search.",
       "iptvAdded": "Added",
-      "iptvUnavailable": "IPTV directory not available. Run `node scripts/iptv-sync.mjs` to build it."
+      "iptvUnavailable": "IPTV directory not available. Run `node scripts/iptv-sync.mjs` to build it.",
+      "watchOnOfficialSite": "Watch on {{host}}"
     },
     "map": {
       "showMap": "मानचित्र दिखाएं",
