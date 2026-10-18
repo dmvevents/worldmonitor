@@ -1160,7 +1160,7 @@ const GY_FEEDS: Record<string, Feed[]> = {
   // National outlets first; mirrors server/worldmonitor/news/v1/_feeds.ts (see notes there).
   'gy-news': [
     { name: 'Stabroek News', url: rss('https://news.google.com/rss/search?q=site:stabroeknews.com+when:1d&hl=en-US&gl=US&ceid=US:en') },
-    { name: 'Kaieteur News', url: rss('https://www.kaieteurnewsonline.com/feed/') },
+    { name: 'Kaieteur News', url: rss('https://kaieteurnewsonline.com/feed/') },
     { name: 'Guyana Chronicle', url: rss('https://guyanachronicle.com/feed/') },
     { name: 'News Room Guyana', url: rss('https://news.google.com/rss/search?q=site:newsroom.gy+when:1d&hl=en-US&gl=US&ceid=US:en') },
     { name: 'Demerara Waves', url: rss('https://demerarawaves.com/feed/') },

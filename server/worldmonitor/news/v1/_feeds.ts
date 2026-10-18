@@ -583,7 +583,7 @@ export const VARIANT_FEEDS: Record<string, Record<string, ServerFeed[]>> = {
     // reachable RSS (probed 2026-10-18) and use Google News site queries; the rest are direct.
     'gy-news': [
       { name: 'Stabroek News', url: gn('site:stabroeknews.com when:1d') },
-      { name: 'Kaieteur News', url: 'https://www.kaieteurnewsonline.com/feed/' },
+      { name: 'Kaieteur News', url: 'https://kaieteurnewsonline.com/feed/' },
       { name: 'Guyana Chronicle', url: 'https://guyanachronicle.com/feed/' },
       { name: 'News Room Guyana', url: gn('site:newsroom.gy when:1d') },
       { name: 'Demerara Waves', url: 'https://demerarawaves.com/feed/' },
