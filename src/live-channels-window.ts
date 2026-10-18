@@ -31,6 +31,7 @@ interface IptvDirectoryEntry {
   logo?: string;
   notNonStop?: boolean;
   geoBlocked?: boolean;
+  needsProxy?: boolean;
 }
 
 interface IptvDirectory {
@@ -371,8 +372,10 @@ export async function initLiveChannelsWindow(containerEl?: HTMLElement): Promise
       const term = search.value.trim().toLowerCase();
       const country = countrySel.value;
       const currentIds = new Set(channels.map((c) => c.id));
+      // A typed search spans every country (the strip is about finding a station, not a region);
+      // the country filter applies when the box is empty.
       const matches = entries.filter((e) => {
-        if (country && e.country !== country) return false;
+        if (country && !term && e.country !== country) return false;
         if (!term) return true;
         const hay = `${e.name} ${(e.altNames ?? []).join(' ')} ${e.countryName} ${e.categories.join(' ')}`.toLowerCase();
         return hay.includes(term);
@@ -407,7 +410,7 @@ export async function initLiveChannelsWindow(containerEl?: HTMLElement): Promise
         if (e.notNonStop) label.title = t('components.liveNews.scheduledHint') ?? 'Streams during newscasts only — may be off air';
         const meta = document.createElement('span');
         meta.className = 'live-news-iptv-meta';
-        meta.textContent = [e.countryName, e.categories.slice(0, 2).join(', '), e.quality, e.geoBlocked ? 'geo-blocked' : ''].filter(Boolean).join(' · ');
+        meta.textContent = [e.countryName, e.categories.slice(0, 2).join(', '), e.quality, e.needsProxy ? 'via hub proxy' : '', e.geoBlocked ? 'geo-blocked' : ''].filter(Boolean).join(' · ');
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'live-news-manage-add-btn live-news-iptv-add' + (added ? ' added' : '');
@@ -415,7 +418,10 @@ export async function initLiveChannelsWindow(containerEl?: HTMLElement): Promise
         btn.disabled = added;
         btn.addEventListener('click', () => {
           if (channels.some((c) => c.id === e.id)) return;
-          channels.push({ id: e.id, name: e.name, hlsUrl: e.hlsUrl, useFallbackOnly: true });
+          // No-CORS streams play through the hub's same-origin proxy (GA front door); absolute so the
+          // panel's https/local-origin check accepts it.
+          const hlsUrl = e.needsProxy ? `${window.location.origin}/api/iptv-proxy?url=${encodeURIComponent(e.hlsUrl)}` : e.hlsUrl;
+          channels.push({ id: e.id, name: e.name, hlsUrl, useFallbackOnly: true });
           saveChannelsToStorage(channels);
           renderList(listEl);
           render();

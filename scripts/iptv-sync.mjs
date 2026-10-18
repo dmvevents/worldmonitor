@@ -5,8 +5,8 @@
  *
  * Keeps: every channel from the Caribbean + Guiana Shield countries (any genre)
  * plus worldwide channels tagged `news`. Each stream is probed from this machine:
- * HTTP 200, a `#EXTM3U` manifest and an `Access-Control-Allow-Origin` header
- * (hls.js in a browser needs CORS). Only verified https streams are written.
+ * HTTP 200 and a `#EXTM3U` manifest. Streams without an `Access-Control-Allow-Origin`
+ * header are kept but flagged `needsProxy` (the hub plays them via its same-origin proxy).
  *
  *   node scripts/iptv-sync.mjs                 # default scope
  *   IPTV_COUNTRIES=TT,GY node scripts/iptv-sync.mjs --no-news
@@ -41,7 +41,7 @@ async function probe(url) {
     const res = await fetch(url, { headers: { 'User-Agent': UA, Origin: 'https://worldmonitor.app' }, redirect: 'follow', signal: AbortSignal.timeout(12_000) });
     const text = (await res.text()).slice(0, 4000);
     const cors = res.headers.get('access-control-allow-origin');
-    return { ok: res.ok && text.includes('#EXTM3U') && !!cors, status: res.status, cors: cors ?? '-' };
+    return { ok: res.ok && text.includes('#EXTM3U'), cors: cors ?? '-', hasCors: !!cors, status: res.status };
   } catch (err) {
     return { ok: false, status: err?.name === 'TimeoutError' ? 'timeout' : 'error', cors: '-' };
   }
@@ -77,11 +77,13 @@ const probed = await mapLimit(candidates, CONCURRENCY, async (s) => {
 
 // One entry per channel: prefer the highest quality verified stream.
 const qualityRank = (q) => { const m = /(\d+)p/.exec(q || ''); return m ? Number(m[1]) : 0; };
+// One entry per channel: prefer streams the browser can fetch directly (CORS), then quality.
 const best = new Map();
+const rank = (x) => (x.probe.hasCors ? 1000 : 0) + qualityRank(x.quality);
 for (const s of probed) {
   if (!s.probe.ok) continue;
   const prev = best.get(s.channel);
-  if (!prev || qualityRank(s.quality) > qualityRank(prev.quality)) best.set(s.channel, s);
+  if (!prev || rank(s) > rank(prev)) best.set(s.channel, s);
 }
 const directory = [...best.values()].map((s) => {
   const c = byId.get(s.channel);
@@ -101,6 +103,9 @@ const directory = [...best.values()].map((s) => {
     notNonStop: Array.isArray(s.labels) && s.labels.some((x) => /not 24\/7/i.test(x)) ? true : undefined,
     geoBlocked: Array.isArray(s.labels) && s.labels.some((x) => /geo-?blocked/i.test(x)) ? true : undefined,
     cors: s.probe.cors,
+    // No CORS header: hls.js cannot fetch it directly; the hub plays it through its same-origin
+    // /api/iptv-proxy (scripts/tt-hub-server.mjs), which only accepts hosts listed in this file.
+    needsProxy: s.probe.hasCors ? undefined : true,
   };
 }).sort((a, b) => a.countryName.localeCompare(b.countryName) || a.name.localeCompare(b.name));
 
@@ -114,6 +119,7 @@ writeFileSync(OUT, JSON.stringify({
   scope: { countries: [...COUNTRIES], newsWorldwide: INCLUDE_NEWS },
   probed: candidates.length,
   verified: directory.length,
+  needsProxy: directory.filter((d) => d.needsProxy).length,
   byCountry,
   channels: directory,
 }, null, 1));

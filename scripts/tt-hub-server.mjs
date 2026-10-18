@@ -10,7 +10,7 @@
  *   HUB_PORT=3200 SIDECAR_PORT=46123 DIST_DIR=dist node scripts/tt-hub-server.mjs
  */
 import http from 'node:http';
-import { createReadStream, existsSync, statSync } from 'node:fs';
+import { createReadStream, existsSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -94,6 +94,55 @@ function proxyApi(req, res) {
 // The sidecar only knows /api/youtube/live as a cloud-relay route (503 in self-hosted mode), so the
 // front door runs the edge handler itself: api/youtube/live.js resolves @handle → live videoId /
 // hlsUrl / latestVideoId straight from youtube.com, which is what the Live News panel needs.
+// Same-origin HLS proxy for directory entries flagged needsProxy (manifest reachable but no CORS
+// header). Closed allowlist: only hostnames present in public/data/iptv-directory.json, https only,
+// no header spoofing — it changes the fetching origin, not the network location (geo-blocks stay).
+let iptvHosts = null;
+let iptvHostsLoadedAt = 0;
+function loadIptvHosts() {
+  if (iptvHosts && Date.now() - iptvHostsLoadedAt < 60_000) return iptvHosts;
+  try {
+    const dir = JSON.parse(readFileSync(path.join(DIST, 'data', 'iptv-directory.json'), 'utf8'));
+    iptvHosts = new Set((dir.channels || []).map((c) => { try { return new URL(c.hlsUrl).hostname; } catch { return null; } }).filter(Boolean));
+  } catch { iptvHosts = iptvHosts || new Set(); }
+  iptvHostsLoadedAt = Date.now();
+  return iptvHosts;
+}
+const IPTV_UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36';
+function proxiedUrl(absolute) { return `/api/iptv-proxy?url=${encodeURIComponent(absolute)}`; }
+async function serveIptvProxy(res, url) {
+  const target = url.searchParams.get('url') || '';
+  let upstream;
+  try { upstream = new URL(target); } catch { res.writeHead(400); return res.end('bad url'); }
+  if (upstream.protocol !== 'https:' || !loadIptvHosts().has(upstream.hostname)) { res.writeHead(403, { 'content-type': 'text/plain' }); return res.end('host not in IPTV directory'); }
+  try {
+    const r = await fetch(upstream, { headers: { 'User-Agent': IPTV_UA, Accept: '*/*' }, redirect: 'follow', signal: AbortSignal.timeout(20_000) });
+    const ct = r.headers.get('content-type') || '';
+    const isManifest = /mpegurl/i.test(ct) || /\.m3u8(\?|$)/i.test(upstream.pathname);
+    if (!r.ok) { res.writeHead(r.status, { 'content-type': 'text/plain' }); return res.end(`upstream ${r.status}`); }
+    if (isManifest) {
+      const text = await r.text();
+      const base = new URL(r.url || upstream);
+      const rewritten = text.split('\n').map((line) => {
+        const l = line.trim();
+        if (!l) return line;
+        if (l.startsWith('#')) return line.replace(/URI="([^"]+)"/g, (_m, u) => `URI="${proxiedUrl(new URL(u, base).toString())}"`);
+        try { return proxiedUrl(new URL(l, base).toString()); } catch { return line; }
+      }).join('\n');
+      res.writeHead(200, { 'content-type': 'application/vnd.apple.mpegurl', 'cache-control': 'no-store' });
+      return res.end(rewritten);
+    }
+    const headers = { 'content-type': ct || 'application/octet-stream', 'cache-control': 'no-store' };
+    const len = r.headers.get('content-length'); if (len) headers['content-length'] = len;
+    res.writeHead(200, headers);
+    const { Readable } = await import('node:stream');
+    Readable.fromWeb(r.body).pipe(res);
+  } catch (err) {
+    if (!res.headersSent) res.writeHead(502, { 'content-type': 'text/plain' });
+    res.end(`iptv proxy error: ${String(err?.message || err).slice(0, 160)}`);
+  }
+}
+
 let youtubeLiveHandler = null;
 async function serveYoutubeLive(req, res, url) {
   try {
@@ -115,6 +164,7 @@ async function serveYoutubeLive(req, res, url) {
 const server = http.createServer((req, res) => {
   const url = new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`);
   if (url.pathname === '/api/youtube/live') return void serveYoutubeLive(req, res, url);
+  if (url.pathname === '/api/iptv-proxy') return void serveIptvProxy(res, url);
   if (url.pathname.startsWith('/api/')) return proxyApi(req, res);
   if (url.pathname === '/healthz') { res.writeHead(200, { 'content-type': 'application/json' }); return res.end(JSON.stringify({ ok: true, dist: existsSync(path.join(DIST, 'dashboard.html')), sidecarPort: SIDECAR_PORT })); }
   if (req.method !== 'GET' && req.method !== 'HEAD') { res.writeHead(405); return res.end(); }

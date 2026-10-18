@@ -1,7 +1,7 @@
 {
  "source": "https://github.com/iptv-org/iptv (iptv-org.github.io/api)",
  "licence": "Channel metadata CC0 / streams are the broadcasters' public URLs; verified from this machine only",
- "generatedAt": "2026-10-17T23:24:11.608Z",
+ "generatedAt": "2026-10-18T00:12:31.905Z",
  "scope": {
   "countries": [
    "TT",
@@ -40,7 +40,8 @@
   "newsWorldwide": true
  },
  "probed": 1949,
- "verified": 998,
+ "verified": 999,
+ "needsProxy": 8,
  "byCountry": {
   "AF": 1,
   "AL": 5,
@@ -51,7 +52,7 @@
   "AU": 11,
   "AZ": 1,
   "BS": 2,
-  "BD": 1,
+  "BD": 2,
   "BY": 2,
   "BE": 1,
   "BZ": 1,
@@ -64,14 +65,14 @@
   "CM": 3,
   "CA": 9,
   "CL": 9,
-  "CN": 11,
+  "CN": 10,
   "CO": 6,
   "CR": 1,
   "HR": 1,
   "CU": 1,
   "CW": 3,
   "CZ": 2,
-  "DO": 186,
+  "DO": 188,
   "EC": 1,
   "EG": 1,
   "FI": 1,
@@ -88,7 +89,7 @@
   "HN": 7,
   "HK": 1,
   "IS": 1,
-  "IN": 236,
+  "IN": 235,
   "ID": 2,
   "IR": 4,
   "IQ": 11,
@@ -111,9 +112,8 @@
   "MD": 1,
   "MC": 1,
   "MA": 3,
-  "MM": 1,
   "NL": 1,
-  "NG": 2,
+  "NG": 1,
   "OM": 1,
   "PK": 12,
   "PS": 3,
@@ -123,7 +123,7 @@
   "PH": 2,
   "PL": 3,
   "PT": 1,
-  "PR": 18,
+  "PR": 19,
   "QA": 8,
   "RO": 12,
   "RU": 13,
@@ -144,13 +144,13 @@
   "TG": 2,
   "TT": 5,
   "TR": 19,
-  "UA": 4,
+  "UA": 7,
   "AE": 6,
   "UK": 9,
-  "US": 89,
+  "US": 85,
   "UZ": 2,
   "VE": 40,
-  "VN": 2,
+  "VN": 4,
   "YE": 2
  },
  "channels": [
@@ -737,6 +737,25 @@
    "hlsUrl": "https://zns-edge1.streamcomedia.cloud/znstv13/zns1080p_stream/playlist.m3u8",
    "quality": "1080p",
    "cors": "*"
+  },
+  {
+   "id": "iptv-ekusheytv-bd",
+   "iptvId": "EkusheyTV.bd",
+   "name": "Ekushey TV",
+   "altNames": [
+    "একুশে টেলিভিশন"
+   ],
+   "country": "BD",
+   "countryName": "Bangladesh",
+   "categories": [
+    "News"
+   ],
+   "logo": "https://i.imgur.com/lRpkGHj.png",
+   "website": "https://www.ekushey-tv.com/",
+   "hlsUrl": "https://ekusheyserver.com/etvlivesn.m3u8",
+   "quality": "480p",
+   "cors": "-",
+   "needsProxy": true
   },
   {
    "id": "iptv-nantv-bd",
@@ -1767,23 +1786,6 @@
    "cors": "*"
   },
   {
-   "id": "iptv-dongguancomprehensivenewschannel-cn",
-   "iptvId": "DongguanComprehensiveNewsChannel.cn",
-   "name": "Dongguan Comprehensive News Channel",
-   "altNames": [
-    "东莞广播电视台"
-   ],
-   "country": "CN",
-   "countryName": "China",
-   "categories": [
-    "News"
-   ],
-   "logo": "https://www.tvchinese.net/uploads/tv/dgtv1.jpg",
-   "website": "https://dgrtv.sun0769.com/index.php/online2/4",
-   "hlsUrl": "https://stream.sun0769.com/dgrtv1/mp4tv1_800/index.m3u8",
-   "cors": "*"
-  },
-  {
    "id": "iptv-harbincomprehensivenewschannel-cn",
    "iptvId": "HarbinComprehensiveNewsChannel.cn",
    "name": "Harbin Comprehensive News Channel",
@@ -2043,21 +2045,6 @@
    "logo": "https://i.imgur.com/hKo8ApU.png",
    "website": "https://www.currenttime.tv/",
    "hlsUrl": "https://rfe-ingest.akamaized.net/hls/live/2033043/tvmc05/master.m3u8",
-   "quality": "1080p",
-   "cors": "*"
-  },
-  {
-   "id": "iptv-a7tv-do",
-   "iptvId": "A7TV.do",
-   "name": "A7 TV",
-   "country": "DO",
-   "countryName": "Dominican Republic",
-   "categories": [
-    "General"
-   ],
-   "logo": "https://a7tvjarabacoa.netlify.app/IMG_1968.PNG",
-   "website": "https://a7tvjarabacoa.netlify.app/#inicio",
-   "hlsUrl": "https://183.bozztv.com/ssh101/ssh101/a7tvjarabacoa/playlist.m3u8",
    "quality": "1080p",
    "cors": "*"
   },
@@ -2851,21 +2838,6 @@
    "cors": "*"
   },
   {
-   "id": "iptv-cttcanal49-do",
-   "iptvId": "CTTCanal49.do",
-   "name": "CTT Canal 49",
-   "country": "DO",
-   "countryName": "Dominican Republic",
-   "categories": [
-    "General"
-   ],
-   "logo": "https://i.imgur.com/jsi4qVb.jpg",
-   "hlsUrl": "https://cdnfox.hostlagarto.com/cct49/index.m3u8",
-   "quality": "1080p",
-   "notNonStop": true,
-   "cors": "*"
-  },
-  {
    "id": "iptv-cvvisiontv-do",
    "iptvId": "CVVisionTV.do",
    "name": "CV Vision TV",
@@ -2896,6 +2868,21 @@
    "logo": "https://i.imgur.com/6ML2z17.png",
    "website": "https://deultimominuto.net/",
    "hlsUrl": "https://soportedvb.click:3620/live/deultimominutomedialive.m3u8",
+   "cors": "*"
+  },
+  {
+   "id": "iptv-delpueblotv-do",
+   "iptvId": "DelPuebloTV.do",
+   "name": "Del Pueblo TV",
+   "country": "DO",
+   "countryName": "Dominican Republic",
+   "categories": [
+    "General"
+   ],
+   "logo": "https://imgur.com/Pw7ZUT1.jpg",
+   "website": "https://www.tvdominicana.net/livetv/watch/delpueblotv/49",
+   "hlsUrl": "https://vdopanel.jlahozconsulting.com:3869/hybrid/play.m3u8",
+   "notNonStop": true,
    "cors": "*"
   },
   {
@@ -3670,6 +3657,22 @@
    "cors": "*"
   },
   {
+   "id": "iptv-misioneltv-do",
+   "iptvId": "MisionELTV.do",
+   "name": "Mision ELTV",
+   "country": "DO",
+   "countryName": "Dominican Republic",
+   "categories": [
+    "Religious"
+   ],
+   "logo": "https://i.imgur.com/hwC1stN.png",
+   "website": "https://www.misioneltv.com/",
+   "hlsUrl": "https://rd.tvabierta.net/live/misioneltv.m3u8",
+   "quality": "720p",
+   "cors": "-",
+   "needsProxy": true
+  },
+  {
    "id": "iptv-montecristidigital8-do",
    "iptvId": "MontecristiDigital8.do",
    "name": "Montecristi Digital 8",
@@ -4402,6 +4405,23 @@
    "cors": "*"
   },
   {
+   "id": "iptv-teleimpacto-do",
+   "iptvId": "Teleimpacto.do",
+   "name": "Teleimpacto",
+   "country": "DO",
+   "countryName": "Dominican Republic",
+   "categories": [
+    "General"
+   ],
+   "logo": "https://i.imgur.com/dBEysOV.png",
+   "website": "https://teleimpacto52.com/",
+   "hlsUrl": "https://vpss2003.streamprolive.com/hls/live.m3u8",
+   "quality": "720p",
+   "notNonStop": true,
+   "cors": "-",
+   "needsProxy": true
+  },
+  {
    "id": "iptv-telemax-do",
    "iptvId": "Telemax.do",
    "name": "Telemax",
@@ -4510,6 +4530,22 @@
    "website": "https://teleradionorte.com/",
    "hlsUrl": "https://angelistic.live:3785/live/tvoficiallive.m3u8",
    "quality": "720p",
+   "cors": "*"
+  },
+  {
+   "id": "iptv-telesiglo-do",
+   "iptvId": "TELESIGLO.do",
+   "name": "TELESIGLO",
+   "country": "DO",
+   "countryName": "Dominican Republic",
+   "categories": [
+    "General"
+   ],
+   "logo": "https://www.vivalivetv.com/public/files/shows/0/1/2195-294x165-FFFFFF.jpg",
+   "website": "https://www.vivalivetv.com/channel/telesiglo",
+   "hlsUrl": "https://cnn.hostlagarto.com/telesiglo/tracks-v1a1/mono.m3u8",
+   "quality": "1080p",
+   "notNonStop": true,
    "cors": "*"
   },
   {
@@ -6137,21 +6173,6 @@
    "cors": "*"
   },
   {
-   "id": "iptv-22scopenews-in",
-   "iptvId": "22ScopeNews.in",
-   "name": "22Scope News",
-   "country": "IN",
-   "countryName": "India",
-   "categories": [
-    "News"
-   ],
-   "logo": "https://jiotvimages.cdn.jio.com/dare_images/images/22Scope_News.png",
-   "website": "https://22scope.com/",
-   "hlsUrl": "https://thelegitpro.in/HDlive/22scope/index.fmp4.m3u8",
-   "quality": "1080p",
-   "cors": "*"
-  },
-  {
    "id": "iptv-24news-in",
    "iptvId": "24News.in",
    "name": "24 News",
@@ -6427,7 +6448,7 @@
    ],
    "logo": "https://i.imgur.com/RhkbhZD.png",
    "website": "https://www.apnlive.com/",
-   "hlsUrl": "https://d1msejlow1t3l4.cloudfront.net/fta/apnnews/playlist.m3u8",
+   "hlsUrl": "https://mumt01.tangotv.in/O5aw8Zn3APN/index.m3u8",
    "quality": "576p",
    "cors": "*"
   },
@@ -10945,26 +10966,6 @@
    "cors": "*"
   },
   {
-   "id": "iptv-dvbtv-mm",
-   "iptvId": "DVBTV.mm",
-   "name": "DVB TV",
-   "altNames": [
-    "Democratic Voice of Burma",
-    "ဒီမိုကရေတစ်မြန်မာ့အသံ"
-   ],
-   "country": "MM",
-   "countryName": "Myanmar",
-   "categories": [
-    "News"
-   ],
-   "logo": "https://i.imgur.com/VdezHOv.png",
-   "website": "https://burmese.dvb.no/",
-   "hlsUrl": "https://live-stream.dvb.no/hls/stream_src/index.m3u8",
-   "quality": "720p",
-   "geoBlocked": true,
-   "cors": "*"
-  },
-  {
    "id": "iptv-nh-nl",
    "iptvId": "NH.nl",
    "name": "NH",
@@ -10981,20 +10982,6 @@
    "website": "https://www.nhnieuws.nl/",
    "hlsUrl": "https://takeoff.jetstre.am/?account=nhnieuws&file=live&output=playlist.m3u8&protocol=https&service=wowza&type=live",
    "quality": "1080p",
-   "cors": "*"
-  },
-  {
-   "id": "iptv-newscentral-ng",
-   "iptvId": "NewsCentral.ng",
-   "name": "News Central",
-   "country": "NG",
-   "countryName": "Nigeria",
-   "categories": [
-    "News"
-   ],
-   "logo": "https://i.imgur.com/qvCgI8N.png",
-   "website": "http://newscentral.africa/",
-   "hlsUrl": "https://wf.newscentral.ng:8443/hls/stream.m3u8",
    "cors": "*"
   },
   {
@@ -11796,6 +11783,21 @@
    "hlsUrl": "https://583ed2f226ac2.streamlock.net/theretrochannel/stream/playlist.m3u8",
    "quality": "1080p",
    "notNonStop": true,
+   "cors": "*"
+  },
+  {
+   "id": "iptv-triunfo969fm-pr",
+   "iptvId": "Triunfo969FM.pr",
+   "name": "Triunfo 96.9 FM",
+   "country": "PR",
+   "countryName": "Puerto Rico",
+   "categories": [
+    "Religious"
+   ],
+   "logo": "https://i.ibb.co/q0qt0h5/x-SCWAc-Jfp3.png",
+   "website": "https://www.triunfo969.fm/",
+   "hlsUrl": "https://59825a54e4454.streamlock.net:8443/william652/william652/playlist.m3u8",
+   "quality": "360p",
    "cors": "*"
   },
   {
@@ -13668,6 +13670,25 @@
    "cors": "*"
   },
   {
+   "id": "iptv-armytv-ua",
+   "iptvId": "ArmyTV.ua",
+   "name": "Army TV",
+   "altNames": [
+    "Армія ТБ"
+   ],
+   "country": "UA",
+   "countryName": "Ukraine",
+   "categories": [
+    "News"
+   ],
+   "logo": "https://i.imgur.com/pGByjbh.png",
+   "website": "http://armyfm.com.ua/",
+   "hlsUrl": "https://api-tv.ipnet.ua/api/v1/manifest/2118742632.m3u8",
+   "quality": "1080p",
+   "cors": "-",
+   "needsProxy": true
+  },
+  {
    "id": "iptv-channel24-ua",
    "iptvId": "Channel24.ua",
    "name": "Channel 24",
@@ -13684,6 +13705,26 @@
    "hlsUrl": "https://streamvideol1.luxnet.ua/news24/smil:news24.stream.smil/playlist.m3u8",
    "quality": "1080p",
    "cors": "*"
+  },
+  {
+   "id": "iptv-channel5-ua",
+   "iptvId": "Channel5.ua",
+   "name": "Channel 5",
+   "altNames": [
+    "5 канал",
+    "Пятый канал"
+   ],
+   "country": "UA",
+   "countryName": "Ukraine",
+   "categories": [
+    "News"
+   ],
+   "logo": "https://i.imgur.com/a9JJXPk.png",
+   "website": "http://5.ua/",
+   "hlsUrl": "https://api-tv.ipnet.ua/api/v1/manifest/2118742539.m3u8",
+   "quality": "1080p",
+   "cors": "-",
+   "needsProxy": true
   },
   {
    "id": "iptv-espresotv-ua",
@@ -13723,6 +13764,26 @@
    "hlsUrl": "https://dash4.antik.sk/live/test_uatv/playlist.m3u8",
    "quality": "1080p",
    "cors": "*"
+  },
+  {
+   "id": "iptv-kyiv-ua",
+   "iptvId": "Kyiv.ua",
+   "name": "Kyiv",
+   "altNames": [
+    "Київ",
+    "Київ 24"
+   ],
+   "country": "UA",
+   "countryName": "Ukraine",
+   "categories": [
+    "News"
+   ],
+   "logo": "https://i.imgur.com/TVuCY4N.png",
+   "website": "https://tv.kyiv.media/",
+   "hlsUrl": "https://api-tv.ipnet.ua/api/v1/manifest/1293296300.m3u8",
+   "quality": "1080p",
+   "cors": "-",
+   "needsProxy": true
   },
   {
    "id": "iptv-alarabiyaprograms-ae",
@@ -14786,48 +14847,17 @@
    "cors": "*"
   },
   {
-   "id": "iptv-news12bronx-us",
-   "iptvId": "News12Bronx.us",
-   "name": "News12 Bronx",
+   "id": "iptv-news12brooklyn-us",
+   "iptvId": "News12Brooklyn.us",
+   "name": "News12 Brooklyn",
    "country": "US",
    "countryName": "United States",
    "categories": [
     "News"
    ],
-   "logo": "https://i.imgur.com/d6xQiaf.png",
-   "website": "https://bronx.news12.com/",
-   "hlsUrl": "https://mdc.ott.alticeusa.net/live4.ott.optimum.net/live4-uploads/N12XH_A1/index_new.m3u8?omap=https",
-   "geoBlocked": true,
-   "cors": "*"
-  },
-  {
-   "id": "iptv-news12hudsonvalley-us",
-   "iptvId": "News12HudsonValley.us",
-   "name": "News12 Hudson Valley",
-   "country": "US",
-   "countryName": "United States",
-   "categories": [
-    "News"
-   ],
-   "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/News_12_logo_2019.png/960px-News_12_logo_2019.png",
-   "website": "https://hudsonvalley.news12.com/",
-   "hlsUrl": "https://mdc.ott.alticeusa.net/live4.ott.optimum.net/live4-uploads/N12HH_A1/index_new.m3u8?omap=https",
-   "geoBlocked": true,
-   "cors": "*"
-  },
-  {
-   "id": "iptv-news12longisland-us",
-   "iptvId": "News12LongIsland.us",
-   "name": "News12 Long Island",
-   "country": "US",
-   "countryName": "United States",
-   "categories": [
-    "News"
-   ],
-   "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/News_12_logo_2019.png/960px-News_12_logo_2019.png",
-   "website": "https://longisland.news12.com/",
-   "hlsUrl": "https://mdc.ott.alticeusa.net/live4.ott.optimum.net/live4-uploads/N12LH_WEST_A1/index_new.m3u8?omap=https",
-   "quality": "1080p",
+   "logo": "https://i.imgur.com/fvcOzzK.png",
+   "website": "https://brooklyn.news12.com/",
+   "hlsUrl": "https://mdc.ott.alticeusa.net/live4.ott.optimum.net/live4-uploads/N12KH_A1/index_new.m3u8?omap=https",
    "geoBlocked": true,
    "cors": "*"
   },
@@ -14893,22 +14923,6 @@
    "cors": "*"
   },
   {
-   "id": "iptv-news12plushudsonvalley-us",
-   "iptvId": "News12PlusHudsonValley.us",
-   "name": "News12+ Hudson Valley",
-   "country": "US",
-   "countryName": "United States",
-   "categories": [
-    "News"
-   ],
-   "logo": "https://i.ibb.co/cKkdC203/news12plus-HV.jpg",
-   "website": "http://news12.plus/",
-   "hlsUrl": "https://mdc.ott.alticeusa.net/live4.ott.optimum.net/live4-uploads/N12PLUS_H_WC_A1/index_new.m3u8",
-   "quality": "1080p",
-   "geoBlocked": true,
-   "cors": "*"
-  },
-  {
    "id": "iptv-news12pluslongisland-us",
    "iptvId": "News12PlusLongIsland.us",
    "name": "News12+ Long Island",
@@ -14919,7 +14933,7 @@
    ],
    "logo": "https://i.ibb.co/p6FPNcCk/news12plus-LI.jpg",
    "website": "http://news12.plus/",
-   "hlsUrl": "https://mdc.ott.alticeusa.net/live4.ott.optimum.net/live4-uploads/N12PLUS_H_LI_A1/index_new.m3u8",
+   "hlsUrl": "https://mdc4.ott.alticeusa.net/live4.ott.optimum.net/live4-uploads/N12LH_WEST_A1/index_new.m3u8",
    "quality": "1080p",
    "geoBlocked": true,
    "cors": "*"
@@ -14936,22 +14950,6 @@
    "logo": "https://i.ibb.co/qYCVcWDV/news12plus-NJ.jpg",
    "website": "http://news12.plus/",
    "hlsUrl": "https://mdc.ott.alticeusa.net/live4.ott.optimum.net/live4-uploads/N12PLUS_H_NJ_A1/index_new.m3u8",
-   "quality": "1080p",
-   "geoBlocked": true,
-   "cors": "*"
-  },
-  {
-   "id": "iptv-news12plusnewyork-us",
-   "iptvId": "News12PlusNewYork.us",
-   "name": "News12+ New York",
-   "country": "US",
-   "countryName": "United States",
-   "categories": [
-    "News"
-   ],
-   "logo": "https://i.ibb.co/tThKYM09/news12plus-NYC.jpg",
-   "website": "http://news12.plus/",
-   "hlsUrl": "https://mdc.ott.alticeusa.net/live4.ott.optimum.net/live4-uploads/N12PLUS_H_NYC_A1/index_new.m3u8",
    "quality": "1080p",
    "geoBlocked": true,
    "cors": "*"
@@ -15060,8 +15058,8 @@
    ],
    "logo": "https://i.imgur.com/0xW69iu.png",
    "website": "https://www.oan.plus/",
-   "hlsUrl": "https://a-cdn.herringnetwork.com/affiliate/oane/playlist.m3u8",
-   "quality": "720p",
+   "hlsUrl": "https://oneamericanews-roku-us.amagi.tv/playlist.m3u8",
+   "quality": "1080p",
    "cors": "*"
   },
   {
@@ -15431,22 +15429,6 @@
    "logo": "https://i.ibb.co/bRmGbsyV/A3-SPORTTV.jpg",
    "hlsUrl": "https://streamtv.as3sport.online:3394/hybrid/play.m3u8",
    "quality": "1080p",
-   "cors": "*"
-  },
-  {
-   "id": "iptv-audaztv-ve",
-   "iptvId": "AudazTV.ve",
-   "name": "Audaz TV",
-   "country": "VE",
-   "countryName": "Venezuela",
-   "categories": [
-    "Religious"
-   ],
-   "logo": "https://i.imgur.com/QtCgtZq.jpg",
-   "website": "https://audaz.com.ve/",
-   "hlsUrl": "https://cloud2.streaminglivehd.com:1936/8264/8264/playlist.m3u8",
-   "quality": "432p",
-   "notNonStop": true,
    "cors": "*"
   },
   {
@@ -15898,6 +15880,21 @@
    "cors": "*"
   },
   {
+   "id": "iptv-tves-ve",
+   "iptvId": "TVes.ve",
+   "name": "TVes",
+   "country": "VE",
+   "countryName": "Venezuela",
+   "categories": [
+    "General"
+   ],
+   "logo": "https://i.imgur.com/QX5DVUB.png",
+   "website": "https://www.tves.gob.ve/",
+   "hlsUrl": "https://vs20.live.opencaster.com/tves_5fd18b1e/index.m3u8",
+   "quality": "1080p",
+   "cors": "*"
+  },
+  {
    "id": "iptv-tvmparati-ve",
    "iptvId": "TVMparati.ve",
    "name": "TVM para ti",
@@ -16025,6 +16022,23 @@
    "cors": "*"
   },
   {
+   "id": "iptv-htv9-vn",
+   "iptvId": "HTV9.vn",
+   "name": "HTV9",
+   "country": "VN",
+   "countryName": "Vietnam",
+   "categories": [
+    "News",
+    "General"
+   ],
+   "logo": "https://upload.wikimedia.org/wikipedia/commons/b/bf/HTV9_logo.webp",
+   "website": "https://htv.com.vn/",
+   "hlsUrl": "https://dethich.pw/htv9/index.m3u8",
+   "quality": "720p",
+   "cors": "-",
+   "needsProxy": true
+  },
+  {
    "id": "iptv-travinhtv-vn",
    "iptvId": "TraVinhTV.vn",
    "name": "Tra Vinh TV",
@@ -16044,6 +16058,23 @@
    "hlsUrl": "https://freem3u.xyz/api/live/play.m3u8?vid=91",
    "quality": "1080p",
    "cors": "https://worldmonitor.app"
+  },
+  {
+   "id": "iptv-vinhlongtv1-vn",
+   "iptvId": "VinhLongTV1.vn",
+   "name": "Vinh Long TV 1",
+   "country": "VN",
+   "countryName": "Vietnam",
+   "categories": [
+    "News",
+    "General"
+   ],
+   "logo": "https://i.imgur.com/5YFsqPx.png",
+   "website": "https://www.thvl.vn/",
+   "hlsUrl": "https://dethich.pw/thvl1/index.m3u8",
+   "quality": "720p",
+   "cors": "-",
+   "needsProxy": true
   },
   {
    "id": "iptv-almasirah-ye",

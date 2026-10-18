@@ -1435,7 +1435,8 @@ export class LiveNewsPanel extends Panel {
 
   private async renderNativeHlsPlayer(): Promise<void> {
     const hlsUrl = this.getDirectHlsUrl(this.activeChannel.id) || this.getProxiedHlsUrl(this.activeChannel.id) || this.activeChannel.hlsUrl;
-    if (!hlsUrl || !(hlsUrl.startsWith('https://') || hlsUrl.startsWith('http://127.0.0.1'))) return;
+    const sameOrigin = typeof window !== 'undefined' && hlsUrl?.startsWith(`${window.location.origin}/`);
+    if (!hlsUrl || !(hlsUrl.startsWith('https://') || hlsUrl.startsWith('http://127.0.0.1') || sameOrigin)) return;
     const sessionToken = this.liveMediaSessionToken;
 
     this.destroyPlayer();
