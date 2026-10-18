@@ -1011,7 +1011,9 @@ export class PanelLayoutManager implements AppModule {
     // now so those panels are registered and mounted (switchToTab is a no-op
     // for the already-active tab, so nothing else would do it).
     const restoring = state.tabs.find((tab) => tab.id === state.activeTabId);
-    if (restoring && Object.entries(restoring.panelSettings).some(([key, cfg]) => cfg.enabled && !(key in this.ctx.panelSettings))) {
+    // Compare enabled state, not key presence: an older build persisted the
+    // preset's panels into the boot set as disabled entries.
+    if (restoring && Object.entries(restoring.panelSettings).some(([key, cfg]) => cfg.enabled && this.ctx.panelSettings[key]?.enabled !== true)) {
       this.applyTabPanelState(restoring.panelSettings, restoring.panelOrder, restoring.bottomSet);
     }
 
