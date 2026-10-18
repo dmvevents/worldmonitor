@@ -246,6 +246,11 @@ npm run dev:tt
 
 ## How to Refresh the IPTV Directory
 
+Geo-blocked streams: the hub never circumvents; the operator can supply an exit they are entitled to use
+(`IPTV_EGRESS_PROXY` in keys.env, remote `scripts/tt-egress-proxy.mjs` + `scripts/tt-install-egress-tunnel.sh`).
+When `/healthz` reports `iptvEgress`, geo-blocked directory entries are added through `/api/iptv-proxy`.
+Step-by-step: `docs/tt/IPTV-GEO-BLOCKING.md` → "Egress setting".
+
 The IPTV directory is a curated list of about 1,000 verified Caribbean and worldwide news streams from the iptv-org project (channels in the Caribbean, channels broadcasting into it per feeds.json `broadcast_area`, and worldwide news).
 
 ```bash

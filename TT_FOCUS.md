@@ -52,12 +52,17 @@ same-origin HLS proxy restricted to hostnames present in the directory file (htt
 spoofing). That fixes browser CORS, not geography: a CDN that geo-blocks sees this Mac's IP either way, so
 "Geo-blocked" entries are labelled and may not play here. Probing the 47 flagged entries from this network
 showed 20 play, 10 are dead and only one is truly IP-blocked; the label is advisory. The hub does not ship
-circumvention. If you have a network exit you are entitled to use (your own VPS in the region, a VPN you
-subscribe to), set `IPTV_EGRESS_PROXY=http://user:pass@host:port` in `~/.config/worldmonitor/keys.env` and
-restart: the front door's IPTV proxy fetches (and only those; YouTube and local calls stay direct) go
-through that exit, and `/healthz` reports `iptvEgress`. Public proxy lists are deliberately not supported:
-they are mostly dead or hostile endpoints that see and can alter the traffic, and video through them does
-not play.
+circumvention. If you have a network exit you are entitled to use (your own VPS in the region, a box at a
+relative's home there, a VPN you subscribe to), set `IPTV_EGRESS_PROXY=http://127.0.0.1:8888` (or the
+provider's `http://user:pass@host:port`) in `~/.config/worldmonitor/keys.env` and restart: the front door's
+IPTV proxy fetches (and only those; YouTube and local calls stay direct) go through that exit, `/healthz`
+reports `iptvEgress`, and the directory UI then adds "Geo-blocked" channels through the hub proxy (meta line
+"via hub egress") so the broadcaster sees the exit's address; channels added before enabling egress keep
+their direct URL (remove and re-add them). `scripts/tt-egress-proxy.mjs` is a dependency-free HTTP proxy to
+run on the remote machine and `scripts/tt-install-egress-tunnel.sh` keeps the SSH tunnel to it alive as a
+launchd agent; the full step-by-step is in `docs/tt/IPTV-GEO-BLOCKING.md` ("Egress setting"). Public proxy
+lists are deliberately not supported: they are mostly dead or hostile endpoints that see and can alter the
+traffic, and video through them does not play.
 
 Live Intelligence (GDELT) has a Caribbean & Guiana Shield topic; the seed loop runs that seed with a
 longer budget (`GDELT_SOFT_BUDGET_MS=540000`) because GDELT rate-limits to about one request per five seconds.

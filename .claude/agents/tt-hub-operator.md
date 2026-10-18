@@ -138,3 +138,9 @@ curl -sI 'https://live.bizztv.net/live/bizztv.m3u8' | head -5
 
 - **tt-iptv-curator** runs `npm run iptv:sync`; after sync, verify directory UI works (Live News → Manage channels → IPTV directory)
 - **Main session** may ask you to verify after they push code; run healthchecks and report results
+
+## Egress (geo-blocked streams)
+
+- `curl -s http://127.0.0.1:3100/healthz` → `iptvEgress` null means no exit configured; geo-blocked entries then play only if the broadcaster allows this network.
+- Tunnel health: `bash scripts/tt-install-egress-tunnel.sh status|test` (test must show two different exit IPs). Log: `~/Library/Logs/worldmonitor-hub/egress-tunnel.log`.
+- Never add public proxy lists or spoof headers; the operator supplies `IPTV_EGRESS_PROXY` (keys.env) for an exit they are entitled to use. Runbook: `docs/tt/IPTV-GEO-BLOCKING.md`.

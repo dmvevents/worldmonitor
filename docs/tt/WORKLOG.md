@@ -298,3 +298,17 @@ country filter and search match `broadcastTo`, and the meta line reads "United S
 rebuilt: 1,038 verified of 2,126 probed (HGPTV dropped out while its Dacast URL is down; it stays in the Guyana
 strip as a YouTube-fallback channel). No circumvention added: the geo-blocked label stays advisory
 (`docs/tt/IPTV-GEO-BLOCKING.md`).
+
+## Round 13: egress for geo-blocked streams, step by step (2026-10-18)
+
+Anton asked how to work around the Guyana geo-blocks (DTV-8 is a Cloudflare country rule on the whole host)
+and to integrate it end to end. The existing `IPTV_EGRESS_PROXY` setting had a gap: only no-CORS channels
+went through the hub proxy, so a geo-blocked channel with CORS was still fetched from the browser's own IP
+and the egress never saw it. The directory UI now reads `/healthz`; when `iptvEgress` is reported,
+geo-blocked entries are added through `/api/iptv-proxy` (meta "via hub egress (host)"). New helpers:
+`scripts/tt-egress-proxy.mjs` (dependency-free HTTP CONNECT/forward proxy, loopback-only by default,
+optional host allowlist, logs host:port only) to run on a machine in the region, and
+`scripts/tt-install-egress-tunnel.sh` (launchd agent `com.worldmonitor.tt-egress-tunnel` keeping
+`ssh -N -L 8888:127.0.0.1:8888` alive, `test` subcommand compares direct vs tunnelled exit IP). Runbook in
+`docs/tt/IPTV-GEO-BLOCKING.md`. Boundaries unchanged: the operator supplies an exit they are entitled to
+use; no proxy discovery, public lists or header spoofing.

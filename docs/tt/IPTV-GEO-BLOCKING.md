@@ -157,6 +157,86 @@ curl http://127.0.0.1:3100/api/hls-proxy?url=https%3A%2F%2Frd.tvabierta.net%2Fli
 ## Egress setting (added 2026-10-18)
 
 `IPTV_EGRESS_PROXY` in the keys file routes the front door's stream fetches through a network exit the
-operator is entitled to use (own VPS, subscribed VPN). It is a standard outbound-proxy setting, applied
-only to the IPTV proxy process; the hub ships no proxy discovery, no public proxy lists and no header
-spoofing. `/healthz` shows the egress host when active.
+operator is entitled to use (own VPS, a machine at a relative's home in the region, subscribed VPN). It is
+a standard outbound-proxy setting, applied only to the IPTV proxy process; the hub ships no proxy
+discovery, no public proxy lists and no header spoofing. `/healthz` shows the egress host when active.
+
+### What changes when egress is on (2026-10-18)
+
+- The directory UI reads `/healthz`; when `iptvEgress` is set, entries labelled **Geo-blocked** are added
+  to the strip through `/api/iptv-proxy` (meta line "geo-blocked · via hub egress (host)"), exactly like
+  no-CORS entries. Without egress they keep their direct URL, because routing them through this Mac would
+  change nothing.
+- `/api/iptv-proxy` still accepts only hostnames present in `public/data/iptv-directory.json` and only
+  https. The egress sees stream traffic for those hosts and nothing else (YouTube, the sidecar and Upstash
+  stay direct via `NO_PROXY`).
+- Channels you added to the strip *before* enabling egress keep their direct URL. Remove and re-add them
+  from the directory.
+- DTV-8 (Guyana) is the concrete case: `watch.davestv8.com` answers 403 from Cloudflare for the whole host
+  from a US exit (country rule), so only an in-region exit plays it.
+
+### Step by step: your own exit over SSH
+
+You need one machine whose internet connection is in the broadcaster's region and that you may use: a
+small VPS there, or a Raspberry Pi / old laptop at a relative's house with Node ≥ 18 installed. Nothing
+else is required on it.
+
+1. **Put the proxy on the remote machine** (from this repo):
+
+   ```bash
+   scp scripts/tt-egress-proxy.mjs user@remote:~/tt-egress-proxy.mjs
+   ssh user@remote 'nohup node ~/tt-egress-proxy.mjs > ~/tt-egress.log 2>&1 &'
+   ```
+
+   It listens on the remote's `127.0.0.1:8888` only, so nothing on the internet can use it; the SSH tunnel
+   is the only way in. Optional: `EGRESS_ALLOW=davestv8.com,bozztv.com node ~/tt-egress-proxy.mjs` limits
+   it to the stream hosts you need. On a Linux VPS make it survive reboots with a systemd unit:
+
+   ```ini
+   # /etc/systemd/system/tt-egress.service
+   [Unit]
+   Description=World Monitor IPTV egress proxy
+   After=network-online.target
+   [Service]
+   ExecStart=/usr/bin/node /home/user/tt-egress-proxy.mjs
+   Restart=always
+   User=user
+   [Install]
+   WantedBy=multi-user.target
+   ```
+
+   `sudo systemctl enable --now tt-egress`.
+
+2. **Key-based SSH from this Mac** (once): `ssh-copy-id user@remote`, then `ssh user@remote true` must
+   succeed without a prompt.
+
+3. **Keep the tunnel alive at login**: add `EGRESS_SSH_TARGET=user@remote` (append `:2222` for a
+   non-default SSH port) to `~/.config/worldmonitor/keys.env`, then
+
+   ```bash
+   bash scripts/tt-install-egress-tunnel.sh install     # launchd agent com.worldmonitor.tt-egress-tunnel
+   bash scripts/tt-install-egress-tunnel.sh test        # prints direct exit IP vs the IP seen through the tunnel
+   ```
+
+   The test must show two different addresses; if they match, the tunnel is up but the remote is not in a
+   different region. Logs: `~/Library/Logs/worldmonitor-hub/egress-tunnel.log`.
+
+4. **Point the hub at it**: add `IPTV_EGRESS_PROXY=http://127.0.0.1:8888` to the same keys file and
+   `bash scripts/tt-install-service.sh restart`. `curl -s http://127.0.0.1:3100/healthz` now shows
+   `"iptvEgress":"127.0.0.1:8888"`, and the hub log says `IPTV egress via 127.0.0.1:8888`.
+
+5. **Add the channel**: Live News panel → Manage channels → IPTV directory → country Guyana → the DTV-8 row
+   (when iptv-org's probe lists it again) or any entry marked geo-blocked → Add channel. Its meta line reads
+   "via hub egress"; playback goes browser → front door → tunnel → remote → broadcaster. The remote's log
+   (`~/tt-egress.log`) shows one `CONNECT host:443` line per stream host.
+
+A commercial VPN that offers an HTTP proxy endpoint in the region works the same way: skip steps 1–3 and
+set `IPTV_EGRESS_PROXY=http://user:pass@proxy-host:port` directly (credentials stay in the keys file; the
+log prints host:port only).
+
+### Verified here
+
+Plumbing was verified on 2026-10-18 with the egress proxy running on this Mac itself (same exit, so it
+proves routing, not unblocking): `/healthz` reported the egress, a geo-blocked directory entry (GTN Canada)
+was added as a hub-proxied URL, the proxy log showed the `CONNECT` lines for its CDN, and the stream played
+in headless Chrome through the chain.
