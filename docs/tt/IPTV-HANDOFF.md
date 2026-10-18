@@ -228,3 +228,42 @@ in headless Chrome (1280×720 / 1024×576, hls.js, `currentTime` advancing) with
 resolver (which sends only a browser UA) needs a re-look. Tokens are per resolve, so one hub resolve is
 shared by every browser tab for up to 24 h. Rebuild + restart the GA hub to ship:
 `npm run build:full && node scripts/build-sidecar-handlers.mjs && bash scripts/tt-install-service.sh restart`.
+
+### 9.1 Follow-up: CNC3 / TV6 search, official-page links, shipped to the hub (2026-10-18)
+
+**Search of iptv-org and GitHub `topic:iptv` for CNC3 / TV6.** iptv-org's database lists 41 T&T channels
+with streams for only six; its issue #49617 ("Add: CNC3 SD", Aug 2026) proposed `https://cnc3live.com/`,
+labelled geo-blocked, and was rejected as malformed — that host answers 403 from Cloudflare to curl,
+headless Chrome and a Googlebot UA alike. Issue #21479 (May 2025) *removed* TTT/Synergy/Plus TV because the
+TegoTV token URLs expire, which is exactly what `/api/tego/stream` works around. Free-TV/IPTV lists six T&T
+stations through `sktv-forwarders.7m.pl`, a dead relay (302 → 404; their own checker flags all six).
+`fraudiay79/strm` carries `platforms/tego.py` with the same siberapi guest flow (independent confirmation).
+Other hits are pirate re-servers (iptvmate, a Chinese multicast relay, a 2015 `rtmp://live.cnc3.co.tt`) —
+not used. `kenz-01/kulchaflo-tv-browser-mk2` documents CNC3's official live as `cnc3.co.tt/live-stream` →
+Dailymotion video `x9vba4u` (owner `cnc3tt`, mode live). Dailymotion's player metadata answers `DM016 "cnc3tt
+has limited its access"` for any embedder other than cnc3.co.tt, and `DM003` (not available / off air) with
+cnc3.co.tt as embedder; TV6's `x7x3klh` has `allow_embed: false` and the same DM016. **Both stations are
+embed-locked to their own domains**; Referer/embedder spoofing and framing the Cloudflare-gated pages are
+excluded, so they stay off-air-card channels.
+
+**Added (ccbffd07d).** `LiveChannel.officialLiveUrl`: the off-air card for CNC3 and TV6 now shows a plain
+external link "Watch on cnc3.co.tt" / "Watch on tv6tnt.com" (`target=_blank rel=noopener noreferrer`,
+`sanitizeUrl`, https only; never framed or proxied). YouTube auto-detect on their handles is unchanged. ABS TV
+(Antigua & Barbuda), TegoTV id 10, added to the Caribbean picker. New locale key
+`components.liveNews.watchOnOfficialSite` synced to all 24 locales. Tests: `tests/live-news-hls.test.mjs`
+section 12 (TegoTV ids present and in the picker, no hard-coded sibercdn URLs, resolver wiring, official links
+are sanitized links not iframes, front door validates the channel id).
+
+**Gates.** `tsc --noEmit` clean; `sync:locales:check` 24/24; `tests/live-news-hls` + `tt-tego-resolver` +
+`live-news-panel-guard` 73/73; validator 12/12 TegoTV entries OK; full `npm run test:data` 14,568 pass /
+1 fail / 6 skipped of 14,575 — the one failure (`stock-dividend-profile` "produces a non-zero CAGR…") fails
+identically on `main` before the merge and is unrelated (Yahoo dividend fixture).
+
+**Shipped.** Merged to `main` as 198851903 (local `.gitignore` edit and `.omc/` stashed around the merge
+and restored). Build (`build:full`, sidecar handlers) and `tt-install-service.sh restart` →
+`com.worldmonitor.tt-hub` pid 80673. Verified on `127.0.0.1:3100`: `/healthz` ok; `GET /api/tego/channels`
+→ 12 channels; `GET /api/tego/stream?channel=1` → TTT manifest URL; `channel=abc` → 400. Headless Chrome,
+Trinidad & Tobago tab: strip opens TTT, IETV, Synergy TV, Gayelle, Bizz TV, CNC3, TV6 News, Parliament,
+Tobago Updates, CBC TV8, ZIZ TV, teleSUR, SkyNews, AlJazeera; TTT plays at 1280×720 within 10 s; CNC3 card
+reads "CNC3 is off air right now" with the cnc3.co.tt link; TV6 card links tv6tnt.com; ABS TV (Antigua)
+appears in the Caribbean picker as "live TV · TegoTV".
