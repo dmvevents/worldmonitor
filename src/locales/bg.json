@@ -2971,6 +2971,10 @@
       "maritime": {
         "name": "Морска сигурност",
         "description": "Морски операции, морски гърла на бутилката, морски маршрути"
+      },
+      "caribbean": {
+        "name": "Caribbean & Guiana Shield",
+        "description": "Trinidad & Tobago, Guyana, CARICOM and the southern Caribbean in world media"
       }
     }
   },

@@ -3248,6 +3248,10 @@
       "maritime": {
         "name": "Pomorska sigurnost",
         "description": "Pomorske operacije, pomorska uska grla, pomorske rute"
+      },
+      "caribbean": {
+        "name": "Caribbean & Guiana Shield",
+        "description": "Trinidad & Tobago, Guyana, CARICOM and the southern Caribbean in world media"
       }
     }
   },

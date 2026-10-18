@@ -2971,6 +2971,10 @@
       "maritime": {
         "name": "Θαλάσσια Ασφάλεια",
         "description": "Ναυτικές επιχειρήσεις, θαλάσσια σημεία ελέγχου, θαλάσσιες οδοί"
+      },
+      "caribbean": {
+        "name": "Caribbean & Guiana Shield",
+        "description": "Trinidad & Tobago, Guyana, CARICOM and the southern Caribbean in world media"
       }
     }
   },

@@ -2742,6 +2742,10 @@
       "maritime": {
         "name": "Maritieme veiligheid",
         "description": "Marine-operaties, maritieme knelpunten, zeeroutes"
+      },
+      "caribbean": {
+        "name": "Caribbean & Guiana Shield",
+        "description": "Trinidad & Tobago, Guyana, CARICOM and the southern Caribbean in world media"
       }
     }
   },

@@ -3003,6 +3003,10 @@
       "maritime": {
         "name": "Морская безопасность",
         "description": "Морские операции, узкие места, морские пути"
+      },
+      "caribbean": {
+        "name": "Caribbean & Guiana Shield",
+        "description": "Trinidad & Tobago, Guyana, CARICOM and the southern Caribbean in world media"
       }
     }
   },

@@ -3039,6 +3039,10 @@
       "maritime": {
         "name": "समुद्री सुरक्षा",
         "description": "नौसैनिक ऑपरेशंस, समुद्री संकीर्ण रास्ते, समुद्री मार्ग"
+      },
+      "caribbean": {
+        "name": "Caribbean & Guiana Shield",
+        "description": "Trinidad & Tobago, Guyana, CARICOM and the southern Caribbean in world media"
       }
     }
   },

@@ -3039,6 +3039,10 @@
       "maritime": {
         "name": "Tengeri Biztonság",
         "description": "Haditengerészeti műveletek, tengeri szűk helyek, hajózási útvonalak"
+      },
+      "caribbean": {
+        "name": "Caribbean & Guiana Shield",
+        "description": "Trinidad & Tobago, Guyana, CARICOM and the southern Caribbean in world media"
       }
     }
   },

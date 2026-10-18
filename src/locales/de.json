@@ -2971,6 +2971,10 @@
       "maritime": {
         "name": "Maritime Sicherheit",
         "description": "Marineoperationen, maritime Engpässe, Seewege"
+      },
+      "caribbean": {
+        "name": "Caribbean & Guiana Shield",
+        "description": "Trinidad & Tobago, Guyana, CARICOM and the southern Caribbean in world media"
       }
     }
   },

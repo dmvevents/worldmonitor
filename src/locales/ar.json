@@ -3035,6 +3035,10 @@
       "maritime": {
         "name": "الأمن البحري",
         "description": "عمليات بحرية ونقاط اختناق وممرات بحرية"
+      },
+      "caribbean": {
+        "name": "Caribbean & Guiana Shield",
+        "description": "Trinidad & Tobago, Guyana, CARICOM and the southern Caribbean in world media"
       }
     }
   },

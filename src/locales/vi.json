@@ -2971,6 +2971,10 @@
       "maritime": {
         "name": "An ninh Hàng hải",
         "description": "Hoạt động hải quân, điểm nghẽn hàng hải, tuyến đường biển"
+      },
+      "caribbean": {
+        "name": "Caribbean & Guiana Shield",
+        "description": "Trinidad & Tobago, Guyana, CARICOM and the southern Caribbean in world media"
       }
     }
   },

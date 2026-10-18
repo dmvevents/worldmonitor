@@ -2971,6 +2971,10 @@
       "maritime": {
         "name": "Deniz Guvenligi",
         "description": "Donanma operasyonlari, deniz darbogazlari, deniz yollari"
+      },
+      "caribbean": {
+        "name": "Caribbean & Guiana Shield",
+        "description": "Trinidad & Tobago, Guyana, CARICOM and the southern Caribbean in world media"
       }
     }
   },

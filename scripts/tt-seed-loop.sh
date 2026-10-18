@@ -56,7 +56,8 @@ pass() {
       run_seed seed-economy
     fi
     # Keyless slow-moving sources once a day (all public/official; aggregate data only):
-    for s in seed-fx-rates seed-gdelt-intel seed-disease-outbreaks seed-displacement-summary seed-energy-disruptions \
+    run_seed seed-gdelt-intel GDELT_SOFT_BUDGET_MS=200000   # stays under the runner's 240 s hard deadline; GDELT allows ~1 req/5 s
+    for s in seed-fx-rates seed-disease-outbreaks seed-displacement-summary seed-energy-disruptions \
              seed-fuel-shortages seed-market-breadth seed-climate-anomalies seed-cross-source-signals; do run_seed "$s"; done
   fi
   # Weekly sweep of EVERY keyless seed script (upstream runs these on Railway cron). This is what

@@ -3039,6 +3039,10 @@
       "maritime": {
         "name": "Maritime Security",
         "description": "Naval operations, maritime chokepoints, sea lanes"
+      },
+      "caribbean": {
+        "name": "Caribbean & Guiana Shield",
+        "description": "Trinidad & Tobago, Guyana, CARICOM and the southern Caribbean in world media"
       }
     }
   },

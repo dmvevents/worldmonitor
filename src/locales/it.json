@@ -2987,6 +2987,10 @@
       "maritime": {
         "name": "Sicurezza marittima",
         "description": "Operazioni navali, punti di strozzatura marittimi, rotte marittime"
+      },
+      "caribbean": {
+        "name": "Caribbean & Guiana Shield",
+        "description": "Trinidad & Tobago, Guyana, CARICOM and the southern Caribbean in world media"
       }
     }
   },

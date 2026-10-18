@@ -3003,6 +3003,10 @@
       "maritime": {
         "name": "Námořní bezpečnost",
         "description": "Námořní operace, úzká hrdla na moři, námořní trasy"
+      },
+      "caribbean": {
+        "name": "Caribbean & Guiana Shield",
+        "description": "Trinidad & Tobago, Guyana, CARICOM and the southern Caribbean in world media"
       }
     }
   },

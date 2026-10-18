@@ -2971,6 +2971,10 @@
       "maritime": {
         "name": "海洋安全保障",
         "description": "海軍作戦、海上チョークポイント、シーレーン"
+      },
+      "caribbean": {
+        "name": "Caribbean & Guiana Shield",
+        "description": "Trinidad & Tobago, Guyana, CARICOM and the southern Caribbean in world media"
       }
     }
   },

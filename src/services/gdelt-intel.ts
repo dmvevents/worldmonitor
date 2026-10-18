@@ -79,6 +79,13 @@ export const INTEL_TOPICS: IntelTopic[] = [
     icon: '🚢',
     description: 'Naval operations, maritime chokepoints, sea lanes',
   },
+  {
+    id: 'caribbean',
+    name: 'Caribbean & Guiana Shield',
+    query: '("Trinidad and Tobago" OR Guyana OR Essequibo OR CARICOM OR Barbados OR Jamaica OR "Port of Spain" OR Georgetown) sourcelang:eng',
+    icon: '🌴',
+    description: 'Trinidad & Tobago, Guyana, CARICOM and the southern Caribbean in world media',
+  },
 ];
 
 export const POSITIVE_GDELT_TOPICS: IntelTopic[] = [
