@@ -60,7 +60,9 @@ reports `iptvEgress`, and the directory UI then adds "Geo-blocked" channels thro
 "via hub egress") so the broadcaster sees the exit's address; channels added before enabling egress keep
 their direct URL (remove and re-add them). `scripts/tt-egress-proxy.mjs` is a dependency-free HTTP proxy to
 run on the remote machine and `scripts/tt-install-egress-tunnel.sh` keeps the SSH tunnel to it alive as a
-launchd agent; the full step-by-step is in `docs/tt/IPTV-GEO-BLOCKING.md` ("Egress setting"). Public proxy
+launchd agent; `scripts/tt-egress-vpn.compose.example.yml` runs a subscribed VPN (gluetun) in Docker as the
+exit instead (NordVPN lists Guyana and Trinidad as virtual locations); the full step-by-step for both is in
+`docs/tt/IPTV-GEO-BLOCKING.md` ("Egress setting"). Public proxy
 lists are deliberately not supported: they are mostly dead or hostile endpoints that see and can alter the
 traffic, and video through them does not play.
 

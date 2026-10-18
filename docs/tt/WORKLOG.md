@@ -312,3 +312,12 @@ optional host allowlist, logs host:port only) to run on a machine in the region,
 `ssh -N -L 8888:127.0.0.1:8888` alive, `test` subcommand compares direct vs tunnelled exit IP). Runbook in
 `docs/tt/IPTV-GEO-BLOCKING.md`. Boundaries unchanged: the operator supplies an exit they are entitled to
 use; no proxy discovery, public lists or header spoofing.
+
+Follow-up (2026-10-18): Anton shared iptv-proxy, kptv-proxy and a VPN vendor's geo-blocking guide. The two
+proxies are IPTV re-servers (M3U/Xtream → your own address); they only change region when run on an
+in-region machine, send no CORS on stream output, and overlap the hub's own HLS proxy and directory, so they
+stay optional (iptv-proxy is worth it if the remote box should also serve a playlist to other devices).
+For the VPN route, the providers' public server lists were checked: NordVPN exposes Guyana, Trinidad,
+Barbados and Jamaica as virtual locations; Surfshark has none of GY/TT. Added
+`scripts/tt-egress-vpn.compose.example.yml` (gluetun with its HTTP proxy on loopback :8888) so a subscribed
+VPN plugs into `IPTV_EGRESS_PROXY` without routing the rest of the Mac; runbook extended.

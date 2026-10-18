@@ -230,9 +230,38 @@ else is required on it.
    "via hub egress"; playback goes browser → front door → tunnel → remote → broadcaster. The remote's log
    (`~/tt-egress.log`) shows one `CONNECT host:443` line per stream host.
 
-A commercial VPN that offers an HTTP proxy endpoint in the region works the same way: skip steps 1–3 and
-set `IPTV_EGRESS_PROXY=http://user:pass@proxy-host:port` directly (credentials stay in the keys file; the
-log prints host:port only).
+### Step by step: a VPN you subscribe to, in Docker
+
+No machine in the region needed. The VPN runs inside one container (gluetun) that exposes an HTTP
+proxy on `127.0.0.1:8888`; only the hub's IPTV proxy uses it, the rest of the Mac stays direct. Docker
+Desktop is already on this Mac (Grafana).
+
+1. Check the provider has an exit where you need it. From the providers' public server lists on
+   2026-10-18: **NordVPN** lists Guyana (`gy1`), Trinidad and Tobago (`tt3`, `tt4`), Barbados and
+   Jamaica, all flagged *virtual location* (the IP geolocates to the country, the hardware is elsewhere;
+   Cloudflare-style country rules normally accept that, but it is not guaranteed and can change).
+   **Surfshark** lists only Bahamas, Puerto Rico and Venezuela in the region. Windscribe's location list
+   could not be read from its site (JavaScript-rendered) and is unverified; its free plan has about ten
+   locations, none Caribbean as far as is known.
+2. `cp scripts/tt-egress-vpn.compose.example.yml ~/.config/worldmonitor/egress-vpn.compose.yml` and fill
+   in the provider block (NordVPN: the *service credentials* from the dashboard's manual-setup page, not
+   your login; `SERVER_COUNTRIES=Guyana`).
+3. `docker compose -f ~/.config/worldmonitor/egress-vpn.compose.yml up -d`, then
+   `curl -x http://127.0.0.1:8888 https://api.ipify.org` must print a different address than
+   `curl https://api.ipify.org`.
+4. Add `IPTV_EGRESS_PROXY=http://127.0.0.1:8888` to `~/.config/worldmonitor/keys.env`,
+   `bash scripts/tt-install-service.sh restart`, confirm `/healthz` shows `iptvEgress`, then add the
+   geo-blocked channel from the directory as above.
+
+Running the provider's own desktop app instead also works, but it routes the whole Mac (Bedrock, Upstash,
+Gmail) through the VPN and the hub cannot tell it is on; the container keeps it to stream traffic.
+Browser-side tricks that VPN vendors advertise (timezone or language "warp", location spoofing) are
+irrelevant here: the broadcaster only sees the address of whatever fetches the stream, which with egress
+on is the hub's front door.
+
+A commercial VPN that offers an HTTP proxy endpoint in the region works the same way without Docker: set
+`IPTV_EGRESS_PROXY=http://user:pass@proxy-host:port` directly (credentials stay in the keys file; the log
+prints host:port only).
 
 ### Verified here
 

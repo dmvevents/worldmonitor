@@ -1,0 +1,37 @@
+# Egress for geo-blocked streams through a VPN you subscribe to, isolated in Docker.
+# gluetun (github.com/qdm12/gluetun, MIT) connects to the provider and exposes an HTTP proxy
+# on 127.0.0.1:8888 that only the hub's IPTV proxy uses (IPTV_EGRESS_PROXY). Nothing else on
+# this Mac is routed through the VPN.
+#
+#   cp scripts/tt-egress-vpn.compose.example.yml ~/.config/worldmonitor/egress-vpn.compose.yml
+#   # fill in the provider block, then:
+#   docker compose -f ~/.config/worldmonitor/egress-vpn.compose.yml up -d
+#   curl -x http://127.0.0.1:8888 https://api.ipify.org          # must differ from your direct IP
+#   echo 'IPTV_EGRESS_PROXY=http://127.0.0.1:8888' >> ~/.config/worldmonitor/keys.env
+#   bash scripts/tt-install-service.sh restart
+#
+# Provider exits in the region (public server lists, 2026-10-18): NordVPN lists Guyana (gy1),
+# Trinidad and Tobago (tt3, tt4), Barbados, Jamaica — all "virtual locations" (IP geolocated to
+# the country, hardware elsewhere; a broadcaster's country rule usually accepts them, not
+# guaranteed). Surfshark: Bahamas, Puerto Rico, Venezuela only. Check your provider's list first.
+# Credentials: NordVPN "service credentials" (not your login) from the Nord dashboard → Manual setup.
+services:
+  egress-vpn:
+    image: qmcgaw/gluetun:latest
+    container_name: tt-egress-vpn
+    cap_add: [NET_ADMIN]
+    devices: ["/dev/net/tun:/dev/net/tun"]
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8888:8888"       # loopback only: the hub is the only client
+    environment:
+      VPN_SERVICE_PROVIDER: nordvpn   # or windscribe, surfshark, protonvpn, mullvad, custom … (see gluetun wiki)
+      VPN_TYPE: openvpn               # or wireguard (then WIREGUARD_PRIVATE_KEY instead of OPENVPN_USER/PASSWORD)
+      OPENVPN_USER: "replace-with-service-username"
+      OPENVPN_PASSWORD: "replace-with-service-password"
+      SERVER_COUNTRIES: Guyana        # Trinidad and Tobago / Barbados / Jamaica …; windscribe uses SERVER_REGIONS
+      HTTPPROXY: "on"
+      HTTPPROXY_LISTENING_ADDRESS: ":8888"
+      HTTPPROXY_STEALTH: "on"         # no Via/X-Forwarded headers added to stream requests
+      HEALTH_VPN_DURATION_INITIAL: 30s
+      TZ: America/Port_of_Spain
