@@ -25,6 +25,8 @@ interface IptvDirectoryEntry {
   altNames?: string[];
   country: string;
   countryName: string;
+  /** Scoped countries the station broadcasts into besides its home country (diaspora stations). */
+  broadcastTo?: Array<{ code: string; name: string }>;
   categories: string[];
   hlsUrl: string;
   quality?: string;
@@ -353,7 +355,11 @@ export async function initLiveChannelsWindow(containerEl?: HTMLElement): Promise
     }
     const entries = Array.isArray(directory.channels) ? directory.channels : [];
     const countries = new Map<string, string>();
-    for (const e of entries) countries.set(e.country, e.countryName || e.country);
+    for (const e of entries) {
+      countries.set(e.country, e.countryName || e.country);
+      for (const b of e.broadcastTo ?? []) if (!countries.has(b.code)) countries.set(b.code, b.name);
+    }
+    const servesCountry = (e: IptvDirectoryEntry, code: string): boolean => e.country === code || (e.broadcastTo ?? []).some((b) => b.code === code);
     const sortedCountries = [...countries.entries()].sort((a, b) => a[1].localeCompare(b[1]));
     const allOpt = document.createElement('option');
     allOpt.value = '';
@@ -362,7 +368,7 @@ export async function initLiveChannelsWindow(containerEl?: HTMLElement): Promise
     for (const [code, name] of sortedCountries) {
       const opt = document.createElement('option');
       opt.value = code;
-      opt.textContent = `${name} (${directory.byCountry?.[code] ?? entries.filter((e) => e.country === code).length})`;
+      opt.textContent = `${name} (${directory.byCountry?.[code] ?? entries.filter((e) => servesCountry(e, code)).length})`;
       countrySel.appendChild(opt);
     }
     // Default to the user's region when the directory has it, otherwise show the search prompt.
@@ -375,9 +381,9 @@ export async function initLiveChannelsWindow(containerEl?: HTMLElement): Promise
       // A typed search spans every country (the strip is about finding a station, not a region);
       // the country filter applies when the box is empty.
       const matches = entries.filter((e) => {
-        if (country && !term && e.country !== country) return false;
+        if (country && !term && !servesCountry(e, country)) return false;
         if (!term) return true;
-        const hay = `${e.name} ${(e.altNames ?? []).join(' ')} ${e.countryName} ${e.categories.join(' ')}`.toLowerCase();
+        const hay = `${e.name} ${(e.altNames ?? []).join(' ')} ${e.countryName} ${(e.broadcastTo ?? []).map((b) => b.name).join(' ')} ${e.categories.join(' ')}`.toLowerCase();
         return hay.includes(term);
       });
       setTrustedHtml(results, trustedHtml('', "legacy direct innerHTML migration"));
@@ -410,7 +416,8 @@ export async function initLiveChannelsWindow(containerEl?: HTMLElement): Promise
         if (e.notNonStop) label.title = t('components.liveNews.scheduledHint') ?? 'Streams during newscasts only — may be off air';
         const meta = document.createElement('span');
         meta.className = 'live-news-iptv-meta';
-        meta.textContent = [e.countryName, e.categories.slice(0, 2).join(', '), e.quality, e.needsProxy ? 'via hub proxy' : '', e.geoBlocked ? 'geo-blocked' : ''].filter(Boolean).join(' · ');
+        const reach = e.broadcastTo?.length ? `${e.countryName} → ${e.broadcastTo.map((b) => b.name).join(', ')}` : e.countryName;
+        meta.textContent = [reach, e.categories.slice(0, 2).join(', '), e.quality, e.needsProxy ? 'via hub proxy' : '', e.geoBlocked ? 'geo-blocked' : ''].filter(Boolean).join(' · ');
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'live-news-manage-add-btn live-news-iptv-add' + (added ? ' added' : '');

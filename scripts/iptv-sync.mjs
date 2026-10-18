@@ -3,8 +3,11 @@
  * IPTV directory sync — builds public/data/iptv-directory.json from the public
  * iptv-org index (https://github.com/iptv-org/iptv, API at iptv-org.github.io/api).
  *
- * Keeps: every channel from the Caribbean + Guiana Shield countries (any genre)
- * plus worldwide channels tagged `news`. Each stream is probed from this machine:
+ * Keeps: every channel from the Caribbean + Guiana Shield countries (any genre),
+ * channels whose feeds broadcast INTO one of those countries (iptv-org's country
+ * playlists include diaspora stations such as Little Guyana TV from the US — their
+ * `broadcast_area` in feeds.json names the target country), plus worldwide
+ * channels tagged `news`. Each stream is probed from this machine:
  * HTTP 200 and a `#EXTM3U` manifest. Streams without an `Access-Control-Allow-Origin`
  * header are kept but flagged `needsProxy` (the hub plays them via its same-origin proxy).
  *
@@ -55,7 +58,18 @@ async function mapLimit(items, limit, fn) {
   return out;
 }
 
-const [channels, streams, countries, categories, logos] = await Promise.all([getJson('channels'), getJson('streams'), getJson('countries'), getJson('categories'), getJson('logos').catch(() => [])]);
+const [channels, streams, feeds, countries, categories, logos] = await Promise.all([getJson('channels'), getJson('streams'), getJson('feeds').catch(() => []), getJson('countries'), getJson('categories'), getJson('logos').catch(() => [])]);
+// feeds.json: broadcast_area entries like "c/GY" say where a feed is aimed. This is what
+// iptv-org's countries/<cc>.m3u playlists use, so a channel owned in the US can sit in gy.m3u.
+const reaches = new Map(); // channel id -> Set of scoped country codes its feeds broadcast to
+for (const f of feeds) {
+  for (const area of f?.broadcast_area || []) {
+    const [kind, code] = String(area).split('/');
+    if (kind !== 'c' || !COUNTRIES.has(code)) continue;
+    if (!reaches.has(f.channel)) reaches.set(f.channel, new Set());
+    reaches.get(f.channel).add(code);
+  }
+}
 // channels.json carries no logo field any more; logos live in logos.json (one or more per channel).
 const logoByChannel = new Map();
 for (const l of logos) if (l?.channel && l?.url && !logoByChannel.has(l.channel)) logoByChannel.set(l.channel, l.url);
@@ -63,7 +77,7 @@ const countryName = new Map(countries.map((c) => [c.code, c.name]));
 const categoryName = new Map(categories.map((c) => [c.id, c.name]));
 const byId = new Map(channels.map((c) => [c.id, c]));
 
-const wanted = channels.filter((c) => !c.closed && (COUNTRIES.has(c.country) || (INCLUDE_NEWS && (c.categories || []).includes('news'))));
+const wanted = channels.filter((c) => !c.closed && (COUNTRIES.has(c.country) || reaches.has(c.id) || (INCLUDE_NEWS && (c.categories || []).includes('news'))));
 const wantedIds = new Set(wanted.map((c) => c.id));
 const candidates = streams.filter((s) => s.channel && wantedIds.has(s.channel) && typeof s.url === 'string' && s.url.startsWith('https://') && !s.referrer && !s.user_agent);
 console.error(`[iptv-sync] channels in scope: ${wanted.length}; https streams without header requirements: ${candidates.length}; probing with concurrency ${CONCURRENCY}…`);
@@ -95,6 +109,8 @@ const directory = [...best.values()].map((s) => {
     country: c.country,
     countryName: countryName.get(c.country) || c.country,
     categories: (c.categories || []).map((id) => categoryName.get(id) || id),
+    // Scoped countries this channel broadcasts to besides its home country (diaspora stations).
+    broadcastTo: [...(reaches.get(s.channel) || [])].filter((code) => code !== c.country).sort().map((code) => ({ code, name: countryName.get(code) || code })),
     logo: logoByChannel.get(s.channel) || c.logo || undefined,
     website: c.website || undefined,
     hlsUrl: s.url,
@@ -107,10 +123,11 @@ const directory = [...best.values()].map((s) => {
     // /api/iptv-proxy (scripts/tt-hub-server.mjs), which only accepts hosts listed in this file.
     needsProxy: s.probe.hasCors ? undefined : true,
   };
-}).sort((a, b) => a.countryName.localeCompare(b.countryName) || a.name.localeCompare(b.name));
+}).map((d) => (d.broadcastTo.length ? d : { ...d, broadcastTo: undefined })).sort((a, b) => a.countryName.localeCompare(b.countryName) || a.name.localeCompare(b.name));
 
+// Per-country counts include channels broadcasting into the country (what the UI's country filter shows).
 const byCountry = {};
-for (const d of directory) byCountry[d.country] = (byCountry[d.country] || 0) + 1;
+for (const d of directory) for (const code of [d.country, ...(d.broadcastTo || []).map((b) => b.code)]) byCountry[code] = (byCountry[code] || 0) + 1;
 mkdirSync(dirname(OUT), { recursive: true });
 writeFileSync(OUT, JSON.stringify({
   source: 'https://github.com/iptv-org/iptv (iptv-org.github.io/api)',

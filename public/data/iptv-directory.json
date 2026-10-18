@@ -1,7 +1,7 @@
 {
  "source": "https://github.com/iptv-org/iptv (iptv-org.github.io/api)",
  "licence": "Channel metadata CC0 / streams are the broadcasters' public URLs; verified from this machine only",
- "generatedAt": "2026-10-18T00:12:31.905Z",
+ "generatedAt": "2026-10-18T03:05:20.132Z",
  "scope": {
   "countries": [
    "TT",
@@ -39,16 +39,19 @@
   ],
   "newsWorldwide": true
  },
- "probed": 1949,
- "verified": 999,
+ "probed": 2126,
+ "verified": 1038,
  "needsProxy": 8,
  "byCountry": {
   "AF": 1,
   "AL": 5,
   "AG": 1,
-  "AR": 7,
+  "AR": 10,
+  "DO": 193,
+  "VE": 51,
+  "PR": 37,
   "AM": 1,
-  "AW": 9,
+  "AW": 10,
   "AU": 11,
   "AZ": 1,
   "BS": 2,
@@ -58,21 +61,21 @@
   "BZ": 1,
   "BO": 3,
   "BQ": 4,
+  "CW": 4,
   "BA": 1,
   "BR": 20,
   "VG": 2,
-  "BF": 1,
-  "CM": 3,
-  "CA": 9,
+  "KH": 1,
+  "CM": 4,
+  "CA": 10,
+  "GY": 3,
   "CL": 9,
   "CN": 10,
   "CO": 6,
   "CR": 1,
   "HR": 1,
-  "CU": 1,
-  "CW": 3,
+  "CU": 3,
   "CZ": 2,
-  "DO": 188,
   "EC": 1,
   "EG": 1,
   "FI": 1,
@@ -84,9 +87,8 @@
   "GP": 4,
   "GT": 1,
   "GN": 1,
-  "GY": 2,
-  "HT": 6,
-  "HN": 7,
+  "HT": 14,
+  "HN": 6,
   "HK": 1,
   "IS": 1,
   "IN": 235,
@@ -112,6 +114,7 @@
   "MD": 1,
   "MC": 1,
   "MA": 3,
+  "MM": 1,
   "NL": 1,
   "NG": 1,
   "OM": 1,
@@ -119,11 +122,10 @@
   "PS": 3,
   "PA": 1,
   "PY": 3,
-  "PE": 9,
+  "PE": 10,
   "PH": 2,
   "PL": 3,
   "PT": 1,
-  "PR": 19,
   "QA": 8,
   "RO": 12,
   "RU": 13,
@@ -147,9 +149,9 @@
   "UA": 7,
   "AE": 6,
   "UK": 9,
-  "US": 85,
+  "US": 122,
+  "VI": 7,
   "UZ": 2,
-  "VE": 40,
   "VN": 4,
   "YE": 2
  },
@@ -269,6 +271,20 @@
    "cors": "*"
   },
   {
+   "id": "iptv-247canaldenoticias-ar",
+   "iptvId": "247CanaldeNoticias.ar",
+   "name": "24/7 Canal de Noticias",
+   "country": "AR",
+   "countryName": "Argentina",
+   "categories": [
+    "News"
+   ],
+   "logo": "https://i.imgur.com/4hDCB1M.png",
+   "website": "https://cn247.tv/",
+   "hlsUrl": "https://panel.host-live.com:19360/cn247tv/cn247tv.m3u8",
+   "cors": "*"
+  },
+  {
    "id": "iptv-canal26-ar",
    "iptvId": "Canal26.ar",
    "name": "Canal 26",
@@ -335,6 +351,32 @@
    "cors": "*"
   },
   {
+   "id": "iptv-disneychannellatinamerica-ar",
+   "iptvId": "DisneyChannelLatinAmerica.ar",
+   "name": "Disney Channel Latin America",
+   "country": "AR",
+   "countryName": "Argentina",
+   "categories": [
+    "Animation",
+    "Kids"
+   ],
+   "broadcastTo": [
+    {
+     "code": "DO",
+     "name": "Dominican Republic"
+    },
+    {
+     "code": "VE",
+     "name": "Venezuela"
+    }
+   ],
+   "logo": "https://upload.wikimedia.org/wikipedia/commons/f/ff/2024_Disney_Channel_text_logo.svg",
+   "website": "https://www.disneylatino.com/tv",
+   "hlsUrl": "https://barinaslive1.boldmss.com/DISNEY/DISNEY.isml/DISNEY.m3u8",
+   "quality": "1080p",
+   "cors": "*"
+  },
+  {
    "id": "iptv-mercurionoticias-ar",
    "iptvId": "MercurioNoticias.ar",
    "name": "Mercurio Noticias",
@@ -374,6 +416,27 @@
    "logo": "https://raw.githubusercontent.com/vivetvargentina/vive-tv/main/Logo%20512x512-04.png",
    "website": "https://vivetv.com.ar/",
    "hlsUrl": "https://vivo.solumedia.com:19360/vivetv/vivetv.m3u8",
+   "quality": "1080p",
+   "cors": "*"
+  },
+  {
+   "id": "iptv-xlevelmedia-ar",
+   "iptvId": "XLevelMedia.ar",
+   "name": "X Level Media",
+   "country": "AR",
+   "countryName": "Argentina",
+   "categories": [
+    "Music"
+   ],
+   "broadcastTo": [
+    {
+     "code": "PR",
+     "name": "Puerto Rico"
+    }
+   ],
+   "logo": "https://i.imgur.com/BGwQdQW.jpeg",
+   "website": "https://xlevelmedia.com/",
+   "hlsUrl": "https://tuvideoonline.com.ar:3332/live/xlevelmedialive.m3u8",
    "quality": "1080p",
    "cors": "*"
   },
@@ -920,6 +983,16 @@
    "categories": [
     "General"
    ],
+   "broadcastTo": [
+    {
+     "code": "AW",
+     "name": "Aruba"
+    },
+    {
+     "code": "CW",
+     "name": "Curacao"
+    }
+   ],
    "logo": "https://i.imgur.com/GVKjI5c.jpeg",
    "website": "https://energiabonaire.com/",
    "hlsUrl": "https://sincerecloud.stream/loadbalancer/public/actMdyoE.m3u8",
@@ -1314,19 +1387,32 @@
    "cors": "*"
   },
   {
-   "id": "iptv-filinfotv-bf",
-   "iptvId": "FilinfoTV.bf",
-   "name": "Filinfo TV",
-   "country": "BF",
-   "countryName": "Burkina Faso",
+   "id": "iptv-eacnewstv-kh",
+   "iptvId": "EACNewsTV.kh",
+   "name": "EAC News TV",
+   "country": "KH",
+   "countryName": "Cambodia",
    "categories": [
     "News"
    ],
-   "logo": "https://i.imgur.com/KG93Tvn.png",
-   "website": "https://filinfos.net/",
-   "hlsUrl": "https://d2iqjnqfr8pv3b.cloudfront.net/out/v1/d09d2fc718404cd8bccd3eba2444dd70/index.m3u8",
-   "quality": "1080p",
-   "cors": "https://worldmonitor.app"
+   "logo": "https://i.imgur.com/EuYhS9Z.png",
+   "website": "https://eacnews.asia/",
+   "hlsUrl": "https://live.eac-news.com/LiveApp/streams/eacnews.m3u8",
+   "cors": "*"
+  },
+  {
+   "id": "iptv-balafontv-cm",
+   "iptvId": "BalafonTV.cm",
+   "name": "Balafon TV",
+   "country": "CM",
+   "countryName": "Cameroon",
+   "categories": [
+    "News"
+   ],
+   "logo": "https://i.imgur.com/EqOzhYw.png",
+   "hlsUrl": "https://broadcasting-channels.com:9044/hls/test.m3u8",
+   "geoBlocked": true,
+   "cors": "*"
   },
   {
    "id": "iptv-crtvnews-cm",
@@ -1461,6 +1547,28 @@
    "website": "http://www.cp24.com/",
    "hlsUrl": "https://tvsen6.aynaott.com/cp24/index.m3u8",
    "quality": "576p",
+   "cors": "*"
+  },
+  {
+   "id": "iptv-gtncanada-ca",
+   "iptvId": "GTNCanada.ca",
+   "name": "GTN Canada",
+   "country": "CA",
+   "countryName": "Canada",
+   "categories": [
+    "General"
+   ],
+   "broadcastTo": [
+    {
+     "code": "GY",
+     "name": "Guyana"
+    }
+   ],
+   "logo": "https://i.imgur.com/7bQPJOd.png",
+   "website": "https://guyanatvnetwork.com/",
+   "hlsUrl": "https://streamer12.vdn.dstreamone.net/carishowtime/showtime/chunks.m3u8",
+   "quality": "1080i",
+   "geoBlocked": true,
    "cors": "*"
   },
   {
@@ -2049,6 +2157,21 @@
    "cors": "*"
   },
   {
+   "id": "iptv-a7tv-do",
+   "iptvId": "A7TV.do",
+   "name": "A7 TV",
+   "country": "DO",
+   "countryName": "Dominican Republic",
+   "categories": [
+    "General"
+   ],
+   "logo": "https://a7tvjarabacoa.netlify.app/IMG_1968.PNG",
+   "website": "https://a7tvjarabacoa.netlify.app/#inicio",
+   "hlsUrl": "https://183.bozztv.com/ssh101/ssh101/a7tvjarabacoa/playlist.m3u8",
+   "quality": "1080p",
+   "cors": "*"
+  },
+  {
    "id": "iptv-adoramtv-do",
    "iptvId": "AdoramTV.do",
    "name": "Adoram TV",
@@ -2061,22 +2184,6 @@
    "website": "https://adoramtv.org/",
    "hlsUrl": "https://live20.bozztv.com/giatv/giatv-adoram/adoram/chunks.m3u8",
    "quality": "720p",
-   "cors": "*"
-  },
-  {
-   "id": "iptv-aguilatv-do",
-   "iptvId": "AguilaTV.do",
-   "name": "Aguila TV",
-   "country": "DO",
-   "countryName": "Dominican Republic",
-   "categories": [
-    "General"
-   ],
-   "logo": "https://www.vivalivetv.com/public/files/shows/0/1/3770-294x165-FFFFFF.jpg",
-   "website": "https://www.vivalivetv.com/channel/aguila-tv",
-   "hlsUrl": "https://fox.hostlagarto.com:8081/aguilatv/playlist.m3u8",
-   "quality": "1080p",
-   "notNonStop": true,
    "cors": "*"
   },
   {
@@ -2381,21 +2488,6 @@
    "cors": "*"
   },
   {
-   "id": "iptv-canal70-do",
-   "iptvId": "Canal70.do",
-   "name": "Canal 70",
-   "country": "DO",
-   "countryName": "Dominican Republic",
-   "categories": [
-    "General"
-   ],
-   "logo": "https://imgur.com/LfcHA2d.jpg",
-   "website": "https://gia.tv/watchssh101.php?sn=cnal70tv",
-   "hlsUrl": "https://183.bozztv.com/giatv/giatv-cnal70tv/cnal70tv/playlist.m3u8",
-   "quality": "720p",
-   "cors": "*"
-  },
-  {
    "id": "iptv-canalcatorce-do",
    "iptvId": "CanalCatorce.do",
    "name": "Canal Catorce",
@@ -2443,25 +2535,6 @@
    "website": "https://dominiodtv.blogspot.com/",
    "hlsUrl": "https://s.emisoras.tv:8081/dtv/index.m3u8",
    "quality": "720p",
-   "cors": "*"
-  },
-  {
-   "id": "iptv-canalmultivision-do",
-   "iptvId": "CanalMultivision.do",
-   "name": "Canal Multivision",
-   "altNames": [
-    "Canal Multivisión"
-   ],
-   "country": "DO",
-   "countryName": "Dominican Republic",
-   "categories": [
-    "General"
-   ],
-   "logo": "https://i.imgur.com/puOrL7B.jpg",
-   "website": "https://canalmultivision.com/",
-   "hlsUrl": "https://live20.bozztv.com/akamaissh101/ssh101/canalmulti24/playlist.m3u8",
-   "quality": "720p",
-   "notNonStop": true,
    "cors": "*"
   },
   {
@@ -2854,23 +2927,6 @@
    "cors": "*"
   },
   {
-   "id": "iptv-deultimominutotv-do",
-   "iptvId": "DeUltimoMinutoTV.do",
-   "name": "De Ultimo Minuto TV",
-   "altNames": [
-    "De Último Minuto TV"
-   ],
-   "country": "DO",
-   "countryName": "Dominican Republic",
-   "categories": [
-    "News"
-   ],
-   "logo": "https://i.imgur.com/6ML2z17.png",
-   "website": "https://deultimominuto.net/",
-   "hlsUrl": "https://soportedvb.click:3620/live/deultimominutomedialive.m3u8",
-   "cors": "*"
-  },
-  {
    "id": "iptv-delpueblotv-do",
    "iptvId": "DelPuebloTV.do",
    "name": "Del Pueblo TV",
@@ -3016,25 +3072,6 @@
    "cors": "*"
   },
   {
-   "id": "iptv-enntivision-do",
-   "iptvId": "Enntivision.do",
-   "name": "Enntivision",
-   "altNames": [
-    "Enntivisión"
-   ],
-   "country": "DO",
-   "countryName": "Dominican Republic",
-   "categories": [
-    "General"
-   ],
-   "logo": "https://i.imgur.com/nePOFZW.png",
-   "website": "https://www.tonyconelpueblofm.com/enntivision",
-   "hlsUrl": "https://edge.essastream.com/enntivision/playlist.m3u8",
-   "quality": "1080p",
-   "notNonStop": true,
-   "cors": "*"
-  },
-  {
    "id": "iptv-entelevision-do",
    "iptvId": "entelevision.do",
    "name": "entelevision",
@@ -3098,24 +3135,6 @@
    "hlsUrl": "https://video-eu1.streamerr.co/hls/sb77f834a54/live.m3u8",
    "quality": "720p",
    "notNonStop": true,
-   "cors": "*"
-  },
-  {
-   "id": "iptv-farovision-do",
-   "iptvId": "Farovision.do",
-   "name": "Farovision",
-   "altNames": [
-    "Farovisión"
-   ],
-   "country": "DO",
-   "countryName": "Dominican Republic",
-   "categories": [
-    "General"
-   ],
-   "logo": "https://i.imgur.com/YtdOXWb.png",
-   "website": "http://farovision.net/",
-   "hlsUrl": "https://streamtv.intervenhosting.net:3754/hybrid/play.m3u8",
-   "quality": "720p",
    "cors": "*"
   },
   {
@@ -4156,6 +4175,21 @@
    "cors": "*"
   },
   {
+   "id": "iptv-senaldigitaltv-do",
+   "iptvId": "SenalDigitalTV.do",
+   "name": "Senal Digital TV",
+   "country": "DO",
+   "countryName": "Dominican Republic",
+   "categories": [
+    "General"
+   ],
+   "logo": "https://imgur.com/KGqUu1X.jpg",
+   "website": "https://canalesdominicanos.live/senal-digital-tv/",
+   "hlsUrl": "https://soportedvb.click:3494/live/senaldigitaltvlive.m3u8",
+   "notNonStop": true,
+   "cors": "*"
+  },
+  {
    "id": "iptv-senalestv-do",
    "iptvId": "SenalesTV.do",
    "name": "Senales TV",
@@ -4751,22 +4785,6 @@
    "website": "https://tv10sanjuan.com.do/",
    "hlsUrl": "https://59d39900ebfb8.streamlock.net/tv10sanjuan/tv10sanjuan/playlist.m3u8",
    "quality": "720p",
-   "notNonStop": true,
-   "cors": "*"
-  },
-  {
-   "id": "iptv-tvcotuicanal31-do",
-   "iptvId": "TVCotuiCanal31.do",
-   "name": "TV Cotui Canal 31",
-   "country": "DO",
-   "countryName": "Dominican Republic",
-   "categories": [
-    "General"
-   ],
-   "logo": "https://i.imgur.com/sMF7JDm.png",
-   "website": "http://tvcotuicanal31.com/",
-   "hlsUrl": "https://live20.bozztv.com/akamaissh101/ssh101/tvcotui/playlist.m3u8",
-   "quality": "1080p",
    "notNonStop": true,
    "cors": "*"
   },
@@ -5568,6 +5586,12 @@
    "categories": [
     "News"
    ],
+   "broadcastTo": [
+    {
+     "code": "PR",
+     "name": "Puerto Rico"
+    }
+   ],
    "logo": "https://i.imgur.com/MNKkgfa.png",
    "website": "https://www.dw.com/",
    "hlsUrl": "https://dwamdstream103.akamaized.net/hls/live/2015526/dwstream103/master.m3u8",
@@ -5640,6 +5664,21 @@
    "cors": "*"
   },
   {
+   "id": "iptv-astratv-gr",
+   "iptvId": "AstraTV.gr",
+   "name": "Astra TV",
+   "country": "GR",
+   "countryName": "Greece",
+   "categories": [
+    "News"
+   ],
+   "logo": "https://i.imgur.com/oYRPfZm.png",
+   "website": "https://www.astratv.gr/live-streaming/",
+   "hlsUrl": "https://server.gointernet.gr/live/livestream.m3u8",
+   "quality": "1080p",
+   "cors": "*"
+  },
+  {
    "id": "iptv-corfuchannel-gr",
    "iptvId": "CorfuChannel.gr",
    "name": "Corfu Channel",
@@ -5655,24 +5694,6 @@
    "website": "https://corfuchannel.com/",
    "hlsUrl": "https://itv.streams.ovh:1936/corfuchannel/corfuchannel/playlist.m3u8",
    "quality": "720p",
-   "cors": "*"
-  },
-  {
-   "id": "iptv-egnatiatv-gr",
-   "iptvId": "EgnatiaTV.gr",
-   "name": "Egnatia TV",
-   "altNames": [
-    "Εγνατία TV"
-   ],
-   "country": "GR",
-   "countryName": "Greece",
-   "categories": [
-    "News"
-   ],
-   "logo": "https://i.imgur.com/zuyYIca.png",
-   "website": "https://www.egnatia.tv/",
-   "hlsUrl": "https://video.streams.ovh:1936/egnatiatv/egnatiatv/index.m3u8",
-   "quality": "576p",
    "cors": "*"
   },
   {
@@ -5884,22 +5905,6 @@
    "cors": "*"
   },
   {
-   "id": "iptv-hgptv-gy",
-   "iptvId": "HGPTV.gy",
-   "name": "HGPTV",
-   "country": "GY",
-   "countryName": "Guyana",
-   "categories": [
-    "General"
-   ],
-   "logo": "https://i.imgur.com/0aIH6V5.png",
-   "website": "https://hgptv.com/",
-   "hlsUrl": "https://cdn-us-east-prod-ingest-infra-dacast-com.akamaized.net/8424fb7f-99a9-87ae-3861-f0620849d11c/source/index.m3u8",
-   "quality": "720p",
-   "notNonStop": true,
-   "cors": "*"
-  },
-  {
    "id": "iptv-mtvguyana-gy",
    "iptvId": "MTVGuyana.gy",
    "name": "MTV Guyana",
@@ -6089,25 +6094,6 @@
    "website": "https://www.rcv.hn/",
    "hlsUrl": "https://59d39900ebfb8.streamlock.net/rcv/rcv/playlist.m3u8",
    "quality": "712p",
-   "cors": "*"
-  },
-  {
-   "id": "iptv-tsi-hn",
-   "iptvId": "TSi.hn",
-   "name": "TSi",
-   "altNames": [
-    "Telesistema Informativo"
-   ],
-   "country": "HN",
-   "countryName": "Honduras",
-   "categories": [
-    "News"
-   ],
-   "logo": "https://i.imgur.com/GEyxDnf.png",
-   "website": "https://www.televicentro.hn/",
-   "hlsUrl": "https://mdstrm.com/live-stream-playlist/6287fdc9303e3008289ab711.m3u8",
-   "quality": "720p",
-   "notNonStop": true,
    "cors": "*"
   },
   {
@@ -6448,7 +6434,7 @@
    ],
    "logo": "https://i.imgur.com/RhkbhZD.png",
    "website": "https://www.apnlive.com/",
-   "hlsUrl": "https://mumt01.tangotv.in/O5aw8Zn3APN/index.m3u8",
+   "hlsUrl": "https://d1msejlow1t3l4.cloudfront.net/fta/apnnews/playlist.m3u8",
    "quality": "576p",
    "cors": "*"
   },
@@ -10966,6 +10952,26 @@
    "cors": "*"
   },
   {
+   "id": "iptv-dvbtv-mm",
+   "iptvId": "DVBTV.mm",
+   "name": "DVB TV",
+   "altNames": [
+    "Democratic Voice of Burma",
+    "ဒီမိုကရေတစ်မြန်မာ့အသံ"
+   ],
+   "country": "MM",
+   "countryName": "Myanmar",
+   "categories": [
+    "News"
+   ],
+   "logo": "https://i.imgur.com/VdezHOv.png",
+   "website": "https://burmese.dvb.no/",
+   "hlsUrl": "https://live-stream.dvb.no/hls/stream_src/index.m3u8",
+   "quality": "720p",
+   "geoBlocked": true,
+   "cors": "*"
+  },
+  {
    "id": "iptv-nh-nl",
    "iptvId": "NH.nl",
    "name": "NH",
@@ -11318,6 +11324,27 @@
    "cors": "*"
   },
   {
+   "id": "iptv-betheltv-pe",
+   "iptvId": "BethelTV.pe",
+   "name": "Bethel TV",
+   "country": "PE",
+   "countryName": "Peru",
+   "categories": [
+    "Religious"
+   ],
+   "broadcastTo": [
+    {
+     "code": "PR",
+     "name": "Puerto Rico"
+    }
+   ],
+   "logo": "https://i.imgur.com/zCVh765.png",
+   "website": "https://www.betheltv.tv/",
+   "hlsUrl": "https://alfa.betheltv.tv/srt/3_abr/playlist.m3u8",
+   "quality": "720p",
+   "cors": "*"
+  },
+  {
    "id": "iptv-conecta2tv-pe",
    "iptvId": "Conecta2TV.pe",
    "name": "Conecta2TV",
@@ -11593,6 +11620,25 @@
    "cors": "*"
   },
   {
+   "id": "iptv-catv-pr",
+   "iptvId": "CAtv.pr",
+   "name": "CAtv",
+   "altNames": [
+    "Caribbean Advantage TV"
+   ],
+   "country": "PR",
+   "countryName": "Puerto Rico",
+   "categories": [
+    "General"
+   ],
+   "logo": "https://caribbeanadvantage.com/images/CAtv-logo-512.png",
+   "website": "http://caribbeanadvantage.com",
+   "hlsUrl": "https://video2.getstreamhosting.com:19360/8216/8216.m3u8",
+   "quality": "1080p",
+   "notNonStop": true,
+   "cors": "*"
+  },
+  {
    "id": "iptv-cdminternacional-pr",
    "iptvId": "CDMInternacional.pr",
    "name": "CDM Internacional",
@@ -11798,6 +11844,26 @@
    "website": "https://www.triunfo969.fm/",
    "hlsUrl": "https://59825a54e4454.streamlock.net:8443/william652/william652/playlist.m3u8",
    "quality": "360p",
+   "cors": "*"
+  },
+  {
+   "id": "iptv-wapatv41-pr",
+   "iptvId": "WAPATV41.pr",
+   "name": "WAPA-TV 4.1",
+   "altNames": [
+    "WAPA-TV",
+    "WAPA HD"
+   ],
+   "country": "PR",
+   "countryName": "Puerto Rico",
+   "categories": [
+    "General"
+   ],
+   "logo": "https://i.imgur.com/kqq7tD9.png",
+   "website": "http://www.televicentropr.com/",
+   "hlsUrl": "https://wapa-updater.onrender.com/WAPA-TV-4-1.m3u8",
+   "quality": "1080p",
+   "notNonStop": true,
    "cors": "*"
   },
   {
@@ -14082,6 +14148,31 @@
    "cors": "*, *"
   },
   {
+   "id": "iptv-abc-us",
+   "iptvId": "ABC.us",
+   "name": "ABC",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "General"
+   ],
+   "broadcastTo": [
+    {
+     "code": "PR",
+     "name": "Puerto Rico"
+    },
+    {
+     "code": "VI",
+     "name": "U.S. Virgin Islands"
+    }
+   ],
+   "logo": "https://upload.wikimedia.org/wikipedia/commons/f/f8/KTVX2022LOGO.svg",
+   "website": "https://abc.com/",
+   "hlsUrl": "https://amg01942-amg01942c6-stirr-us-10178.playouts.now.amagi.tv/playlist.m3u8",
+   "quality": "1080p",
+   "cors": "*"
+  },
+  {
    "id": "iptv-abcnewslive-us",
    "iptvId": "ABCNewsLive.us",
    "name": "ABC News Live",
@@ -14335,6 +14426,26 @@
    "cors": "http://pluto.tv"
   },
   {
+   "id": "iptv-bpxtvradio-us",
+   "iptvId": "BPXTVRadio.us",
+   "name": "BPX TV Radio",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "Music"
+   ],
+   "broadcastTo": [
+    {
+     "code": "HT",
+     "name": "Haiti"
+    }
+   ],
+   "logo": "https://i.imgur.com/86VXni8.jpeg",
+   "website": "https://haitibroadcasting.com/bpxtvradio/",
+   "hlsUrl": "https://video1.getstreamhosting.com:1936/8212/8212/playlist.m3u8",
+   "cors": "*"
+  },
+  {
    "id": "iptv-bxinform-us",
    "iptvId": "BXInform.us",
    "name": "BX Inform",
@@ -14349,6 +14460,27 @@
    "hlsUrl": "https://reflect-stream-bronxnet.cablecast.tv/live-8/live/stream-4/live.m3u8",
    "quality": "1080p",
    "cors": "*"
+  },
+  {
+   "id": "iptv-cbs-us",
+   "iptvId": "CBS.us",
+   "name": "CBS",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "General"
+   ],
+   "broadcastTo": [
+    {
+     "code": "VI",
+     "name": "U.S. Virgin Islands"
+    }
+   ],
+   "logo": "https://upload.wikimedia.org/wikipedia/en/6/6b/KYES-TV_2017_Logo.png",
+   "website": "https://www.cbs.com/",
+   "hlsUrl": "https://cdn-ue1-prod.tsv2.amagi.tv/linear/amg00327-coxmediagroup-kirobreaking-ono/playlist.m3u8",
+   "quality": "1080p",
+   "cors": "https://worldmonitor.app"
   },
   {
    "id": "iptv-cbsnews247-us",
@@ -14576,6 +14708,27 @@
    "cors": "*"
   },
   {
+   "id": "iptv-cinecanal-us",
+   "iptvId": "Cinecanal.us",
+   "name": "Cinecanal",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "Movies"
+   ],
+   "broadcastTo": [
+    {
+     "code": "VE",
+     "name": "Venezuela"
+    }
+   ],
+   "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/CinecanalLA.png/960px-CinecanalLA.png",
+   "website": "https://foxplay.com/ar/brandingchannel/98d445b15e5f4d3ab92fdc1e84bbc45e",
+   "hlsUrl": "https://barinaslive1.boldmss.com/CINECANAL/CINECANAL.isml/CINECANAL.m3u8",
+   "quality": "1080p",
+   "cors": "*"
+  },
+  {
    "id": "iptv-cnn-us",
    "iptvId": "CNN.us",
    "name": "CNN",
@@ -14641,6 +14794,69 @@
    "cors": "https://worldmonitor.app"
   },
   {
+   "id": "iptv-comedycentrallatinamerica-us",
+   "iptvId": "ComedyCentralLatinAmerica.us",
+   "name": "Comedy Central Latin America",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "Comedy"
+   ],
+   "broadcastTo": [
+    {
+     "code": "VE",
+     "name": "Venezuela"
+    }
+   ],
+   "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Comedy_Central_2018.svg/960px-Comedy_Central_2018.svg.png",
+   "website": "http://comedycentral.la/",
+   "hlsUrl": "https://barinaslive1.boldmss.com/COMEDY/COMEDY.isml/COMEDY.m3u8",
+   "quality": "1080p",
+   "cors": "*"
+  },
+  {
+   "id": "iptv-courttv-us",
+   "iptvId": "CourtTV.us",
+   "name": "Court TV",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "Documentary"
+   ],
+   "broadcastTo": [
+    {
+     "code": "VI",
+     "name": "U.S. Virgin Islands"
+    }
+   ],
+   "logo": "https://i.imgur.com/jOKA735.png",
+   "website": "https://www.courttv.com/",
+   "hlsUrl": "https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01438-ewscrippscompan-courttv-tablo/playlist.m3u8",
+   "quality": "1080p",
+   "cors": "https://worldmonitor.app"
+  },
+  {
+   "id": "iptv-daystartv-us",
+   "iptvId": "DaystarTV.us",
+   "name": "Daystar TV",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "Religious"
+   ],
+   "broadcastTo": [
+    {
+     "code": "PR",
+     "name": "Puerto Rico"
+    }
+   ],
+   "logo": "https://i.imgur.com/IjzCv8f.png",
+   "website": "https://www.daystar.com/",
+   "hlsUrl": "https://live-mcl.cdn01.net/smarttv/48vy43564/playlist.m3u8",
+   "quality": "1080p",
+   "cors": "*"
+  },
+  {
    "id": "iptv-didgahtv-us",
    "iptvId": "DidgahTV.us",
    "name": "Didgah TV",
@@ -14675,6 +14891,181 @@
    "cors": "*"
   },
   {
+   "id": "iptv-espn2latinamerica-us",
+   "iptvId": "ESPN2LatinAmerica.us",
+   "name": "ESPN 2 Latin America",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "Sports"
+   ],
+   "broadcastTo": [
+    {
+     "code": "DO",
+     "name": "Dominican Republic"
+    }
+   ],
+   "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/ESPN2_logo.svg/960px-ESPN2_logo.svg.png",
+   "website": "https://espn.com/",
+   "hlsUrl": "https://barinaslive1.boldmss.com/ESPN_2/ESPN_2.isml/ESPN_2.m3u8",
+   "quality": "1080p",
+   "cors": "*"
+  },
+  {
+   "id": "iptv-espn3latinamerica-us",
+   "iptvId": "ESPN3LatinAmerica.us",
+   "name": "ESPN 3 Latin America",
+   "altNames": [
+    "ESPN 3 Sur",
+    "ESPN Norte"
+   ],
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "Sports"
+   ],
+   "broadcastTo": [
+    {
+     "code": "DO",
+     "name": "Dominican Republic"
+    },
+    {
+     "code": "VE",
+     "name": "Venezuela"
+    }
+   ],
+   "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/ESPN3_Logo.png/960px-ESPN3_Logo.png",
+   "website": "http://espn.com/",
+   "hlsUrl": "https://barinaslive1.boldmss.com/ESPN_3/ESPN_3.isml/ESPN_3.m3u8",
+   "quality": "1080p",
+   "cors": "*"
+  },
+  {
+   "id": "iptv-espn4latinamerica-us",
+   "iptvId": "ESPN4LatinAmerica.us",
+   "name": "ESPN 4 Latin America",
+   "altNames": [
+    "ESPN 4 Sur",
+    "ESPN 4 Norte"
+   ],
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "Sports"
+   ],
+   "broadcastTo": [
+    {
+     "code": "DO",
+     "name": "Dominican Republic"
+    },
+    {
+     "code": "VE",
+     "name": "Venezuela"
+    }
+   ],
+   "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/ESPN_4_logo.svg/960px-ESPN_4_logo.svg.png",
+   "website": "https://espn.com/",
+   "hlsUrl": "https://barinaslive1.boldmss.com/ESPN_4/ESPN_4.isml/ESPN_4.m3u8",
+   "quality": "1080p",
+   "cors": "*"
+  },
+  {
+   "id": "iptv-espn5latinamerica-us",
+   "iptvId": "ESPN5LatinAmerica.us",
+   "name": "ESPN 5 Latin America",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "Sports"
+   ],
+   "broadcastTo": [
+    {
+     "code": "DO",
+     "name": "Dominican Republic"
+    },
+    {
+     "code": "VE",
+     "name": "Venezuela"
+    }
+   ],
+   "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/ESPN_wordmark.svg/960px-ESPN_wordmark.svg.png",
+   "website": "https://espn.com/",
+   "hlsUrl": "https://barinaslive1.boldmss.com/ESPN_5/ESPN_5.isml/ESPN_5.m3u8",
+   "quality": "1080p",
+   "cors": "*"
+  },
+  {
+   "id": "iptv-espn6latinamerica-us",
+   "iptvId": "ESPN6LatinAmerica.us",
+   "name": "ESPN 6 Latin America",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "Sports"
+   ],
+   "broadcastTo": [
+    {
+     "code": "DO",
+     "name": "Dominican Republic"
+    },
+    {
+     "code": "VE",
+     "name": "Venezuela"
+    }
+   ],
+   "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/ESPN_wordmark.svg/960px-ESPN_wordmark.svg.png",
+   "website": "https://espn.com/",
+   "hlsUrl": "https://barinaslive1.boldmss.com/ESPN_6/ESPN_6.isml/ESPN_6.m3u8",
+   "quality": "1080p",
+   "cors": "*"
+  },
+  {
+   "id": "iptv-espn7latinamerica-us",
+   "iptvId": "ESPN7LatinAmerica.us",
+   "name": "ESPN 7 Latin America",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "Sports"
+   ],
+   "broadcastTo": [
+    {
+     "code": "VE",
+     "name": "Venezuela"
+    }
+   ],
+   "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/ESPN_wordmark.svg/960px-ESPN_wordmark.svg.png",
+   "website": "https://espn.com/",
+   "hlsUrl": "https://barinaslive1.boldmss.com/ESPN_7/ESPN_7.isml/ESPN_7.m3u8",
+   "quality": "1080p",
+   "cors": "*"
+  },
+  {
+   "id": "iptv-espnlatinamerica-us",
+   "iptvId": "ESPNLatinAmerica.us",
+   "name": "ESPN Latin America",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "Sports"
+   ],
+   "broadcastTo": [
+    {
+     "code": "DO",
+     "name": "Dominican Republic"
+    },
+    {
+     "code": "VE",
+     "name": "Venezuela"
+    }
+   ],
+   "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/ESPN_wordmark.svg/960px-ESPN_wordmark.svg.png",
+   "website": "https://espn.com/",
+   "hlsUrl": "https://barinaslive1.boldmss.com/ESPN/ESPN.isml/ESPN.m3u8",
+   "quality": "1080p",
+   "cors": "*"
+  },
+  {
    "id": "iptv-estrellanews-us",
    "iptvId": "EstrellaNews.us",
    "name": "Estrella News",
@@ -14688,6 +15079,52 @@
    "hlsUrl": "https://estrella-news-oando.amagi.tv/playlist.m3u8",
    "quality": "1080p",
    "cors": "*"
+  },
+  {
+   "id": "iptv-ewtn-us",
+   "iptvId": "EWTN.us",
+   "name": "EWTN",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "Religious"
+   ],
+   "broadcastTo": [
+    {
+     "code": "PR",
+     "name": "Puerto Rico"
+    }
+   ],
+   "logo": "https://i.imgur.com/sua70RO.png",
+   "website": "https://www.ewtn.com/tv/",
+   "hlsUrl": "https://cdn3.wowza.com/1/ZVBYYXFLLzE0c3NC/Qk1FMURC/hls/live/playlist.m3u8",
+   "quality": "720p",
+   "cors": "*"
+  },
+  {
+   "id": "iptv-fox-us",
+   "iptvId": "Fox.us",
+   "name": "Fox",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "General"
+   ],
+   "broadcastTo": [
+    {
+     "code": "PR",
+     "name": "Puerto Rico"
+    },
+    {
+     "code": "VI",
+     "name": "U.S. Virgin Islands"
+    }
+   ],
+   "logo": "https://static.wikia.nocookie.net/tvstations/images/8/8e/KBSIO6.png",
+   "website": "https://www.fox.com/",
+   "hlsUrl": "https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg00488-foxdigital-fox4dallaskdfw-vizious/playlist.m3u8",
+   "quality": "1080p",
+   "cors": "https://worldmonitor.app"
   },
   {
    "id": "iptv-foxnewschannel-us",
@@ -14735,6 +15172,48 @@
    "cors": "*"
   },
   {
+   "id": "iptv-fxlatinamerica-us",
+   "iptvId": "FXLatinAmerica.us",
+   "name": "FX Latin America",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "Entertainment"
+   ],
+   "broadcastTo": [
+    {
+     "code": "VE",
+     "name": "Venezuela"
+    }
+   ],
+   "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/FX_International_logo.svg/960px-FX_International_logo.svg.png",
+   "website": "http://www.canalfx.tv/",
+   "hlsUrl": "https://barinaslive1.boldmss.com/FX/FX.isml/FX.m3u8",
+   "quality": "1080p",
+   "cors": "*"
+  },
+  {
+   "id": "iptv-hmipromznews-us",
+   "iptvId": "HMIPROMZNEWS.us",
+   "name": "HMI PROMZ NEWS",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "Music"
+   ],
+   "broadcastTo": [
+    {
+     "code": "HT",
+     "name": "Haiti"
+    }
+   ],
+   "logo": "https://i.imgur.com/gwPaw3v.png",
+   "website": "https://hmipromznews.com/",
+   "hlsUrl": "https://video1.getstreamhosting.com:1936/8326/8326/playlist.m3u8",
+   "quality": "720p",
+   "cors": "*"
+  },
+  {
    "id": "iptv-hollywire-us",
    "iptvId": "HollyWire.us",
    "name": "HollyWire",
@@ -14748,6 +15227,49 @@
    "website": "https://hollywire.com/",
    "hlsUrl": "https://bozztv.com/hwotta/playlist/playlist.m3u8",
    "quality": "720p",
+   "cors": "*"
+  },
+  {
+   "id": "iptv-iontv-us",
+   "iptvId": "IONTV.us",
+   "name": "ION TV",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "Entertainment"
+   ],
+   "broadcastTo": [
+    {
+     "code": "VI",
+     "name": "U.S. Virgin Islands"
+    }
+   ],
+   "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiSmnYsts3yvFitiy9hspQUKgqp9mThaxVh0f4IDP12KZR52nEzg6UFmnycSjSJvA8kSA&usqp=CAU",
+   "website": "https://iontelevision.com/",
+   "hlsUrl": "https://pb-xhb3ic8b61whm.akamaized.net/Ion_US.m3u8",
+   "quality": "1080p",
+   "geoBlocked": true,
+   "cors": "*"
+  },
+  {
+   "id": "iptv-kajoutv-us",
+   "iptvId": "KajouTV.us",
+   "name": "Kajou TV",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "Culture"
+   ],
+   "broadcastTo": [
+    {
+     "code": "HT",
+     "name": "Haiti"
+    }
+   ],
+   "logo": "https://i.imgur.com/2XzghdT.png",
+   "hlsUrl": "https://video1.getstreamhosting.com:1936/8055/8055/playlist.m3u8",
+   "quality": "720p",
+   "notNonStop": true,
    "cors": "*"
   },
   {
@@ -14766,6 +15288,27 @@
    "cors": "*"
   },
   {
+   "id": "iptv-littleguyanatv-us",
+   "iptvId": "LittleGuyanaTV.us",
+   "name": "Little Guyana TV",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "General"
+   ],
+   "broadcastTo": [
+    {
+     "code": "GY",
+     "name": "Guyana"
+    }
+   ],
+   "logo": "https://i.imgur.com/b475xOT.jpg",
+   "website": "https://littleguyanatv.com/",
+   "hlsUrl": "https://video1.getstreamhosting.com:1936/8122/8122/playlist.m3u8",
+   "quality": "1080p",
+   "cors": "*"
+  },
+  {
    "id": "iptv-livenowfromfox-us",
    "iptvId": "LiveNOWfromFOX.us",
    "name": "LiveNOW from FOX",
@@ -14780,6 +15323,48 @@
    "quality": "1080p",
    "geoBlocked": true,
    "cors": "*"
+  },
+  {
+   "id": "iptv-mariavisionusa-us",
+   "iptvId": "MariaVisionUSA.us",
+   "name": "Maria Vision USA",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "Religious"
+   ],
+   "broadcastTo": [
+    {
+     "code": "PR",
+     "name": "Puerto Rico"
+    }
+   ],
+   "logo": "https://i.imgur.com/eaVt8R1.png",
+   "website": "https://www.mariavision.us/",
+   "hlsUrl": "https://1601580044.rsc.cdn77.org/live/_jcn_/amls:PALMIAMI/playlist.m3u8",
+   "quality": "1080p",
+   "cors": "*"
+  },
+  {
+   "id": "iptv-megatv-us",
+   "iptvId": "MegaTV.us",
+   "name": "Mega TV",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "General"
+   ],
+   "broadcastTo": [
+    {
+     "code": "PR",
+     "name": "Puerto Rico"
+    }
+   ],
+   "logo": "https://i.imgur.com/MiPdjSX.png",
+   "website": "https://mega.tv/?=inicio",
+   "hlsUrl": "https://mdstrm.com/live-stream-playlist/67ed74e8af482ba71d47fd7b.m3u8",
+   "quality": "1080p",
+   "cors": "https://worldmonitor.app"
   },
   {
    "id": "iptv-msnow-us",
@@ -14812,6 +15397,27 @@
    "website": "https://iraniancongress.com",
    "hlsUrl": "https://tv.iraniancongress.com/stream/tv.m3u8",
    "cors": "*"
+  },
+  {
+   "id": "iptv-nbc-us",
+   "iptvId": "NBC.us",
+   "name": "NBC",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "General"
+   ],
+   "broadcastTo": [
+    {
+     "code": "PR",
+     "name": "Puerto Rico"
+    }
+   ],
+   "logo": "https://i.imgur.com/B1qVjQN.png",
+   "website": "http://www.nbc.com/",
+   "hlsUrl": "https://d368vp0qqzvkid.cloudfront.net/11603/88889711/hls/master.m3u8?ads.xumo_channelId=88889711a&ads.xumo_ifaType=&ads.xumo_providerId=3822&ads.xumo_providerName=NBCNBA",
+   "quality": "1080p",
+   "cors": "https://worldmonitor.app"
   },
   {
    "id": "iptv-nbcnewsnow-us",
@@ -14847,32 +15453,18 @@
    "cors": "*"
   },
   {
-   "id": "iptv-news12brooklyn-us",
-   "iptvId": "News12Brooklyn.us",
-   "name": "News12 Brooklyn",
-   "country": "US",
-   "countryName": "United States",
-   "categories": [
-    "News"
-   ],
-   "logo": "https://i.imgur.com/fvcOzzK.png",
-   "website": "https://brooklyn.news12.com/",
-   "hlsUrl": "https://mdc.ott.alticeusa.net/live4.ott.optimum.net/live4-uploads/N12KH_A1/index_new.m3u8?omap=https",
-   "geoBlocked": true,
-   "cors": "*"
-  },
-  {
-   "id": "iptv-news12newjersey-us",
-   "iptvId": "News12NewJersey.us",
-   "name": "News12 New Jersey",
+   "id": "iptv-news12longisland-us",
+   "iptvId": "News12LongIsland.us",
+   "name": "News12 Long Island",
    "country": "US",
    "countryName": "United States",
    "categories": [
     "News"
    ],
    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/News_12_logo_2019.png/960px-News_12_logo_2019.png",
-   "website": "https://newjersey.news12.com/",
-   "hlsUrl": "https://mdc.ott.alticeusa.net/live4.ott.optimum.net/live4-uploads/N12JH_CENT_A1/index_new.m3u8?omap=https",
+   "website": "https://longisland.news12.com/",
+   "hlsUrl": "https://mdc.ott.alticeusa.net/live4.ott.optimum.net/live4-uploads/N12LH_WEST_A1/index_new.m3u8?omap=https",
+   "quality": "1080p",
    "geoBlocked": true,
    "cors": "*"
   },
@@ -14890,21 +15482,6 @@
    "hlsUrl": "https://aegis-cloudfront-1.tubi.video/97fbb992-c212-4164-8406-abb6f731e517/playlist.m3u8",
    "quality": "1080p",
    "cors": "https://worldmonitor.app"
-  },
-  {
-   "id": "iptv-news12westchester-us",
-   "iptvId": "News12Westchester.us",
-   "name": "News12 Westchester",
-   "country": "US",
-   "countryName": "United States",
-   "categories": [
-    "News"
-   ],
-   "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/News_12_logo_2019.png/960px-News_12_logo_2019.png",
-   "website": "https://westchester.news12.com/",
-   "hlsUrl": "https://mdc.ott.alticeusa.net/live4.ott.optimum.net/live4-uploads/N12WH_A1/index_new.m3u8?omap=https",
-   "geoBlocked": true,
-   "cors": "*"
   },
   {
    "id": "iptv-news12plusconnecticut-us",
@@ -15016,6 +15593,31 @@
    "cors": "https://worldmonitor.app"
   },
   {
+   "id": "iptv-nickelodeonlatinamerica-us",
+   "iptvId": "NickelodeonLatinAmerica.us",
+   "name": "Nickelodeon Latin America",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "Kids"
+   ],
+   "broadcastTo": [
+    {
+     "code": "DO",
+     "name": "Dominican Republic"
+    },
+    {
+     "code": "VE",
+     "name": "Venezuela"
+    }
+   ],
+   "logo": "https://i.imgur.com/E84jnP8.png",
+   "website": "http://nickelodeon.la/",
+   "hlsUrl": "https://barinaslive1.boldmss.com/NICK/NICK.isml/NICK.m3u8",
+   "quality": "1080p",
+   "cors": "*"
+  },
+  {
    "id": "iptv-nowmediatelevision-us",
    "iptvId": "NowMediaTelevision.us",
    "name": "NowMedia Television",
@@ -15094,6 +15696,58 @@
    "cors": "*"
   },
   {
+   "id": "iptv-pbs-us",
+   "iptvId": "PBS.us",
+   "name": "PBS",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "Education"
+   ],
+   "broadcastTo": [
+    {
+     "code": "PR",
+     "name": "Puerto Rico"
+    },
+    {
+     "code": "VI",
+     "name": "U.S. Virgin Islands"
+    }
+   ],
+   "logo": "https://i.imgur.com/O1zzAvh.png",
+   "website": "https://www.pbs.org/",
+   "hlsUrl": "https://pbs.lls.cdn.pbs.org/est/index.m3u8",
+   "quality": "1080p",
+   "geoBlocked": true,
+   "cors": "*"
+  },
+  {
+   "id": "iptv-pbskids-us",
+   "iptvId": "PBSKids.us",
+   "name": "PBS Kids",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "Education",
+    "Kids"
+   ],
+   "broadcastTo": [
+    {
+     "code": "PR",
+     "name": "Puerto Rico"
+    },
+    {
+     "code": "VI",
+     "name": "U.S. Virgin Islands"
+    }
+   ],
+   "logo": "https://i.imgur.com/fg8c9WK.png",
+   "website": "https://pbskids.org/",
+   "hlsUrl": "https://livestream.pbskids.org/out/v1/14507d931bbe48a69287e4850e53443c/est.m3u8",
+   "quality": "720p",
+   "cors": "https://worldmonitor.app"
+  },
+  {
    "id": "iptv-plutotvrecordnews-us",
    "iptvId": "PlutoTVRecordNews.us",
    "name": "Pluto TV Record News",
@@ -15107,6 +15761,73 @@
    "hlsUrl": "https://jmp2.uk/plu-6102e04e9ab1db0007a980a1.m3u8",
    "quality": "720p",
    "cors": "http://pluto.tv"
+  },
+  {
+   "id": "iptv-radiotelepuissance-us",
+   "iptvId": "RadioTelePuissance.us",
+   "name": "Radio Tele Puissance",
+   "altNames": [
+    "Radio Télé Puissance"
+   ],
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "Religious"
+   ],
+   "broadcastTo": [
+    {
+     "code": "HT",
+     "name": "Haiti"
+    }
+   ],
+   "logo": "https://i.imgur.com/ZLPwJug.png",
+   "website": "https://radiotelepuissance.com/",
+   "hlsUrl": "https://video1.getstreamhosting.com:1936/8560/8560/playlist.m3u8",
+   "cors": "*"
+  },
+  {
+   "id": "iptv-radiotelesentinel-us",
+   "iptvId": "RadioTeleSentinel.us",
+   "name": "Radio Tele Sentinel",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "Religious"
+   ],
+   "broadcastTo": [
+    {
+     "code": "HT",
+     "name": "Haiti"
+    }
+   ],
+   "logo": "https://i.imgur.com/hy3BJxj.png",
+   "website": "https://radiotelesentinel.com/",
+   "hlsUrl": "https://59d39900ebfb8.streamlock.net/radiotelesentinel/radiotelesentinel/playlist.m3u8",
+   "cors": "*"
+  },
+  {
+   "id": "iptv-radioytelevisionmarti-us",
+   "iptvId": "RadioyTelevisionMarti.us",
+   "name": "Radio y Television Marti",
+   "altNames": [
+    "Radio y Televisión Martí"
+   ],
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "General"
+   ],
+   "broadcastTo": [
+    {
+     "code": "CU",
+     "name": "Cuba"
+    }
+   ],
+   "logo": "https://i.imgur.com/J2ZMa4g.png",
+   "website": "https://www.martinoticias.com/",
+   "hlsUrl": "https://ocb-ingest.akamaized.net/hls/live/2037032/tvmc01/playlist.m3u8",
+   "quality": "720p",
+   "cors": "*"
   },
   {
    "id": "iptv-reuterstv-us",
@@ -15124,6 +15845,48 @@
    "cors": "https://worldmonitor.app"
   },
   {
+   "id": "iptv-rthtv1-us",
+   "iptvId": "RTHTV1.us",
+   "name": "RTH-TV1",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "General"
+   ],
+   "broadcastTo": [
+    {
+     "code": "HT",
+     "name": "Haiti"
+    }
+   ],
+   "logo": "https://i.imgur.com/4z0FiEA.png",
+   "website": "http://www.rth2000.com/",
+   "hlsUrl": "https://2-fss-2.streamhoster.com/pl_120/amlst:206708-4203440/playlist.m3u8",
+   "quality": "1080p",
+   "cors": "*"
+  },
+  {
+   "id": "iptv-rthtv2gospel-us",
+   "iptvId": "RTHTV2Gospel.us",
+   "name": "RTH-TV2 Gospel",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "Religious"
+   ],
+   "broadcastTo": [
+    {
+     "code": "HT",
+     "name": "Haiti"
+    }
+   ],
+   "logo": "https://i.imgur.com/4z0FiEA.png",
+   "website": "http://www.rth2000.com/",
+   "hlsUrl": "https://2-fss-2.streamhoster.com/pl_120/amlst:206708-4202592/playlist.m3u8",
+   "quality": "720p",
+   "cors": "*"
+  },
+  {
    "id": "iptv-salemnewschannel-us",
    "iptvId": "SalemNewsChannel.us",
    "name": "Salem News Channel",
@@ -15136,6 +15899,27 @@
    "website": "https://salemnewschannel.com/",
    "hlsUrl": "https://amg00732-salemmediagroup-snc-ono-ekp8j.amagi.tv/playlist/amg00732-salemmediagroup-snc-ono/playlist.m3u8",
    "quality": "1080p",
+   "cors": "*"
+  },
+  {
+   "id": "iptv-sbntv-us",
+   "iptvId": "SBNTV.us",
+   "name": "SBN TV",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "Religious"
+   ],
+   "broadcastTo": [
+    {
+     "code": "PR",
+     "name": "Puerto Rico"
+    }
+   ],
+   "logo": "https://i.imgur.com/Tp1nH4l.png",
+   "website": "https://www.sonlifetv.com/",
+   "hlsUrl": "https://watch.sardius.media/channels/Ea867F3e1F56B06/site_c5402f016A/live.m3u8",
+   "quality": "720p",
    "cors": "*"
   },
   {
@@ -15166,6 +15950,48 @@
    "hlsUrl": "https://aegis-cloudfront-1.tubi.video/7e1c26b7-7975-4240-9a4f-480eaa8f3ea4/playlist.m3u8",
    "quality": "1080p",
    "cors": "https://worldmonitor.app"
+  },
+  {
+   "id": "iptv-telepam-us",
+   "iptvId": "TelePam.us",
+   "name": "Tele Pam",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "General"
+   ],
+   "broadcastTo": [
+    {
+     "code": "HT",
+     "name": "Haiti"
+    }
+   ],
+   "logo": "https://i.ibb.co/xMYMyHh/telepammmm.png",
+   "website": "http://telepam.tv/",
+   "hlsUrl": "https://watch.haitilive.net/app/2020/telepam/index.fmp4.m3u8",
+   "quality": "1080p",
+   "cors": "*"
+  },
+  {
+   "id": "iptv-telemundo-us",
+   "iptvId": "Telemundo.us",
+   "name": "Telemundo",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "General"
+   ],
+   "broadcastTo": [
+    {
+     "code": "PR",
+     "name": "Puerto Rico"
+    }
+   ],
+   "logo": "https://www.mediamoves.com/wp-content/uploads/2012/11/Telemundo-logo-2012-e1358145354448.jpg",
+   "website": "http://www.telemundo.com/",
+   "hlsUrl": "https://streamer1.nexgen.bz/TELEMUNDO/index.m3u8",
+   "quality": "1080p",
+   "cors": "*"
   },
   {
    "id": "iptv-thefirsttv-us",
@@ -15227,6 +16053,48 @@
    "cors": "*"
   },
   {
+   "id": "iptv-tvhispanic-us",
+   "iptvId": "TVHispanic.us",
+   "name": "TV Hispanic",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "General"
+   ],
+   "broadcastTo": [
+    {
+     "code": "DO",
+     "name": "Dominican Republic"
+    }
+   ],
+   "logo": "https://i.imgur.com/bgBMglf.jpeg",
+   "website": "https://www.tvhispanic.com/",
+   "hlsUrl": "https://livetv.305streamhd.com:3504/live/tvhispaniclive.m3u8",
+   "notNonStop": true,
+   "cors": "*"
+  },
+  {
+   "id": "iptv-tvquisqueya-us",
+   "iptvId": "TVQuisqueya.us",
+   "name": "TV Quisqueya",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "General"
+   ],
+   "broadcastTo": [
+    {
+     "code": "DO",
+     "name": "Dominican Republic"
+    }
+   ],
+   "logo": "https://i.imgur.com/G7X4LQI.png",
+   "website": "http://www.tvquisqueya.com/",
+   "hlsUrl": "https://cloud5.livescast.com:19360/canaltvquisqueya/canaltvquisqueya.m3u8",
+   "quality": "720p",
+   "cors": "*"
+  },
+  {
    "id": "iptv-unwebtv-us",
    "iptvId": "UNWebTV.us",
    "name": "UN Web TV",
@@ -15239,6 +16107,26 @@
    "hlsUrl": "https://cdnapi.kaltura.com/p/2503451/sp/250345100/playManifest/entryId/1_gb6tjmle/protocol/https/format/applehttp/a.m3u8",
    "quality": "540p",
    "cors": "*"
+  },
+  {
+   "id": "iptv-univision-us",
+   "iptvId": "Univision.us",
+   "name": "Univision",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [],
+   "broadcastTo": [
+    {
+     "code": "PR",
+     "name": "Puerto Rico"
+    }
+   ],
+   "logo": "https://i.imgur.com/NpBJT6P.png",
+   "website": "http://www.univision.com/",
+   "hlsUrl": "https://streaming-live-fcdn.api.prd.univisionnow.com/unieast/unieast.isml/hls/unieast.m3u8",
+   "quality": "1080p",
+   "geoBlocked": true,
+   "cors": "https://worldmonitor.app"
   },
   {
    "id": "iptv-usatoday-us",
@@ -15254,6 +16142,27 @@
    "hlsUrl": "https://cdn-ue1-prod.tsv2.amagi.tv/linear/amg00731-gannettcoinc-usatodaynews-plex/playlist.m3u8",
    "quality": "1080p",
    "cors": "https://worldmonitor.app"
+  },
+  {
+   "id": "iptv-visionlatinanetwork-us",
+   "iptvId": "VisionLatinaNetwork.us",
+   "name": "Vision Latina Network",
+   "country": "US",
+   "countryName": "United States",
+   "categories": [
+    "General"
+   ],
+   "broadcastTo": [
+    {
+     "code": "PR",
+     "name": "Puerto Rico"
+    }
+   ],
+   "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToRMq0HU4qtbhBCyMBZzkHGDftIzWn2jeb1L1L7S9SgsyuzKA4WKyrHI9pfEfsYhhhnSk&usqp=CAU",
+   "website": "https://visionlatina.com/",
+   "hlsUrl": "https://cdn-cloudfront.us-east-1.prod.ingest.aws-infra.dacast.com/live/c1804a4c-ccbf-46e5-87c3-0f8d4a94d9e3/master.m3u8",
+   "quality": "1080p",
+   "cors": "*"
   },
   {
    "id": "iptv-voatv-us",
@@ -15756,6 +16665,21 @@
    "cors": "*"
   },
   {
+   "id": "iptv-siembratv-ve",
+   "iptvId": "SiembraTV.ve",
+   "name": "Siembra TV",
+   "country": "VE",
+   "countryName": "Venezuela",
+   "categories": [
+    "General"
+   ],
+   "logo": "https://i.imgur.com/zRX91Xr.png",
+   "website": "https://siembratv.com/",
+   "hlsUrl": "https://cloud2.streaminglivehd.com:1936/siembratv/siembratv/playlist.m3u8",
+   "notNonStop": true,
+   "cors": "*"
+  },
+  {
    "id": "iptv-tamtv-ve",
    "iptvId": "TAMTV.ve",
    "name": "TAM TV",
@@ -15796,6 +16720,12 @@
    "countryName": "Venezuela",
    "categories": [
     "News"
+   ],
+   "broadcastTo": [
+    {
+     "code": "CU",
+     "name": "Cuba"
+    }
    ],
    "logo": "https://i.imgur.com/P50VjRX.png",
    "website": "https://www.telesurtv.net/",
@@ -15877,21 +16807,6 @@
    "logo": "https://i.imgur.com/hwd7osJ.jpeg",
    "hlsUrl": "https://live.teve.pro/live/tvoasis/index.m3u8",
    "quality": "1080i",
-   "cors": "*"
-  },
-  {
-   "id": "iptv-tves-ve",
-   "iptvId": "TVes.ve",
-   "name": "TVes",
-   "country": "VE",
-   "countryName": "Venezuela",
-   "categories": [
-    "General"
-   ],
-   "logo": "https://i.imgur.com/QX5DVUB.png",
-   "website": "https://www.tves.gob.ve/",
-   "hlsUrl": "https://vs20.live.opencaster.com/tves_5fd18b1e/index.m3u8",
-   "quality": "1080p",
    "cors": "*"
   },
   {
