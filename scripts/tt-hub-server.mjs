@@ -148,6 +148,31 @@ async function serveIptvProxy(res, url) {
   }
 }
 
+// TegoTV: T&T free-to-air stations (TTT, ieTV, Synergy, Gayelle, …) publish their HLS through
+// the Siber middleware behind player.tegotv.com, with a 24 h signed CDN token. The hub resolves the
+// tokenised manifest URL the same way the broadcaster's public player does for a guest visitor
+// (scripts/tt-tego-resolver.mjs); the CDN sends CORS *, so the browser plays it directly.
+let tegoResolver = null;
+async function serveTego(res, url) {
+  try {
+    if (!tegoResolver) tegoResolver = await import(path.join(ROOT, 'scripts', 'tt-tego-resolver.mjs'));
+    if (url.pathname === '/api/tego/channels') {
+      const channels = await tegoResolver.listTegoChannels();
+      res.writeHead(200, { 'content-type': 'application/json', 'cache-control': 'public, max-age=600' });
+      return res.end(JSON.stringify({ source: 'player.tegotv.com (guest package)', channels }));
+    }
+    const id = url.searchParams.get('channel') || '';
+    if (!/^\d{1,6}$/.test(id)) { res.writeHead(400, { 'content-type': 'application/json' }); return res.end(JSON.stringify({ error: 'channel must be numeric' })); }
+    const force = url.searchParams.get('force') === '1';
+    const s = await tegoResolver.resolveTegoStream(id, { force });
+    res.writeHead(200, { 'content-type': 'application/json', 'cache-control': 'no-store' });
+    res.end(JSON.stringify({ id: s.id, name: s.name, provider: s.provider, logo: s.logo, url: s.url, expiresAt: new Date(s.exp).toISOString() }));
+  } catch (err) {
+    res.writeHead(502, { 'content-type': 'application/json' });
+    res.end(JSON.stringify({ error: 'tego resolve failed', detail: String(err?.message || err).slice(0, 200) }));
+  }
+}
+
 let youtubeLiveHandler = null;
 async function serveYoutubeLive(req, res, url) {
   try {
@@ -170,6 +195,7 @@ const server = http.createServer((req, res) => {
   const url = new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`);
   if (url.pathname === '/api/youtube/live') return void serveYoutubeLive(req, res, url);
   if (url.pathname === '/api/iptv-proxy') return void serveIptvProxy(res, url);
+  if (url.pathname === '/api/tego/stream' || url.pathname === '/api/tego/channels') return void serveTego(res, url);
   if (url.pathname.startsWith('/api/')) return proxyApi(req, res);
   if (url.pathname === '/healthz') { let egress = null; try { if (process.env.NODE_USE_ENV_PROXY === '1' && process.env.HTTPS_PROXY) egress = new URL(process.env.HTTPS_PROXY).host; } catch {} res.writeHead(200, { 'content-type': 'application/json' }); return res.end(JSON.stringify({ ok: true, dist: existsSync(path.join(DIST, 'dashboard.html')), sidecarPort: SIDECAR_PORT, iptvEgress: egress })); }
   if (req.method !== 'GET' && req.method !== 'HEAD') { res.writeHead(405); return res.end(); }

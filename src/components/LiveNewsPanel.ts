@@ -1,5 +1,6 @@
 import { Panel } from './Panel';
 import { fetchLiveVideoInfo } from '@/services/live-news';
+import { resolveTegoStreamUrl } from '@/services/tego-live';
 import { VARIANT_LIVE_CHANNEL_IDS } from '@/config/live-channel-defaults';
 import { isDesktopRuntime, getRemoteApiBaseUrl, getApiBaseUrl, getLocalApiPort } from '@/services/runtime';
 import { t } from '../services/i18n';
@@ -65,6 +66,12 @@ export interface LiveChannel {
   /** True while the panel is deliberately playing replayVideoId (badge on the tab). */
   isReplay?: boolean;
   hlsUrl?: string; // HLS manifest URL for native <video> playback (desktop)
+  /** TegoTV channel id (T&T free-to-air stations). The hub's /api/tego/stream resolves it to a
+   *  short-lived tokenised HLS URL at play time; see scripts/tt-tego-resolver.mjs. */
+  tegoChannel?: number;
+  /** Broadcaster's own live page, offered as an external link on the off-air card when the station
+   *  streams only on its site (e.g. a Dailymotion embed locked to that domain). Never framed or proxied. */
+  officialLiveUrl?: string;
   useFallbackOnly?: boolean; // Skip auto-detection, always use fallback
   geoAvailability?: string[]; // ISO 3166-1 alpha-2 codes; undefined = available everywhere
 }
@@ -195,14 +202,26 @@ export const OPTIONAL_LIVE_CHANNELS: LiveChannel[] = [
   { id: 'aljazeera-balkans', name: 'Al Jazeera Balkans', handle: '@AlJazeeraBalkans', hlsUrl: 'https://live-hls-web-ajb.getaj.net/AJB/index.m3u8' },
   // Caribbean (tt variant). Handles verified 2026-10-14; most stream only during newscasts /
   // sittings, so they resolve to live when on air and otherwise show the channel's offline card.
-  { id: 'ttt-live', name: 'TTT Live Online', handle: '@TTTLiveOnline' },               // UCf58CbplZsDbH9wPMYoOTFw
-  { id: 'cnc3', name: 'CNC3', handle: '@CNC3Television' },                             // UChEuHwDYri-GtZJP6Tu1nTw
+  { id: 'ttt-live', name: 'TTT Live Online', handle: '@TTTLiveOnline', tegoChannel: 1 },  // UCf58CbplZsDbH9wPMYoOTFw; 24/7 HLS via TegoTV, YouTube as fallback
+  { id: 'cnc3', name: 'CNC3', handle: '@CNC3Television', officialLiveUrl: 'https://www.cnc3.co.tt/live-stream/' },  // UChEuHwDYri-GtZJP6Tu1nTw; live is a Dailymotion embed restricted to cnc3.co.tt
   { id: 'cnc3-prime', name: 'CNC3 Prime', handle: '@CNC3TelevisionPrime' },            // UC4aMlN15zu2pX3fMB4HAsNA
-  { id: 'tv6-news', name: 'TV6 News', handle: '@tv6news' },                            // UC7ukEQ5luwqMorgbxAGKo1Q
+  { id: 'tv6-news', name: 'TV6 News', handle: '@tv6news', officialLiveUrl: 'https://www.tv6tnt.com/watch_live/' },  // UC7ukEQ5luwqMorgbxAGKo1Q; live is a Dailymotion embed restricted to tv6tnt.com
   { id: 'tt-parliament', name: 'Parliament of T&T (ParlView)', handle: '@ParlView' },  // live sittings; @ttparliament is the archive channel
   { id: 'tobago-channel5', name: 'Tobago Channel 5', handle: '@TobagoChannel5' },      // UCj3EKt5lPhsFxc5E9zFDeBQ
   { id: 'tobago-updates', name: 'Tobago Updates', handle: '@TobagoUpdates' },          // UC4TYtHs29DONCkjRFcMXqgw
-  { id: 'ietv', name: 'IETV', handle: '@IETVTT' },                                      // UCMZkLrnnBopfllH39j19xEw
+  { id: 'ietv', name: 'IETV', handle: '@IETVTT', tegoChannel: 11 },                     // UCMZkLrnnBopfllH39j19xEw; 24/7 HLS via TegoTV
+  // T&T free-to-air stations carried by TegoTV (player.tegotv.com, the player ttt.live embeds).
+  // Resolved at play time through the hub (/api/tego/stream); probed 2026-10-18, all play with CORS *.
+  { id: 'synergy-tv', name: 'Synergy TV (T&T)', tegoChannel: 2, useFallbackOnly: true },
+  { id: 'gayelle-tv', name: 'Gayelle The Caribbean (T&T)', tegoChannel: 3, useFallbackOnly: true },
+  { id: 'wpg10-tv', name: 'WPG 10 (Caribbean)', tegoChannel: 4, useFallbackOnly: true },
+  { id: 'tv-jaagriti', name: 'TV Jaagriti (T&T)', tegoChannel: 5, useFallbackOnly: true },
+  { id: 'trinity-tv', name: 'Trinity TV (T&T)', tegoChannel: 6, useFallbackOnly: true },
+  { id: 'bhakti-tv', name: 'Bhakti TV (T&T)', tegoChannel: 7, useFallbackOnly: true },
+  { id: 'ibn-tv', name: 'IBN (T&T)', tegoChannel: 8, useFallbackOnly: true },
+  { id: 'wack-visual-radio', name: 'WACK 90.1 FM Visual Radio (T&T)', tegoChannel: 9, useFallbackOnly: true },
+  { id: 'plus-tv', name: 'Plus TV (T&T)', tegoChannel: 13, useFallbackOnly: true },
+  { id: 'abs-tv-antigua', name: 'ABS TV (Antigua)', tegoChannel: 10, useFallbackOnly: true },
   { id: 'ncn-guyana', name: 'NCN Guyana', handle: '@NCNGuyana' },                      // UCkA-XjVXNMtLNkgC03F1HBg
   { id: 'tvj', name: 'Television Jamaica', handle: '@TelevisionJamaica' },             // UC1Ga-Hv1-dLz9zoAz81d9tA
   { id: 'cvm-tv', name: 'CVM TV News', handle: '@cvmtvnews' },                          // newscast channel; @CVMTV is the general channel
@@ -257,7 +276,7 @@ const _REGION_ENTRIES: { key: string; labelKey: string; channelIds: string[] }[]
   { key: 'me', labelKey: 'components.liveNews.regionMiddleEast', channelIds: ['alarabiya', 'aljazeera', 'al-hadath', 'sky-news-arabia', 'trt-world', 'iran-intl', 'press-tv', 'cgtn-arabic', 'kan-11', 'i24-news', 'asharq-news', 'aljazeera-arabic', 'aljazeera-mubasher', 'alarabiya-business', 'al-qahera-news', 'dw-arabic', 'rt-arabic', 'rudaw'] },
   { key: 'africa', labelKey: 'components.liveNews.regionAfrica', channelIds: ['africanews', 'channels-tv', 'ktn-news', 'enca', 'sabc-news', 'arise-news'] },
   { key: 'oc', labelKey: 'components.liveNews.regionOceania', channelIds: ['abc-news-au'] },
-  { key: 'caribbean', labelKey: 'components.liveNews.regionCaribbean', channelIds: ['ttt-live', 'cnc3', 'cnc3-prime', 'tv6-news', 'tt-parliament', 'tobago-channel5', 'tobago-updates', 'ietv', 'ncn-guyana', 'tvj', 'cvm-tv', 'abs-antigua', 'cbc-barbados', 'gbn-grenada', 'telesur-english', 'bizz-tv', 'sankhya-tv', 'scorch-tv', 'hgptv', 'mtv-guyana', 'little-guyana-tv', 'cbc-tv8', 'tvj-hls', 'gnn-tv', 'dbs-tv', 'pointe-tv', 'zns-tv', 'ziz-tv', 'nevis-tv', 'caribbean-hot7', 'guardian-talk-radio', 'fame95', 'riddim-hope-tv', 'islamic-network-tt', 'antena7', 'noticias16', 'tv-marti', 'prensa-latina-tv', 'haiti-news-channel', 'rth-tv1', 'telemundo-pr'] },
+  { key: 'caribbean', labelKey: 'components.liveNews.regionCaribbean', channelIds: ['ttt-live', 'cnc3', 'cnc3-prime', 'tv6-news', 'tt-parliament', 'tobago-channel5', 'tobago-updates', 'ietv', 'synergy-tv', 'gayelle-tv', 'wpg10-tv', 'tv-jaagriti', 'trinity-tv', 'bhakti-tv', 'ibn-tv', 'wack-visual-radio', 'plus-tv', 'abs-tv-antigua', 'ncn-guyana', 'tvj', 'cvm-tv', 'abs-antigua', 'cbc-barbados', 'gbn-grenada', 'telesur-english', 'bizz-tv', 'sankhya-tv', 'scorch-tv', 'hgptv', 'mtv-guyana', 'little-guyana-tv', 'cbc-tv8', 'tvj-hls', 'gnn-tv', 'dbs-tv', 'pointe-tv', 'zns-tv', 'ziz-tv', 'nevis-tv', 'caribbean-hot7', 'guardian-talk-radio', 'fame95', 'riddim-hope-tv', 'islamic-network-tt', 'antena7', 'noticias16', 'tv-marti', 'prensa-latina-tv', 'haiti-news-channel', 'rth-tv1', 'telemundo-pr'] },
 ];
 export const OPTIONAL_CHANNEL_REGIONS: { key: string; labelKey: string; channelIds: string[] }[] = [
   ..._REGION_ENTRIES,
@@ -408,7 +427,7 @@ export function loadChannelsFromStorage(): LiveChannel[] {
   for (const c of TECH_LIVE_CHANNELS) channelMap.set(c.id, { ...c });
   for (const c of OPTIONAL_LIVE_CHANNELS) channelMap.set(c.id, { ...c });
   for (const c of stored.custom ?? []) {
-    if (c.id && (c.handle || c.hlsUrl)) channelMap.set(c.id, { ...c });
+    if (c.id && (c.handle || c.hlsUrl || c.tegoChannel)) channelMap.set(c.id, { ...c });
   }
   const overrides = stored.displayNameOverrides ?? {};
   for (const [id, name] of Object.entries(overrides)) {
@@ -441,6 +460,8 @@ export class LiveNewsPanel extends Panel {
   private static apiPromise: Promise<void> | null = null;
   private channels: LiveChannel[] = [];
   private activeChannel!: LiveChannel;
+  /** TegoTV channels that failed once and get a single forced re-resolve before cooldown. */
+  private readonly tegoRetry = new Set<string>();
   private channelSwitcher: HTMLElement | null = null;
   private isMuted = true;
   private isPlaying = false;
@@ -703,6 +724,18 @@ export class LiveNewsPanel extends Panel {
     const failedAt = this.hlsFailureCooldown.get(channelId);
     if (failedAt && Date.now() - failedAt < this.HLS_COOLDOWN_MS) return undefined;
     return `http://127.0.0.1:${getLocalApiPort()}/api/hls-proxy?url=${encodeURIComponent(entry.url)}`;
+  }
+
+  /** A channel with an HLS source: a built-in map entry, its own hlsUrl, or a TegoTV id resolved at play time. */
+  private hasHlsSource(channel: LiveChannel): boolean {
+    return !!(this.getDirectHlsUrl(channel.id) || this.getProxiedHlsUrl(channel.id) || channel.hlsUrl || this.getTegoChannel(channel));
+  }
+
+  private getTegoChannel(channel: LiveChannel): number | undefined {
+    if (!channel.tegoChannel) return undefined;
+    const failedAt = this.hlsFailureCooldown.get(channel.id);
+    if (failedAt && Date.now() - failedAt < this.HLS_COOLDOWN_MS) return undefined;
+    return channel.tegoChannel;
   }
 
   private get embedOrigin(): string {
@@ -1170,7 +1203,7 @@ export class LiveNewsPanel extends Panel {
     channel.isReplay = false;
     channel.replayVideoId = undefined;
 
-    if (this.getDirectHlsUrl(channel.id) || this.getProxiedHlsUrl(channel.id) || channel.hlsUrl) {
+    if (this.hasHlsSource(channel)) {
       channel.videoId = channel.fallbackVideoId;
       channel.isLive = true;
       return;
@@ -1267,7 +1300,7 @@ export class LiveNewsPanel extends Panel {
 
   /** A channel that is live around the clock: a direct/proxied HLS feed or a 24/7 YouTube stream id. */
   private isAlwaysLive(channel: LiveChannel): boolean {
-    return !!(channel.hlsUrl || channel.fallbackVideoId || this.getDirectHlsUrl(channel.id) || this.getProxiedHlsUrl(channel.id));
+    return !!(channel.fallbackVideoId || this.hasHlsSource(channel));
   }
 
   /** Off-air card action: deliberately play the station's most recent upload, badged as a replay. */
@@ -1294,6 +1327,9 @@ export class LiveNewsPanel extends Panel {
     const safeName = escapeHtml(channel.name);
     const canReplay = !!channel.replayVideoId;
     const hasNextLive = this.channels.some((c) => c.id !== channel.id && this.isAlwaysLive(c));
+    const officialUrl = channel.officialLiveUrl && /^https:\/\//.test(channel.officialLiveUrl) ? sanitizeUrl(channel.officialLiveUrl) : '';
+    let officialHost = '';
+    try { officialHost = officialUrl ? new URL(officialUrl).hostname.replace(/^www\./, '') : ''; } catch { officialHost = ''; }
     setTrustedHtml(this.content, trustedHtml(`
       <div class="live-offline live-offline-compact">
         <div class="offline-icon">📺</div>
@@ -1301,6 +1337,7 @@ export class LiveNewsPanel extends Panel {
         <div class="offline-actions">
           ${hasNextLive ? `<button class="offline-retry live-next-live">${t('components.liveNews.nextLive')}</button>` : ''}
           ${canReplay ? `<button class="offline-retry live-play-replay">${t('components.liveNews.playReplay')}</button>` : ''}
+          ${officialUrl ? `<a class="offline-retry live-official-page" href="${officialUrl}" target="_blank" rel="noopener noreferrer">${t('components.liveNews.watchOnOfficialSite', { host: escapeHtml(officialHost) })}</a>` : ''}
           <button class="offline-retry live-retry">${t('common.retry')}</button>
         </div>
       </div>
@@ -1436,10 +1473,25 @@ export class LiveNewsPanel extends Panel {
   }
 
   private async renderNativeHlsPlayer(): Promise<void> {
-    const hlsUrl = this.getDirectHlsUrl(this.activeChannel.id) || this.getProxiedHlsUrl(this.activeChannel.id) || this.activeChannel.hlsUrl;
+    const sessionToken = this.liveMediaSessionToken;
+    const tegoChannel = this.getTegoChannel(this.activeChannel);
+    let hlsUrl = this.getDirectHlsUrl(this.activeChannel.id) || this.getProxiedHlsUrl(this.activeChannel.id) || this.activeChannel.hlsUrl;
+    if (!hlsUrl && tegoChannel) {
+      // TegoTV: the manifest URL carries a short-lived token, so it is fetched from the hub at
+      // play time (and once more with force=1 after a fatal error, in case the token expired).
+      const tegoTarget = this.activeChannel;
+      const resolved = await resolveTegoStreamUrl(tegoChannel, this.tegoRetry.has(tegoTarget.id));
+      if (!this.element?.isConnected || !this.ownsLiveMediaSession(tegoTarget.id, sessionToken)) return;
+      if (!resolved) {
+        this.hlsFailureCooldown.set(tegoTarget.id, Date.now());
+        this.tegoRetry.delete(tegoTarget.id);
+        void this.initializePlayer();
+        return;
+      }
+      hlsUrl = resolved;
+    }
     const sameOrigin = typeof window !== 'undefined' && hlsUrl?.startsWith(`${window.location.origin}/`);
     if (!hlsUrl || !(hlsUrl.startsWith('https://') || hlsUrl.startsWith('http://127.0.0.1') || sameOrigin)) return;
-    const sessionToken = this.liveMediaSessionToken;
 
     this.destroyPlayer();
     this.ensurePlayerContainer();
@@ -1466,8 +1518,14 @@ export class LiveNewsPanel extends Panel {
       video.pause();
       video.removeAttribute('src');
       this.nativeVideoElement = null;
-      this.hlsFailureCooldown.set(failedChannel.id, Date.now());
-      failedChannel.hlsUrl = undefined;
+      if (tegoChannel && !this.tegoRetry.has(failedChannel.id)) {
+        // First failure on a TegoTV stream: re-resolve once (expired token) before giving up.
+        this.tegoRetry.add(failedChannel.id);
+      } else {
+        this.tegoRetry.delete(failedChannel.id);
+        this.hlsFailureCooldown.set(failedChannel.id, Date.now());
+        failedChannel.hlsUrl = undefined;
+      }
 
       if (this.ownsLiveMediaSession(failedChannel.id, sessionToken)) {
         this.ensurePlayerContainer();
@@ -1514,6 +1572,7 @@ export class LiveNewsPanel extends Panel {
       this.hlsInstance = hls;
       hls.loadSource(hlsUrl);
       hls.attachMedia(video);
+      if (tegoChannel) hls.once(Hls.Events.FRAG_LOADED, () => this.tegoRetry.delete(failedChannel.id));
       // Monitor both hls.js fatal events and raw media element errors (e.g. decode failures).
       hls.on(Hls.Events.ERROR, (_event, data) => {
         if (data.fatal) onHlsFatalError();
@@ -1643,7 +1702,7 @@ export class LiveNewsPanel extends Panel {
     if (!this.element?.isConnected) return;
     if (!this.ownsLiveMediaSession(channelId, sessionToken)) return;
 
-    if (this.getDirectHlsUrl(this.activeChannel.id) || this.getProxiedHlsUrl(this.activeChannel.id) || this.activeChannel.hlsUrl) {
+    if (this.hasHlsSource(this.activeChannel)) {
       void this.renderNativeHlsPlayer();
       return;
     }

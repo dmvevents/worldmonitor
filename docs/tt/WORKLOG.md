@@ -336,3 +336,18 @@ control server; Android, Apple TV, Linux, macOS, Windows can advertise exit node
 comes up in kernel/TUN mode and waits for login (first trial exposed that containerboot defaults to userspace
 networking, which would have left the sidecar outside the tunnel; `TS_USERSPACE=false` fixes it), proxy answers on the published port through Docker's egress. The exit-node hop
 is untested until a device in the region joins. Runbook extended with the viability table and bandwidth note.
+
+## Round 15: live T&T television through the broadcasters' own player (2026-10-18, Hermes)
+
+Takeover of the IPTV integration. Re-verification showed the existing plumbing (iptv-org directory, hub
+proxy, egress hook, Trinidad tab) working; what failed for the viewer was that TTT, CNC3, TV6 and Parliament
+were YouTube-only and off air, so the T&T strip had no live television. `ttt.live/stream` embeds the TegoTV
+web player; its `player.js` resolves a 24 h guest token from `api.siberapi.com` and asks the Siber middleware
+for the channel's Flussonic HLS URL (`tego-cdn*.sibercdn.com`, signed token, CORS `*`, not IP-bound). The hub
+now does the same guest flow server-side (`scripts/tt-tego-resolver.mjs`, `/api/tego/stream`,
+`/api/tego/channels`) and the player resolves `tegoChannel` entries at play time with one forced re-resolve
+on token expiry. Eleven stations added (TTT, ieTV, Synergy TV, Gayelle, WPG 10, TV Jaagriti, Trinity TV,
+Bhakti TV, IBN, WACK Visual Radio, Plus TV); the `tt` strip opens with TTT. CNC3 (Cloudflare challenge) and
+TV6 (owner-restricted Dailymotion) remain YouTube-only. Verified: typecheck, 61 + 7 tests, validator 11/11,
+TTT/IETV/Synergy/Gayelle playing in headless Chrome on a second front door (:3199). Details and the exact
+endpoint flow: `docs/tt/IPTV-HANDOFF.md` §9.

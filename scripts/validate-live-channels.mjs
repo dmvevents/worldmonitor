@@ -26,7 +26,8 @@ for (const m of src.matchAll(/\{\s*id:\s*'([a-z0-9-]+)',\s*name:\s*'((?:[^'\\]|\
   const [, id, name, rest] = m;
   const hls = rest.match(/hlsUrl:\s*'([^']+)'/)?.[1] ?? null;
   const handle = rest.match(/handle:\s*'(@[^']+)'/)?.[1] ?? null;
-  channels.push({ id, name, hls, handle });
+  const tego = rest.match(/tegoChannel:\s*(\d+)/)?.[1] ?? null;
+  channels.push({ id, name, hls, handle, tego });
 }
 const unique = [...new Map(channels.map((c) => [c.id, c])).values()];
 
@@ -63,12 +64,22 @@ async function mapLimit(items, limit, fn) {
   return out;
 }
 
+// TegoTV (T&T free-to-air) entries carry a channel id instead of a URL; resolve the tokenised
+// manifest the way the hub does (scripts/tt-tego-resolver.mjs) and probe that.
+const tegoChannels = unique.filter((c) => !c.hls && c.tego);
+if (tegoChannels.length) {
+  const { resolveTegoStream } = await import('./tt-tego-resolver.mjs');
+  for (const c of tegoChannels) {
+    try { c.hls = (await resolveTegoStream(c.tego)).url; c.name += ` [tego:${c.tego}]`; }
+    catch (err) { console.log(`[tego] FAIL resolve ${c.id} (channel ${c.tego}): ${err?.message || err}`); c.tegoFailed = true; }
+  }
+}
 const hlsChannels = unique.filter((c) => c.hls);
-const ytChannels = HLS_ONLY ? [] : unique.filter((c) => !c.hls && c.handle);
+const ytChannels = HLS_ONLY ? [] : unique.filter((c) => !c.hls && c.handle && !c.tego);
 
 console.log(`Probing ${hlsChannels.length} HLS channels${HLS_ONLY ? '' : ` and ${ytChannels.length} YouTube channels`}...`);
 const hlsResults = await mapLimit(hlsChannels, CONCURRENCY, async (c) => ({ c, r: await probeHls(c.hls) }));
-let hlsFailures = 0;
+let hlsFailures = unique.filter((c) => c.tegoFailed).length;
 for (const { c, r } of hlsResults) {
   const flag = r.ok ? (r.cors === '*' || r.cors.startsWith('http') ? 'OK ' : 'OK (no CORS: desktop/proxy only)') : 'FAIL';
   if (!r.ok) hlsFailures++;
