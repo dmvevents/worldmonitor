@@ -36,7 +36,8 @@ Front door (scripts/tt-hub-server.mjs, :3100, pure node:http)
     - Serves dist/ (SPA)
     - Proxies /api/* to sidecar with LOCAL_API_TOKEN
     - Serves itself: /api/youtube/live (cloud-only route), /api/iptv-proxy (allowlisted HLS proxy),
-      /api/tego/stream + /api/tego/channels (TegoTV resolver, scripts/tt-tego-resolver.mjs), /healthz
+      /api/tego/stream + /api/tego/channels (TegoTV resolver, scripts/tt-tego-resolver.mjs),
+      /api/chat-analyst (WM Analyst chat from the esbuild bundle dist/hub/chat-analyst.js), /healthz
     - Injects WM_LOCAL_OPERATOR_KEY for Pro routes
          ↓
 Sidecar (src-tauri/sidecar/local-api-server.mjs, :46123, docker mode)
@@ -253,7 +254,7 @@ npm run iptv:sync
 | `src/config/variants/tt.ts` | tt | Timezone, country code, region bbox |
 | `src/config/variant.ts` | all | Registry, detection logic |
 | `src/config/panels.ts` | all | TT_PANELS, TT_MAP_LAYERS, categories |
-| `src/config/feeds.ts` | tt | TT_FEEDS (9 categories) |
+| `src/config/feeds.ts` | tt | TT_FEEDS (10 categories) |
 | `src/config/live-channel-defaults.ts` | tt | VARIANT_LIVE_CHANNEL_IDS per variant |
 | `src/config/dashboard-tabs.ts` | all | Preset tabs (what feeds, map views, channels each tab enables) |
 | `src/components/LiveNewsPanel.ts` | all | OPTIONAL_LIVE_CHANNELS (registry of all known channels) |

@@ -144,3 +144,9 @@ curl -sI 'https://live.bizztv.net/live/bizztv.m3u8' | head -5
 - `curl -s http://127.0.0.1:3100/healthz` → `iptvEgress` null means no exit configured; geo-blocked entries then play only if the broadcaster allows this network.
 - Tunnel health: `bash scripts/tt-install-egress-tunnel.sh status|test` (test must show two different exit IPs). Log: `~/Library/Logs/worldmonitor-hub/egress-tunnel.log`.
 - Never add public proxy lists or spoof headers; the operator supplies `IPTV_EGRESS_PROXY` (keys.env) for an exit they are entitled to use. Runbook: `docs/tt/IPTV-GEO-BLOCKING.md`.
+
+## AI panels on the hub
+
+- AI Insights (Main tab) reads bootstrap key `insights`, written by `scripts/seed-insights.mjs` every seed-loop pass through the `generic` provider (Claude shim). Stale after 60 min → "Waiting for data". Check: `curl -s 'http://127.0.0.1:3100/api/bootstrap?keys=insights' | head -c 300`; manual run: load keys.env, then `LLM_API_URL=http://127.0.0.1:8788/v1/chat/completions LLM_API_KEY=local-bedrock LLM_MODEL=us.anthropic.claude-sonnet-5 WM_API_BASE_URL=http://127.0.0.1:3100 node scripts/seed-insights.mjs`.
+- WM Analyst chat: `POST /api/chat-analyst` served by the front door from `dist/hub/chat-analyst.js` (rebuilt by `node scripts/build-sidecar-handlers.mjs`). Smoke: `curl -s -N -X POST -H 'content-type: application/json' -d '{"history":[],"query":"one sentence on Guyana today","domainFocus":"general"}' http://127.0.0.1:3100/api/chat-analyst | head -c 400` → SSE `data:` lines with `delta`.
+- Street Pulse lenses (`tt-social`, `gy-social`): Google Trends TT, Mastodon hashtags, Google News social queries; Reddit needs API credentials (see TT_FOCUS).

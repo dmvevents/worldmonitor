@@ -403,3 +403,22 @@ rest (294 across resolver, live-news HLS, edge-function and preset suites); API 
 Docs that still said "TTT, CNC3, TV6 are YouTube-only" were updated: TT_FOCUS (Live TV row, strip paragraph,
 IPTV paragraph), HOW-IT-WORKS (front-door routes, decision tree, verified channels), the hub skill, the IPTV
 curator agent, and a supersede note at the top of IPTV-HANDOFF. No code changed in the IPTV lane.
+
+## Round 17: what people are talking about, and the summaries that were not working (2026-10-18)
+
+Anton asked for social-media conversation feeds (Facebook, X, Instagram…) with a summary, and said the
+chat and summary generation were not working. Findings: AI Insights was empty because `seed-insights.mjs`
+only knew Ollama/OpenRouter/Groq (no provider on the hub) — added the `generic` OpenAI-compatible provider
+(LLM_API_URL = the Claude shim), the seed now runs every loop pass (client staleness is 60 min) and warms
+the digest through the local front door; first run produced the 8-story world brief, verified in the panel.
+The WM Analyst chat answered "No local handler" — the edge function is now bundled into `dist/hub/` and
+served by the front door with the operator key; a question about T&T/Guyana streamed a Claude answer in
+10 s (it reasons over the global digest plus market/energy keys, so it says regional reporting is thin —
+the regional lenses are not in its context). The shim floors `max_tokens` at 160 because classify-event's
+50-token budget cut Claude's JSON and `validate()` rejected it. Social sources checked from this network:
+Reddit 403/429 unauthenticated (needs a free API app → also fills Social Velocity), Bluesky search 403,
+Facebook/Instagram no public feeds, X paid, Telegram needs the relay; working keyless: Google Trends TT,
+Mastodon hashtags, Google News social queries → new `tt-social` / `gy-social` "Street Pulse" lenses (client,
+server, docs inventory 89 rows, digest titles), with a title fallback in the RSS parser for untitled items.
+Verified headless: Street Pulse 10 items on T&T, 9 on Guyana; Insights world brief renders on Main.
+Tests: 158 across presets, feed parity, docs inventory, RSS and insights suites; tsc, Biome, boundaries clean.

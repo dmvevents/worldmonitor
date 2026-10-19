@@ -34,7 +34,12 @@ tester key, a desktop API key, or the Clerk/Convex entitlement all pass it, and 
 mints is ours, so nothing of worldmonitor.app's paid service is used. What stays hosted-only because it
 lives behind their relay or accounts: the "Create interactive widget" agent (`RELAY_BASE` →
 proxy.worldmonitor.app), Latest Brief / brief sharing (Clerk + Convex + `BRIEF_URL_SIGNING_SECRET`), the MCP
-server (`api/mcp.ts`, not bundled into the sidecar, "No local handler"), Wingbits ADS-B (paid). Open
+server (`api/mcp.ts`, not bundled into the sidecar, "No local handler"), Wingbits ADS-B (paid). Since
+2026-10-18 the **WM Analyst chat** (`api/chat-analyst.ts`) and **AI Insights** run locally too: the front
+door bundles the chat edge function into `dist/hub/chat-analyst.js` and serves `POST /api/chat-analyst`
+on the Claude shim (entitlement = the operator key, quota in Upstash; it reasons over the global digest,
+market and energy keys), and `seed-insights` gained a `generic` provider so the seed loop refreshes the
+Main tab's AI Insights every pass (the client marks the brief stale after 60 min). Open
 replacements already wired: Claude via Bedrock or Ollama for insights, briefs and forecasts; GDELT, UCDP,
 ReliefWeb, USGS, NWS + WMO SWIC for the intelligence and hazard panels; OpenSky through `scripts/ais-relay.cjs`
 for aircraft; the iptv-org index for live TV; `scripts/tt-daily-digest.mts` for a local digest instead of the
@@ -126,6 +131,20 @@ No usable RSS (blocked, 404, or empty) → Google News `site:` queries instead: 
 Live TV first. The strip opens on **TTT, live around the clock**, followed by IETV, Synergy TV and Gayelle — the T&T free-to-air stations now play through the broadcasters' own public TegoTV player (2026-10-18, Hermes agent; `docs/tt/IPTV-HANDOFF.md` §9): the front door's `/api/tego/stream?channel=N` runs the same anonymous guest flow as `player.tegotv.com` (guest token → channel → signed 24 h Flussonic HLS URL on `*.sibercdn.com`, CORS `*`) and hls.js plays the URL directly; no media is proxied, no header spoofing, only the free "TegoTV - Free TV Channels" package. `/api/tego/channels` lists the catalogue (12 stations; 10 play, Universal Church and Real TV 404 upstream; Trinity TV and WACK were 404 on the 2026-10-18 evening validator run, i.e. not 24/7). CNC3 (Cloudflare JS challenge) and TV6 (Dailymotion embed owner-restricted to tv6tnt.com) still have no browser-playable live stream: they stay YouTube channels with the ◷ marker and an off-air card that links to the station's official live page, plus *Next live channel*, *Play latest bulletin (replay)* and *Retry* instead of silently playing a recording. A replay is badged REPLAY on its tab. Parliament (ParlView, per-event archive player), Tobago Updates and NCN Guyana are YouTube-only as before. teleSUR English, Sky and Al Jazeera are near 24/7. Loop TT's domain no longer resolves and is omitted. A `site:gov.tt` catch-all was tried and removed: Google indexes spam pages on compromised gov.tt subdomains.
 
 Trinidad Express rate-limits bursts (HTTP 429) if the same host fetches its three feeds repeatedly within minutes; the dashboard's per-feed cache keeps this from mattering in normal use.
+
+Street Pulse (`tt-social`, `gy-social`, 2026-10-18): what people are talking about, kept to the scope rule
+(public sources, aggregate and topic level, no scraping of named accounts). Sources that work keyless from
+this network: Google's daily trending searches for T&T (`trends.google.com/trending/rss?geo=TT`; Guyana is
+not offered), the public Mastodon hashtags `#trinidadandtobago` / `#guyana` (posts have no title, so the
+client renders their text), and Google News queries for what is trending on social media or drawing public
+reaction. Checked and not usable for free: **Reddit** now answers 403/429 to unauthenticated clients
+(Responsible Builder Policy 2026) — the relay's `fetchRedditHotListing` path works with a free Reddit API
+app (`REDDIT_CLIENT_ID` / `REDDIT_CLIENT_SECRET`, script type, 100 QPM), which would also fill the
+upstream *Social Velocity* panel (`intelligence:social:reddit:v1`) with r/TrinidadandTobago, r/Guyana and
+r/Caribbean — needs Anton's Reddit account to create; **Bluesky** public search 403s without an app
+password; **Facebook / Instagram** have no public feeds without Meta app review; **X** read access is paid;
+**Telegram** needs the relay's `WS_RELAY_URL`. Summaries: the lens flows into the daily digest's Claude
+summary (`scripts/tt-daily-digest.mts`) and the local analyst chat can be asked about it.
 
 ## What each tab is for
 
