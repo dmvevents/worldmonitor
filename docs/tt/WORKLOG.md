@@ -467,3 +467,17 @@ Lesson recorded in the audit: `variants/<v>.ts` DEFAULT_PANELS is descriptive, p
 Tests: `tests/chat-analyst-regional.test.mts` (builder + prompt sections for every domain focus), analyst
 suites 87/87, preset tests 13/13; harness stubs `tab-store`/`variant` so the panel bundle evaluates without
 `location`. tsc (frontend + api), Biome, boundaries clean.
+
+Demo segment (same day, afternoon): `node scripts/tt-demo-segc.mjs` records the Trinidad segment from a fresh
+profile; final take 54 s at 1080p. What it took eleven takes to learn, so nobody repeats them:
+- Chrome's headless screencast drops an ~87 px window inset and pads the frame grey — a 1920x1080 viewport
+  records 993 rows of page. Window-size flags do nothing; a 1920x1167 viewport fills the 1080 frame.
+- Live News is click-to-play unless the always-on setting is on: click `.offline-retry` ("Play live feed");
+  a transient TegoTV manifest error shows the off-air card — Retry, then "Next live channel".
+- `locator.type()` into the analyst textarea stalled once when a deferred panel re-rendered; `fill()` + Enter.
+- The "⚠ partial" chip is `meta.degraded` (>4 core Redis sources empty), not a cut stream; it flipped when
+  `prediction:markets-bootstrap:v1` expired, so the seed loop now runs the keyless Polymarket seed each pass.
+- "Analyst unavailable" twice in a row = the Claude shim was dead (`[llm-health] Provider unreachable`) while
+  launchd still said running; `tt-hub-serve.sh` now relaunches it. Three service restarts today, each with its
+  reason in the demo folder's SERVICES.md.
+- Pick the newest recording by mtime: Playwright names files by hash, and a lexical sort returned a stale take.
