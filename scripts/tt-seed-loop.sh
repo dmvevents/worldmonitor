@@ -48,6 +48,10 @@ pass() {
   for s in seed-weather-alerts seed-earthquakes seed-crypto-quotes seed-fear-greed; do run_seed "$s"; done
   # GDELT throttles this network hard; one topic per pass (rotating) keeps us under its 1 req / 5 s policy.
   run_seed seed-gdelt-intel GDELT_TOPICS_PER_RUN=1 GDELT_SOFT_BUDGET_MS=200000
+  # AI Insights (Main tab "AI Insights" panel, bootstrap key `insights`): the client treats data older
+  # than 60 min as stale, so refresh every pass (one Claude call via the generic provider = LLM_API_URL;
+  # the seed warms the news digest through the local front door when Redis lacks it).
+  if [ -n "${LLM_API_URL:-}" ]; then run_seed seed-insights WM_API_BASE_URL="http://127.0.0.1:${HUB_PORT:-3100}"; fi
   if [ ! -f "$STAMP_DIR/daily-$today" ]; then
     touch "$STAMP_DIR/daily-$today"
     if [ -n "${EIA_API_KEY:-}" ]; then
@@ -63,9 +67,6 @@ pass() {
       run_seed seed-forecasts FORECAST_LLM_PROVIDER_ORDER=generic FORECAST_LLM_COMBINED_PROVIDER_ORDER=generic \
         FORECAST_LLM_CRITICAL_PROVIDER_ORDER=generic FORECAST_LLM_IMPACT_PROVIDER_ORDER=generic \
         FORECAST_LLM_MARKET_IMPLICATIONS_PROVIDER_ORDER=generic
-      # AI Insights (the Main tab's "AI Insights" panel reads bootstrap key `insights`): the seed's
-      # provider chain ends with `generic` = LLM_API_URL, i.e. the same Claude shim.
-      run_seed seed-insights WM_API_BASE_URL="http://127.0.0.1:${HUB_PORT:-3100}"
     fi
     # Keyless slow-moving sources once a day (all public/official; aggregate data only):
     for s in seed-fx-rates seed-disease-outbreaks seed-displacement-summary seed-energy-disruptions \
