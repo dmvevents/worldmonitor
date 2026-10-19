@@ -229,6 +229,19 @@ export const OPTIONAL_LIVE_CHANNELS: LiveChannel[] = [
   { id: 'dtv8-guyana', name: 'DTV-8 (Guyana)', handle: '@DavesTV8', officialLiveUrl: 'https://dtv8.net/' },
   { id: 'ignite-news-gy', name: 'Ignite News (Guyana)', handle: '@ignitenewsgy', officialLiveUrl: 'https://ignitenews.com/' },
   { id: 'gy-parliament', name: 'Parliament of Guyana', handle: '@parliamentofguyana1710', officialLiveUrl: 'https://parliament.gov.gy/' },
+  // Guyana newsrooms / public bodies that stream on YouTube (Streams tab checked 2026-10-18).
+  { id: 'newsroom-guyana', name: 'News Room Guyana', handle: '@NewsRoomGuyana', officialLiveUrl: 'https://newsroom.gy/' },        // nightly newscast, streamed 1 d ago
+  { id: 'dpi-guyana', name: 'DPI Guyana (Govt)', handle: '@dpiguyana', officialLiveUrl: 'https://dpi.gov.gy/' },                     // UCGA8-rFam5zwrBs7GZ1tRpw; govt press events
+  { id: 'kaieteur-news', name: 'Kaieteur News (Guyana)', handle: '@KaieteurNews', officialLiveUrl: 'https://www.kaieteurnewsonline.com/' },
+  { id: 'inews-guyana', name: 'INews Guyana', handle: '@InewsGuyana', officialLiveUrl: 'https://www.inewsguyana.com/' },
+  { id: 'stabroek-news', name: 'Stabroek News (Guyana)', handle: '@stabroeknews', officialLiveUrl: 'https://www.stabroeknews.com/' },
+  { id: 'glc-guyana', name: 'Guyana Learning Channel', handle: '@GuyanaLearningChannel', officialLiveUrl: 'https://education.gov.gy/onlinelearning/learningchannel/' },
+  // T&T newsrooms / public bodies that stream on YouTube.
+  { id: 'tha-tobago', name: 'THA (Tobago House of Assembly)', handle: '@THAInfoDept', officialLiveUrl: 'https://www.tha.gov.tt/' },  // streamed 4 d ago
+  { id: 'newsday-tt', name: 'Newsday (T&T)', handle: '@newsday', officialLiveUrl: 'https://newsday.co.tt/' },
+  { id: 'ttps', name: 'TT Police Service', handle: '@TTPoliceService', officialLiveUrl: 'https://www.ttpolice.gov.tt/' },
+  { id: 'freedom-1065', name: 'Freedom 106.5 FM (T&T)', handle: '@FREEDOM106.5FM' },
+  { id: 'caricom', name: 'CARICOM', handle: '@caricomorg', officialLiveUrl: 'https://caricom.org/' },
   { id: 'tvj', name: 'Television Jamaica', handle: '@TelevisionJamaica' },             // UC1Ga-Hv1-dLz9zoAz81d9tA
   { id: 'cvm-tv', name: 'CVM TV News', handle: '@cvmtvnews' },                          // newscast channel; @CVMTV is the general channel
   { id: 'abs-antigua', name: 'ABS Antigua', handle: '@ABSTVAntigua' },                 // UCzjrwYEm05BM2Tdg1yVZ3yA
@@ -240,8 +253,8 @@ export const OPTIONAL_LIVE_CHANNELS: LiveChannel[] = [
   { id: 'bizz-tv', name: 'Bizz TV (T&T)', hlsUrl: 'https://stream.bizzmedia.biz/bizz_tv/index.m3u8', useFallbackOnly: true },
   { id: 'sankhya-tv', name: 'Sankhya TV (T&T)', hlsUrl: 'https://5c59fd5680a05.streamlock.net/live/_definst_/ngrp:SANKHYATV.stream_all/playlist.m3u8', useFallbackOnly: true },
   { id: 'scorch-tv', name: 'Scorch TV (T&T)', hlsUrl: 'https://w6oy7x7jlxrg-hls-live.5centscdn.com/MandETV/955ad3298db330b5ee880c2c9e6f23a0.sdp/playlist.m3u8', useFallbackOnly: true },
-  { id: 'hgptv', name: 'HGPTV (Guyana)', hlsUrl: 'https://cdn-us-east-prod-ingest-infra-dacast-com.akamaized.net/8424fb7f-99a9-87ae-3861-f0620849d11c/source/index.m3u8', useFallbackOnly: true },
-  { id: 'mtv-guyana', name: 'MTV Guyana', hlsUrl: 'https://stream.mtvgy.com/mtvguyana/index.fmp4.m3u8', useFallbackOnly: true },
+  { id: 'hgptv', name: 'HGPTV (Guyana)', hlsUrl: 'https://cdn-us-east-prod-ingest-infra-dacast-com.akamaized.net/8424fb7f-99a9-87ae-3861-f0620849d11c/source/index.m3u8', useFallbackOnly: true, officialLiveUrl: 'https://www.hgptv.com/' },  // signs off overnight (iptv-org: Not 24/7)
+  { id: 'mtv-guyana', name: 'MTV Guyana', hlsUrl: 'https://stream.mtvgy.com/mtvguyana/index.fmp4.m3u8', useFallbackOnly: true, officialLiveUrl: 'https://www.mtvgy.com/live' },  // signs off overnight
   { id: 'little-guyana-tv', name: 'Little Guyana TV', hlsUrl: 'https://video1.getstreamhosting.com:1936/8122/8122/playlist.m3u8', useFallbackOnly: true },
   // GTN Canada broadcasts into Guyana (iptv-org feed broadcast_area c/GY); iptv-org labels it geo-blocked
   // but it plays with CORS * from North America (see docs/tt/IPTV-GEO-BLOCKING.md).
@@ -285,7 +298,7 @@ const _REGION_ENTRIES: { key: string; labelKey: string; channelIds: string[] }[]
   { key: 'me', labelKey: 'components.liveNews.regionMiddleEast', channelIds: ['alarabiya', 'aljazeera', 'al-hadath', 'sky-news-arabia', 'trt-world', 'iran-intl', 'press-tv', 'cgtn-arabic', 'kan-11', 'i24-news', 'asharq-news', 'aljazeera-arabic', 'aljazeera-mubasher', 'alarabiya-business', 'al-qahera-news', 'dw-arabic', 'rt-arabic', 'rudaw'] },
   { key: 'africa', labelKey: 'components.liveNews.regionAfrica', channelIds: ['africanews', 'channels-tv', 'ktn-news', 'enca', 'sabc-news', 'arise-news'] },
   { key: 'oc', labelKey: 'components.liveNews.regionOceania', channelIds: ['abc-news-au'] },
-  { key: 'caribbean', labelKey: 'components.liveNews.regionCaribbean', channelIds: ['ttt-live', 'cnc3', 'cnc3-prime', 'tv6-news', 'tt-parliament', 'tobago-channel5', 'tobago-updates', 'ietv', 'synergy-tv', 'gayelle-tv', 'wpg10-tv', 'tv-jaagriti', 'trinity-tv', 'bhakti-tv', 'ibn-tv', 'wack-visual-radio', 'plus-tv', 'abs-tv-antigua', 'ncn-guyana', 'dtv8-guyana', 'ignite-news-gy', 'gy-parliament', 'gtn-canada', 'tvj', 'cvm-tv', 'abs-antigua', 'cbc-barbados', 'gbn-grenada', 'telesur-english', 'bizz-tv', 'sankhya-tv', 'scorch-tv', 'hgptv', 'mtv-guyana', 'little-guyana-tv', 'cbc-tv8', 'tvj-hls', 'gnn-tv', 'dbs-tv', 'pointe-tv', 'zns-tv', 'ziz-tv', 'nevis-tv', 'caribbean-hot7', 'guardian-talk-radio', 'fame95', 'riddim-hope-tv', 'islamic-network-tt', 'antena7', 'noticias16', 'tv-marti', 'prensa-latina-tv', 'haiti-news-channel', 'rth-tv1', 'telemundo-pr'] },
+  { key: 'caribbean', labelKey: 'components.liveNews.regionCaribbean', channelIds: ['ttt-live', 'cnc3', 'cnc3-prime', 'tv6-news', 'tt-parliament', 'tobago-channel5', 'tobago-updates', 'ietv', 'synergy-tv', 'gayelle-tv', 'wpg10-tv', 'tv-jaagriti', 'trinity-tv', 'bhakti-tv', 'ibn-tv', 'wack-visual-radio', 'plus-tv', 'abs-tv-antigua', 'tha-tobago', 'newsday-tt', 'ttps', 'freedom-1065', 'caricom', 'ncn-guyana', 'dtv8-guyana', 'ignite-news-gy', 'gy-parliament', 'newsroom-guyana', 'dpi-guyana', 'kaieteur-news', 'inews-guyana', 'stabroek-news', 'glc-guyana', 'gtn-canada', 'tvj', 'cvm-tv', 'abs-antigua', 'cbc-barbados', 'gbn-grenada', 'telesur-english', 'bizz-tv', 'sankhya-tv', 'scorch-tv', 'hgptv', 'mtv-guyana', 'little-guyana-tv', 'cbc-tv8', 'tvj-hls', 'gnn-tv', 'dbs-tv', 'pointe-tv', 'zns-tv', 'ziz-tv', 'nevis-tv', 'caribbean-hot7', 'guardian-talk-radio', 'fame95', 'riddim-hope-tv', 'islamic-network-tt', 'antena7', 'noticias16', 'tv-marti', 'prensa-latina-tv', 'haiti-news-channel', 'rth-tv1', 'telemundo-pr'] },
 ];
 export const OPTIONAL_CHANNEL_REGIONS: { key: string; labelKey: string; channelIds: string[] }[] = [
   ..._REGION_ENTRIES,
