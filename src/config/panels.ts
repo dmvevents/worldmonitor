@@ -1113,6 +1113,7 @@ const TT_PANELS: Record<string, PanelConfig> = {
   'tt-public-it': { name: 'Public-Sector IT & Procurement', enabled: true, priority: 1 },
   'tt-safety': { name: 'Crime & Public Safety (aggregate)', enabled: true, priority: 1 },
   'tt-weather': { name: 'Weather, Hurricanes & Outages', enabled: true, priority: 1 },
+  'tt-social': { name: 'Street Pulse (social & trends)', enabled: true, priority: 1 },
   // Wider context (existing feeds / data panels)
   latam: { name: 'Latin America', enabled: true, priority: 2 },
   politics: { name: 'World News', enabled: true, priority: 2 },
@@ -1266,6 +1267,7 @@ const GY_PANELS: Record<string, PanelConfig> = {
   'gy-economy': { name: 'Economy and Infrastructure', enabled: true, priority: 1 },
   'gy-safety': { name: 'Public Safety (aggregate)', enabled: true, priority: 1 },
   'gy-weather': { name: 'Weather, Flooding and Hurricanes', enabled: true, priority: 1 },
+  'gy-social': { name: 'Street Pulse (social and trends)', enabled: true, priority: 1 },
   caribbean: { name: 'Caribbean', enabled: true, priority: 1 },
   latam: { name: 'Latin America', enabled: true, priority: 2 },
   politics: { name: 'World News', enabled: true, priority: 2 },
@@ -1955,7 +1957,7 @@ export const PANEL_CATEGORY_MAP: Record<string, { labelKey: string; panelKeys: s
   },
   ttLenses: {
     labelKey: 'header.panelCatTTLenses',
-    panelKeys: ['tt-energy', 'tt-education', 'tt-telecoms', 'tt-public-it', 'tt-safety', 'tt-weather'],
+    panelKeys: ['tt-energy', 'tt-education', 'tt-telecoms', 'tt-public-it', 'tt-safety', 'tt-weather', 'tt-social'],
     variants: ['tt'],
   },
   ttContext: {
@@ -1972,7 +1974,7 @@ export const PANEL_CATEGORY_MAP: Record<string, { labelKey: string; panelKeys: s
   },
   gyLenses: {
     labelKey: 'header.panelCatGyLenses',
-    panelKeys: ['gy-oil', 'gy-essequibo', 'gy-economy', 'gy-safety', 'gy-weather'],
+    panelKeys: ['gy-oil', 'gy-essequibo', 'gy-economy', 'gy-safety', 'gy-weather', 'gy-social'],
     variants: ['gy'],
   },
   gyContext: {

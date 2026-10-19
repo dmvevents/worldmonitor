@@ -555,6 +555,14 @@ export const VARIANT_FEEDS: Record<string, Record<string, ServerFeed[]>> = {
       { name: 'WASA & Water', url: gn('(WASA OR "Water and Sewerage Authority" OR "water supply" OR "water outage") Trinidad when:3d') },
       { name: 'Earthquakes & Flooding TT', url: gn('(Trinidad OR Tobago) (earthquake OR flooding OR landslide OR "flash flood" OR "UWI Seismic") when:3d') },
     ],
+    // What people are talking about, aggregate and topic level: Google's daily trending searches for
+    // T&T, the public Mastodon hashtag (posts without a title use their text), and news about what is
+    // trending on social media. No named-account scraping; Reddit needs API credentials (see TT_FOCUS).
+    'tt-social': [
+      { name: 'Google Trends T&T', url: 'https://trends.google.com/trending/rss?geo=TT' },
+      { name: 'Mastodon #trinidadandtobago', url: 'https://mastodon.social/tags/trinidadandtobago.rss' },
+      { name: 'Social Media in the News TT', url: gn('(Trinidad OR Tobago) (viral OR trending OR "social media" OR TikTok OR Facebook OR Instagram OR WhatsApp) when:2d') },
+    ],
     caribbean: [
       { name: 'CARICOM Today', url: 'https://today.caricom.org/feed/' },
       { name: 'Caribbean News Global', url: 'https://caribbeannewsglobal.com/feed/' },
@@ -628,6 +636,11 @@ export const VARIANT_FEEDS: Record<string, Record<string, ServerFeed[]>> = {
       { name: 'Guyana Hydromet', url: 'https://hydromet.gov.gy/feed/' },
       { name: 'NHC Atlantic', url: 'https://www.nhc.noaa.gov/index-at.xml' },
       { name: 'Guyana Weather and Flooding', url: gn('Guyana (flooding OR flood OR "weather advisory" OR "spring tide" OR drought OR "El Nino") when:3d') },
+    ],
+    'gy-social': [
+      { name: 'Mastodon #guyana', url: 'https://mastodon.social/tags/guyana.rss' },
+      { name: 'Social Media in the News GY', url: gn('Guyana (viral OR trending OR "social media" OR TikTok OR Facebook OR Instagram OR WhatsApp) when:2d') },
+      { name: 'Public Reaction GY', url: gn('Guyana (protest OR petition OR "public outcry" OR residents OR "town hall" OR vigil) when:2d') },
     ],
     caribbean: [
       { name: 'CARICOM Today', url: 'https://today.caricom.org/feed/' },

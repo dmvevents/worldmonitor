@@ -35,6 +35,7 @@ export const DEFAULT_PANELS: Record<string, PanelConfig> = {
   'tt-public-it': { name: 'Public-Sector IT & Procurement', enabled: true, priority: 1 },
   'tt-safety': { name: 'Crime & Public Safety (aggregate)', enabled: true, priority: 1 },
   'tt-weather': { name: 'Weather, Hurricanes & Outages', enabled: true, priority: 1 },
+  'tt-social': { name: 'Street Pulse (social & trends)', enabled: true, priority: 1 },
   // Wider context
   latam: { name: 'Latin America', enabled: true, priority: 2 },
   politics: { name: 'World News', enabled: true, priority: 2 },

@@ -255,7 +255,13 @@ export async function fetchFeed(feed: Feed): Promise<NewsItem[]> {
     const parsed = Array.from(items)
       .slice(0, 5)
       .map((item) => {
-        const title = item.querySelector('title')?.textContent || '';
+        // Feeds whose items have no <title> (Mastodon hashtag RSS: text lives in <description>)
+        // fall back to the item's text, tags stripped, so the post still renders as a headline.
+        let title = item.querySelector('title')?.textContent?.trim() || '';
+        if (!title) {
+          const raw = item.querySelector('description, summary, content')?.textContent || '';
+          title = raw.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 160);
+        }
         let link = '';
         if (isAtom) {
           const linkEl = item.querySelector('link[href]');

@@ -43,6 +43,7 @@ const CATEGORY_TITLES: Record<string, string> = {
   'tt-public-it': 'Public-Sector IT & Procurement',
   'tt-safety': 'Crime & Public Safety (aggregate)',
   'tt-weather': 'Weather, Hurricanes & Outages',
+  'tt-social': 'Street Pulse (social and trends)',
   caribbean: 'Caribbean Geopolitics (Venezuela, Guyana, CARICOM)',
 };
 

@@ -1131,6 +1131,12 @@ const TT_FEEDS: Record<string, Feed[]> = {
     { name: 'WASA & Water', url: rss('https://news.google.com/rss/search?q=(WASA+OR+"Water+and+Sewerage+Authority"+OR+"water+supply"+OR+"water+outage")+Trinidad+when:3d&hl=en-US&gl=US&ceid=US:en') },
     { name: 'Earthquakes & Flooding TT', url: rss('https://news.google.com/rss/search?q=(Trinidad+OR+Tobago)+(earthquake+OR+flooding+OR+landslide+OR+"flash+flood"+OR+"UWI+Seismic")+when:3d&hl=en-US&gl=US&ceid=US:en') },
   ],
+  // Street Pulse: aggregate, topic-level public conversation (mirrors server/worldmonitor/news/v1/_feeds.ts).
+  'tt-social': [
+    { name: 'Google Trends T&T', url: rss('https://trends.google.com/trending/rss?geo=TT') },
+    { name: 'Mastodon #trinidadandtobago', url: rss('https://mastodon.social/tags/trinidadandtobago.rss') },
+    { name: 'Social Media in the News TT', url: rss('https://news.google.com/rss/search?q=(Trinidad+OR+Tobago)+(viral+OR+trending+OR+"social+media"+OR+TikTok+OR+Facebook+OR+Instagram+OR+WhatsApp)+when:2d&hl=en-US&gl=US&ceid=US:en') },
+  ],
   caribbean: [
     { name: 'CARICOM Today', url: rss('https://today.caricom.org/feed/') },
     { name: 'Caribbean News Global', url: rss('https://caribbeannewsglobal.com/feed/') },
@@ -1205,6 +1211,11 @@ const GY_FEEDS: Record<string, Feed[]> = {
     { name: 'Guyana Hydromet', url: rss('https://hydromet.gov.gy/feed/') },
     { name: 'NHC Atlantic', url: rss('https://www.nhc.noaa.gov/index-at.xml') },
     { name: 'Guyana Weather and Flooding', url: rss('https://news.google.com/rss/search?q=Guyana+(flooding+OR+flood+OR+"weather+advisory"+OR+"spring+tide"+OR+drought+OR+"El+Nino")+when:3d&hl=en-US&gl=US&ceid=US:en') },
+  ],
+  'gy-social': [
+    { name: 'Mastodon #guyana', url: rss('https://mastodon.social/tags/guyana.rss') },
+    { name: 'Social Media in the News GY', url: rss('https://news.google.com/rss/search?q=Guyana+(viral+OR+trending+OR+"social+media"+OR+TikTok+OR+Facebook+OR+Instagram+OR+WhatsApp)+when:2d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Public Reaction GY', url: rss('https://news.google.com/rss/search?q=Guyana+(protest+OR+petition+OR+"public+outcry"+OR+residents+OR+"town+hall"+OR+vigil)+when:2d&hl=en-US&gl=US&ceid=US:en') },
   ],
   caribbean: [
     { name: 'CARICOM Today', url: rss('https://today.caricom.org/feed/') },
