@@ -235,6 +235,21 @@ const LLM_PROVIDERS = [
     headers: (key) => ({ 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json', 'User-Agent': CHROME_UA }),
     timeout: 15_000,
   },
+  {
+    // Self-host / hub: any OpenAI-compatible endpoint (LLM_API_URL / LLM_API_KEY / LLM_MODEL), e.g. the
+    // Claude-on-Bedrock shim in scripts/tt-claude-proxy.py. Mirrors the `generic` provider in
+    // server/_shared/llm.ts; last in the chain so hosted deployments are unaffected.
+    name: 'generic',
+    envKey: 'LLM_API_URL',
+    apiUrlFn: (url) => url,
+    model: () => process.env.LLM_MODEL || 'generic',
+    headers: (_url) => ({
+      'Content-Type': 'application/json',
+      'User-Agent': CHROME_UA,
+      ...(process.env.LLM_API_KEY ? { Authorization: `Bearer ${process.env.LLM_API_KEY}` } : {}),
+    }),
+    timeout: 60_000,
+  },
 ];
 
 // Bounded retry for the brief LLM call. seed-insights holds a 120s seed lock

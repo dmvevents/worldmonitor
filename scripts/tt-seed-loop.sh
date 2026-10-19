@@ -63,6 +63,9 @@ pass() {
       run_seed seed-forecasts FORECAST_LLM_PROVIDER_ORDER=generic FORECAST_LLM_COMBINED_PROVIDER_ORDER=generic \
         FORECAST_LLM_CRITICAL_PROVIDER_ORDER=generic FORECAST_LLM_IMPACT_PROVIDER_ORDER=generic \
         FORECAST_LLM_MARKET_IMPLICATIONS_PROVIDER_ORDER=generic
+      # AI Insights (the Main tab's "AI Insights" panel reads bootstrap key `insights`): the seed's
+      # provider chain ends with `generic` = LLM_API_URL, i.e. the same Claude shim.
+      run_seed seed-insights WM_API_BASE_URL="http://127.0.0.1:${HUB_PORT:-3100}"
     fi
     # Keyless slow-moving sources once a day (all public/official; aggregate data only):
     for s in seed-fx-rates seed-disease-outbreaks seed-displacement-summary seed-energy-disruptions \

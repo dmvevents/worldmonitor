@@ -82,7 +82,9 @@ def _to_converse(messages: list[dict]) -> tuple[list[dict], list[dict]]:
 def _inference_config(body: dict) -> dict:
     cfg: dict = {}
     max_tokens = body.get("max_tokens") or body.get("max_completion_tokens")
-    cfg["maxTokens"] = int(max_tokens) if max_tokens else 1024
+    # Floor: World Monitor's short JSON calls (e.g. classify-event asks for 50 tokens) get truncated by
+    # Claude 5's slightly longer JSON and then fail the caller's validate(); 160 leaves room.
+    cfg["maxTokens"] = max(int(max_tokens), 160) if max_tokens else 1024
     # Claude 5 models on Bedrock reject `temperature`/`top_p` ("deprecated for
     # this model"); older Claude accepts them. Forward only when opted in.
     if FORWARD_SAMPLING:
