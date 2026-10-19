@@ -46,6 +46,8 @@ export interface AnalystContext {
   countryBrief: string;
   liveHeadlines: string;
   relevantArticles: string;
+  /** Local-press headlines for the focused country (variant digest), when the hub has one. */
+  regionalHeadlines?: string;
   energyExposure: string;
   coalSpotPrice: string;
   gasSpotTtf: string;
@@ -765,6 +767,63 @@ async function searchDigestByKeywords(keywords: string[]): Promise<string> {
   return lines.join('\n');
 }
 
+// ── Regional headlines (variant digest) ───────────────────────────────────────
+//
+// The hub builds per-variant digests from the local press (news:digest:v1:<variant>:en).
+// When the caller focuses one of those countries, surface its headlines so the analyst
+// answers from Trinidad & Tobago / Guyana coverage instead of the global brief only.
+
+export const REGIONAL_DIGESTS: Record<string, { variant: string; label: string; categories: string[] }> = {
+  TT: { variant: 'tt', label: 'Trinidad and Tobago', categories: ['tt-news', 'tt-gov', 'tt-energy', 'tt-safety', 'tt-social', 'caribbean'] },
+  GY: { variant: 'gy', label: 'Guyana', categories: ['gy-news', 'gy-gov', 'gy-energy', 'gy-safety', 'gy-social', 'caribbean'] },
+};
+
+const MAX_REGIONAL_LINES = 14;
+const MAX_REGIONAL_PER_CATEGORY = 4;
+
+export function buildRegionalHeadlines(digest: unknown, iso2: string): string {
+  const region = REGIONAL_DIGESTS[iso2.toUpperCase()];
+  if (!region || !digest || typeof digest !== 'object') return '';
+  const categories = (digest as { categories?: Record<string, { items?: DigestItem[] }> }).categories;
+  if (!categories || typeof categories !== 'object') return '';
+
+  const lines: string[] = [];
+  const seen = new Set<string>();
+  for (const key of region.categories) {
+    const items = categories[key]?.items;
+    if (!Array.isArray(items) || items.length === 0) continue;
+    const sorted = [...items].sort((a, b) => safeNum(b.publishedAt) - safeNum(a.publishedAt));
+    let taken = 0;
+    for (const item of sorted) {
+      if (taken >= MAX_REGIONAL_PER_CATEGORY || lines.length >= MAX_REGIONAL_LINES) break;
+      const title = sanitizeForPrompt(safeStr(item.title));
+      if (!title) continue;
+      const dedupe = title.toLowerCase();
+      if (seen.has(dedupe)) continue;
+      seen.add(dedupe);
+      const source = safeStr(item.source).slice(0, 40);
+      const ts = item.publishedAt ? new Date(item.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      const meta = [source, ts].filter(Boolean).join(', ');
+      lines.push(`- [${key}] ${title}${meta ? ` (${meta})` : ''}`);
+      taken++;
+    }
+    if (lines.length >= MAX_REGIONAL_LINES) break;
+  }
+  if (lines.length === 0) return '';
+  return `Regional Headlines — ${region.label} (local press and official sources):\n${lines.join('\n')}`;
+}
+
+async function fetchRegionalHeadlines(iso2: string): Promise<string> {
+  const region = REGIONAL_DIGESTS[iso2];
+  if (!region) return '';
+  try {
+    const digest = await getCachedJson(`news:digest:v1:${region.variant}:en`, true);
+    return buildRegionalHeadlines(digest, iso2);
+  } catch {
+    return '';
+  }
+}
+
 // ── Source labels ─────────────────────────────────────────────────────────────
 
 const SOURCE_LABELS: Array<[keyof Omit<AnalystContext, 'timestamp' | 'degraded' | 'activeSources'>, string]> = [
@@ -781,6 +840,7 @@ const SOURCE_LABELS: Array<[keyof Omit<AnalystContext, 'timestamp' | 'degraded' 
   ['predictionMarkets', 'Prediction'],
   ['countryBrief', 'Country'],
   ['liveHeadlines', 'Live'],
+  ['regionalHeadlines', 'Regional'],
   ['gasStorage', 'GasStorage'],
   ['electricityPrices', 'Electricity'],
   ['energyIntelligence', 'EnergyIntel'],
@@ -847,6 +907,7 @@ export async function assembleAnalystContext(
     countryResult,
     headlinesResult,
     relevantArticlesResult,
+    regionalHeadlinesResult,
     gasStorageResult,
     electricityResult,
     energyIntelResult,
@@ -869,6 +930,7 @@ export async function assembleAnalystContext(
     countryKey ? getCachedJson(countryKey, true) : Promise.resolve(null),
     buildLiveHeadlines(resolvedDomain, keywords),
     keywords.length > 0 ? searchDigestByKeywords(keywords) : Promise.resolve(''),
+    iso2 && REGIONAL_DIGESTS[iso2] ? fetchRegionalHeadlines(iso2) : Promise.resolve(''),
     needsGasStorage ? buildGasStorage() : Promise.resolve(undefined),
     needsElectricity ? buildElectricityPrices() : Promise.resolve(undefined),
     needsEnergyIntel ? buildEnergyIntelligence() : Promise.resolve(undefined),
@@ -915,6 +977,7 @@ export async function assembleAnalystContext(
     countryBrief: buildCountryBrief(get(countryResult)),
     liveHeadlines: getStr(headlinesResult),
     relevantArticles: getStr(relevantArticlesResult),
+    regionalHeadlines: getStr(regionalHeadlinesResult) || undefined,
     activeSources: [],
     degraded: failCount > 4,
     gasStorage: getOptStr(gasStorageResult),

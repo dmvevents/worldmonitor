@@ -91,6 +91,12 @@ async function loadChatAnalystPanel() {
     ['checkout-stub', `
       export function startCheckout() {}
     `],
+    ['tab-store-stub', `
+      export function loadTabsState() { return globalThis.__wmAnalystTabsState ?? null; }
+    `],
+    ['variant-stub', `
+      export const SITE_VARIANT = 'full';
+    `],
     ['products-stub', `
       export const DEFAULT_UPGRADE_PRODUCT = 'pro';
     `],
@@ -111,6 +117,8 @@ async function loadChatAnalystPanel() {
     ['@/utils/analyst-markdown', 'analyst-markdown-stub'],
     ['@/services/checkout', 'checkout-stub'],
     ['@/config/products', 'products-stub'],
+    ['@/services/tab-store', 'tab-store-stub'],
+    ['@/config/variant', 'variant-stub'],
     ['marked', 'marked-stub'],
     ['dompurify', 'dompurify-stub'],
   ]);

@@ -5,6 +5,8 @@ import DOMPurify from 'dompurify';
 import { postProcessAnalystHtml } from '@/utils/analyst-markdown';
 import { yieldToMain } from '@/utils/after-paint';
 import { premiumFetch } from '@/services/premium-fetch';
+import { loadTabsState } from '@/services/tab-store';
+import { SITE_VARIANT } from '@/config/variant';
 import { trackAnalystControlAction } from '@/services/analytics';
 import { h, replaceChildren, setTrustedHtml, trustedHtml, type TrustedHtml } from '@/utils/dom-utils';
 import {
@@ -17,6 +19,21 @@ import {
 const API_URL = '/api/chat-analyst';
 const MAX_HISTORY = 20;
 const DASHBOARD_CONTROL_STORAGE_KEY = 'wm-analyst-dashboard-control-enabled';
+
+/** Regional variants / preset tabs whose digest the analyst can read as "Regional Headlines". */
+const REGIONAL_GEO: Record<string, string> = { tt: 'TT', gy: 'GY' };
+
+/**
+ * ISO-2 country focus for the analyst. Derived from the active dashboard tab when it is a
+ * regional preset (preset-tt → TT), else from the site variant (tt → TT). Undefined = global.
+ */
+export function resolveAnalystGeoContext(
+  activeTabId: string | null | undefined = loadTabsState()?.activeTabId,
+  variant: string = SITE_VARIANT,
+): string | undefined {
+  const fromTab = activeTabId?.startsWith('preset-') ? REGIONAL_GEO[activeTabId.slice('preset-'.length)] : undefined;
+  return fromTab ?? REGIONAL_GEO[variant];
+}
 
 interface QuickAction {
   label: string;
@@ -496,8 +513,9 @@ export class ChatAnalystPanel extends Panel {
           history: trimmedHistory,
           query: trimmedQuery,
           domainFocus: this.domainFocus,
-          // geoContext (ISO-2 country focus) is supported by the API but wired in Phase 2
-          // when the panel can read the map's selected country. Agent callers can pass it directly.
+          // ISO-2 country focus: the active regional preset tab (T&T / Guyana) or the site
+          // variant. The server adds that country's local-press digest as Regional Headlines.
+          geoContext: resolveAnalystGeoContext(),
         }),
         signal: this.streamAbort.signal,
       });
