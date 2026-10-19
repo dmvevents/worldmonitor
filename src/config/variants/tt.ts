@@ -36,6 +36,8 @@ export const DEFAULT_PANELS: Record<string, PanelConfig> = {
   'tt-safety': { name: 'Crime & Public Safety (aggregate)', enabled: true, priority: 1 },
   'tt-weather': { name: 'Weather, Hurricanes & Outages', enabled: true, priority: 1 },
   'tt-social': { name: 'Street Pulse (social & trends)', enabled: true, priority: 1 },
+  // Analyst chat: answers from the T&T digest (Regional Headlines) when this tab is active
+  'chat-analyst': { name: 'WM Analyst', enabled: true, priority: 1, premium: 'locked' as const },
   // Wider context
   latam: { name: 'Latin America', enabled: true, priority: 2 },
   politics: { name: 'World News', enabled: true, priority: 2 },

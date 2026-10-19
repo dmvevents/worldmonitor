@@ -441,3 +441,29 @@ clean; `validate-live-channels` 6/8 (HGPTV 403, MTV Guyana 404 overnight). Hub r
 filler ids in either strip. Full station table and tooling notes in IPTV-HANDOFF §9.3. Open item: the panel
 is click-to-play, so the sweep confirms strip composition only; CNC3/TV6 remain link-only (domain-locked
 Dailymotion) and Freedom 106.5 has no official-page URL yet.
+
+## Round 19: the analyst reads Trinidad, and a demo segment of the hub (2026-10-19)
+
+Post-reboot check (Mac restarted 07:16 EDT): the hub LaunchAgent came back by itself, `main` matched the fork,
+the running `dist` (22:59) already carried Hermes's `f0d32c955` strip merge. One gap: `dist/hub/chat-analyst.js`
+was missing after that last build — `npm run build:full` empties `dist/`, and the chat bundle is only written
+by `node scripts/build-sidecar-handlers.mjs` — so WM Analyst answered "Cannot find module". Regenerated; the
+front door lazy-imports it, so no restart was needed for that.
+
+Why the analyst was useless for T&T questions: `assembleAnalystContext` had no regional lens. Asked for the
+top Trinidad story it summarised the global brief and the gas-exposure index ("99% gas-fired power") because
+nothing Trinidadian was in its context. Fix (`3762db435` + this round): when `geoContext` is `TT` or `GY` the
+server reads the hub's own variant digest (`news:digest:v1:tt:en` / `gy`), builds a "Regional Headlines"
+section (newest first, de-duplicated, up to 14 lines across news/gov/energy|oil/safety/social/caribbean) and
+the prompt tells the model to answer from those first. `ChatAnalystPanel` sends `geoContext` from the active
+preset tab (`preset-tt` → `TT`, `preset-gy` → `GY`) or the site variant. Verified live after a restart (the
+front door caches the handler module in memory; reason logged in the demo `SERVICES.md`): the answer now leads
+with the Dragon Gas exchange (Moonilal vs Young) and the NWRHA newborn-deaths ruling, meta sources include
+`Regional`. `WM Analyst` is now part of the T&T and Guyana presets (`src/config/panels.ts` TT_PANELS/GY_PANELS
+are the canonical registry; `variants/tt.ts`/`gy.ts` kept in sync) so the question can be asked on the tab
+whose digest feeds it; existing profiles pick it up through `healPresetTabs` (old set is a strict subset).
+Lesson recorded in the audit: `variants/<v>.ts` DEFAULT_PANELS is descriptive, panels.ts decides.
+
+Tests: `tests/chat-analyst-regional.test.mts` (builder + prompt sections for every domain focus), analyst
+suites 87/87, preset tests 13/13; harness stubs `tab-store`/`variant` so the panel bundle evaluates without
+`location`. tsc (frontend + api), Biome, boundaries clean.

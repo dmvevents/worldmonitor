@@ -51,7 +51,16 @@ pass() {
   # AI Insights (Main tab "AI Insights" panel, bootstrap key `insights`): the client treats data older
   # than 60 min as stale, so refresh every pass (one Claude call via the generic provider = LLM_API_URL;
   # the seed warms the news digest through the local front door when Redis lacks it).
+  # Keyless Polymarket seed: feeds the Predictions panel and keeps the analyst context out of "degraded"
+  # (it counts prediction:markets-bootstrap:v1 among its core sources; the key otherwise expires).
+  run_seed seed-prediction-markets
   if [ -n "${LLM_API_URL:-}" ]; then run_seed seed-insights WM_API_BASE_URL="http://127.0.0.1:${HUB_PORT:-3100}"; fi
+  # Keep the regional digests warm (15-min Redis TTL): the WM Analyst reads them as "Regional
+  # Headlines" on the T&T / Guyana tabs, and no client on the full variant requests them.
+  for v in tt gy; do
+    curl -s -m 90 -o /dev/null -w "[seed-loop $(date +%H:%M:%S)] digest $v %{http_code}\n" \
+      "http://127.0.0.1:${HUB_PORT:-3100}/api/news/v1/list-feed-digest?variant=$v&lang=en" || true
+  done
   if [ ! -f "$STAMP_DIR/daily-$today" ]; then
     touch "$STAMP_DIR/daily-$today"
     if [ -n "${EIA_API_KEY:-}" ]; then

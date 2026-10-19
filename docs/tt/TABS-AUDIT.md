@@ -162,3 +162,13 @@ Room, Demerara) and the national headline queries cover the gap.
 
 **Anton's browser:** his tab still had the 8-panel Main at the time of writing (re-seed marker absent); a
 reload applies the re-seed once and switches Main to the default above.
+
+## 5. Addendum 2026-10-19 — WM Analyst joins the T&T and Guyana tabs
+
+- `chat-analyst` added to `TT_PANELS` and `GY_PANELS` in `src/config/panels.ts` (and mirrored in
+  `src/config/variants/tt.ts` / `gy.ts`). On these tabs the panel sends `geoContext` (TT / GY) and the server
+  adds the tab's own digest as "Regional Headlines", so the answer is about Trinidad or Guyana, not the global brief.
+- Gotcha found while doing it: `src/config/variants/<v>.ts` `DEFAULT_PANELS` does not drive the preset tabs —
+  `getVariantEnabledPanelKeys()` reads `panels.ts`. Editing only the variant file builds a bundle without the panel.
+- Existing profiles: `healPresetTabs` re-applies a preset whose stored enabled set is a strict subset of the new
+  one, so the panel appears on the next load without a reset.

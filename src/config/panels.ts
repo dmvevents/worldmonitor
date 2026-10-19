@@ -1114,6 +1114,7 @@ const TT_PANELS: Record<string, PanelConfig> = {
   'tt-safety': { name: 'Crime & Public Safety (aggregate)', enabled: true, priority: 1 },
   'tt-weather': { name: 'Weather, Hurricanes & Outages', enabled: true, priority: 1 },
   'tt-social': { name: 'Street Pulse (social & trends)', enabled: true, priority: 1 },
+  'chat-analyst': { name: 'WM Analyst', enabled: true, priority: 1, premium: 'locked' as const },
   // Wider context (existing feeds / data panels)
   latam: { name: 'Latin America', enabled: true, priority: 2 },
   politics: { name: 'World News', enabled: true, priority: 2 },
@@ -1268,6 +1269,7 @@ const GY_PANELS: Record<string, PanelConfig> = {
   'gy-safety': { name: 'Public Safety (aggregate)', enabled: true, priority: 1 },
   'gy-weather': { name: 'Weather, Flooding and Hurricanes', enabled: true, priority: 1 },
   'gy-social': { name: 'Street Pulse (social and trends)', enabled: true, priority: 1 },
+  'chat-analyst': { name: 'WM Analyst', enabled: true, priority: 1, premium: 'locked' as const },
   caribbean: { name: 'Caribbean', enabled: true, priority: 1 },
   latam: { name: 'Latin America', enabled: true, priority: 2 },
   politics: { name: 'World News', enabled: true, priority: 2 },

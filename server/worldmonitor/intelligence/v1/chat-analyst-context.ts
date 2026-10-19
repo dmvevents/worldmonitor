@@ -1,4 +1,5 @@
 import { getCachedJson } from '../../../_shared/redis';
+import { listFeedDigest } from '../../news/v1/list-feed-digest';
 // Issue #3724: all LLM-bound headline content goes through sanitizeForPrompt
 // (semantic + structural). The lighter sanitizeHeadline only strips structural
 // delimiters and was designed to preserve security-news semantics for display
@@ -775,7 +776,7 @@ async function searchDigestByKeywords(keywords: string[]): Promise<string> {
 
 export const REGIONAL_DIGESTS: Record<string, { variant: string; label: string; categories: string[] }> = {
   TT: { variant: 'tt', label: 'Trinidad and Tobago', categories: ['tt-news', 'tt-gov', 'tt-energy', 'tt-safety', 'tt-social', 'caribbean'] },
-  GY: { variant: 'gy', label: 'Guyana', categories: ['gy-news', 'gy-gov', 'gy-energy', 'gy-safety', 'gy-social', 'caribbean'] },
+  GY: { variant: 'gy', label: 'Guyana', categories: ['gy-news', 'gy-gov', 'gy-oil', 'gy-essequibo', 'gy-economy', 'gy-safety', 'gy-social', 'caribbean'] },
 };
 
 const MAX_REGIONAL_LINES = 14;
@@ -813,12 +814,28 @@ export function buildRegionalHeadlines(digest: unknown, iso2: string): string {
   return `Regional Headlines — ${region.label} (local press and official sources):\n${lines.join('\n')}`;
 }
 
+// The variant digest lives 15 minutes in Redis and only a client on that variant (or the hub's
+// seed loop) refreshes it. When it is cold, start the digest build and wait a bounded time: a
+// hit within the budget feeds this answer, otherwise the build keeps running and warms the cache
+// for the next question (a cold build fans out to every regional feed and can take ~10 s).
+const REGIONAL_BUILD_BUDGET_MS = 7_000;
+
 async function fetchRegionalHeadlines(iso2: string): Promise<string> {
   const region = REGIONAL_DIGESTS[iso2];
   if (!region) return '';
+  const key = `news:digest:v1:${region.variant}:en`;
   try {
-    const digest = await getCachedJson(`news:digest:v1:${region.variant}:en`, true);
-    return buildRegionalHeadlines(digest, iso2);
+    const cached = await getCachedJson(key, true);
+    if (cached) return buildRegionalHeadlines(cached, iso2);
+  } catch {
+    // fall through to the on-demand build
+  }
+  try {
+    const ctx = { request: new Request('http://127.0.0.1/internal/analyst-regional-digest'), pathParams: {}, headers: {} };
+    const build = listFeedDigest(ctx, { variant: region.variant, lang: 'en' }).catch(() => null);
+    const timeout = new Promise<null>((resolve) => setTimeout(() => resolve(null), REGIONAL_BUILD_BUDGET_MS));
+    const digest = await Promise.race([build, timeout]);
+    return digest ? buildRegionalHeadlines(digest, iso2) : '';
   } catch {
     return '';
   }
