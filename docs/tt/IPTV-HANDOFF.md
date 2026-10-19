@@ -8,7 +8,11 @@ steps only. Companion docs: `docs/tt/IPTV-GEO-BLOCKING.md` (geo-blocking deep di
 > particular): TTT, IETV, Synergy TV, Gayelle and six more T&T stations now play live through the
 > broadcasters' TegoTV player; CNC3 and TV6 remain YouTube/off-air cards with official-page links. The
 > merge is on `main` (198851903, cbf1dcd17), the hub runs it, and the hub docs (TT_FOCUS, HOW-IT-WORKS,
-> skill, curator agent) were aligned to it in the tabs round.
+> skill, curator agent) were aligned to it in the tabs round. §9.2 (Guyana, merges c16657b81/0ee195146)
+> and §9.3 (comprehensive GY/TT strips, merge f0d32c955; WORKLOG Round 18) extend it; the headless
+> :3100 sweep in §9.3 is the current source of truth for what is in each strip. Social-media "pulse"
+> feeds (TikTok/Instagram/Facebook) were asked for but are out of this handoff's scope — see WORKLOG
+> Round 17 (Street Pulse lenses) for what exists keyless today.
 
 ## 1. What works today (verified on this Mac, 2026-10-18)
 
