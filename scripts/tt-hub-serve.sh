@@ -31,8 +31,13 @@ ls api/*/v1/\[rpc\].js >/dev/null 2>&1 || { log "API handler bundles missing: ru
 
 # 1. Claude shim (reuse if already up). Wait until it answers: the sidecar probes LLM providers at
 # boot and marks an unreachable one offline, so starting it first would send every brief to nothing.
+# Supervised: if the shim process dies (2026-10-19: it vanished while the front door kept serving,
+# so every brief, classification and analyst answer went "Offline"), relaunch it after 2 s.
 if ! curl -fsS -m 2 "http://127.0.0.1:${PROXY_PORT}/health" >/dev/null 2>&1; then
-  PORT="$PROXY_PORT" BEDROCK_MODEL="$MODEL" "$PYTHON" scripts/tt-claude-proxy.py &
+  ( while :; do
+      PORT="$PROXY_PORT" BEDROCK_MODEL="$MODEL" "$PYTHON" scripts/tt-claude-proxy.py
+      log "claude shim exited (status $?); restarting in 2s"; sleep 2
+    done ) &
   PIDS+=($!)
   for _ in $(seq 1 40); do curl -fsS -m 1 "http://127.0.0.1:${PROXY_PORT}/health" >/dev/null 2>&1 && break; sleep 0.5; done
 fi
