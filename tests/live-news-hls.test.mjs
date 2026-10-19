@@ -532,7 +532,21 @@ describe('Guyana live channels', () => {
   it('opens on always-live HLS stations before newscast-only YouTube channels', () => {
     const order = [...gyList.matchAll(/'([a-z0-9-]+)'/g)].map((m) => m[1]);
     assert.deepEqual(order.slice(0, 4), ['hgptv', 'mtv-guyana', 'little-guyana-tv', 'gtn-canada']);
-    for (const id of ['ncn-guyana', 'dtv8-guyana', 'ignite-news-gy', 'gy-parliament']) assert.ok(order.includes(id), `${id} in gy strip`);
+    for (const id of ['ncn-guyana', 'newsroom-guyana', 'dtv8-guyana', 'ignite-news-gy', 'dpi-guyana', 'gy-parliament', 'kaieteur-news', 'inews-guyana', 'stabroek-news', 'glc-guyana']) assert.ok(order.includes(id), `${id} in gy strip`);
+  });
+
+  it('GY and TT strips carry no Venezuelan channels; Sky/Al Jazeera remain as the always-live backstop', () => {
+    const ttList = defaults.match(/tt:\s*\[[^\]]*\]/)?.[0] ?? '';
+    for (const list of [gyList, ttList]) {
+      for (const id of ['canal-i', 'venevision-int', 'telesur-english', 'vtv', 'globovision']) assert.ok(!list.includes(`'${id}'`), `${id} must not be in ${list.slice(0, 4)}`);
+      assert.ok(list.includes(`'sky'`) && list.includes(`'aljazeera'`));
+    }
+    for (const id of ['sankhya-tv', 'scorch-tv', 'tha-tobago', 'tobago-channel5', 'newsday-tt', 'ttps', 'freedom-1065']) assert.ok(ttList.includes(`'${id}'`), `${id} in tt strip`);
+  });
+
+  it('every GY/TT newsroom handle added 2026-10-18 is a real YouTube handle (as resolved by youtube.com)', () => {
+    const expected = { 'newsroom-guyana': '@NewsRoomGuyana', 'dpi-guyana': '@dpiguyana', 'kaieteur-news': '@KaieteurNews', 'inews-guyana': '@InewsGuyana', 'stabroek-news': '@stabroeknews', 'glc-guyana': '@GuyanaLearningChannel', 'tha-tobago': '@THAInfoDept', 'newsday-tt': '@newsday', 'ttps': '@TTPoliceService', 'freedom-1065': '@FREEDOM106.5FM', 'caricom': '@caricomorg' };
+    for (const [id, h] of Object.entries(expected)) assert.ok(channelDef(id).includes(`handle: '${h}'`), `${id} → ${h}`);
   });
 
   it('NCN uses the handle its own live page links (@ncn.guyana) and offers the official page when off air', () => {
