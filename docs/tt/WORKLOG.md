@@ -422,3 +422,22 @@ Mastodon hashtags, Google News social queries → new `tt-social` / `gy-social` 
 server, docs inventory 89 rows, digest titles), with a title fallback in the RSS parser for untitled items.
 Verified headless: Street Pulse 10 items on T&T, 9 on Guyana; Insights world brief renders on Main.
 Tests: 158 across presets, feed parity, docs inventory, RSS and insights suites; tsc, Biome, boundaries clean.
+
+## Round 18: GY/TT strips made comprehensive, fillers dropped (2026-10-18, late)
+
+Changes: `src/components/LiveNewsPanel.ts` adds eight YouTube auto-detect definitions with official-page
+links — News Room Guyana, DPI Guyana, Kaieteur News, INews Guyana, Newsday, TT Police Service, Freedom 106.5
+and CARICOM — and gives HGPTV and MTV Guyana `officialLiveUrl` so their overnight sign-off shows a "Watch on"
+link instead of a dead card. `src/config/live-channel-defaults.ts` rewrites the presets: `gy` is now 17
+Guyanese sources plus Sky/Al Jazeera, `tt` is 21 Trinidadian/Tobagonian sources plus the same backstop, with
+Sankhya, Scorch, THA and Tobago Channel 5 pulled in. teleSUR, Canal I, Venevisión and TVJ are removed from
+both strips (still in the `full` Caribbean region). `tests/live-news-hls.test.mjs` asserts every preset id
+resolves and no Venezuelan/TVJ id survives. Commit `06f50a498`, merged `--no-ff` as `f0d32c955`.
+
+Verification: tsc, `sync-locale-keys --check` (24/24), `enforce-premium-fetch` and the live-news suite (80/80)
+clean; `validate-live-channels` 6/8 (HGPTV 403, MTV Guyana 404 overnight). Hub rebuilt and restarted (pid
+18627); `/healthz` and `/api/tego/channels` 200 after the restart race. Headless Chrome sweep on :3100 read
+17 buttons on the Guyana tab (active HGPTV) and 21 on the Trinidad tab (active TTT Live Online) with no
+filler ids in either strip. Full station table and tooling notes in IPTV-HANDOFF §9.3. Open item: the panel
+is click-to-play, so the sweep confirms strip composition only; CNC3/TV6 remain link-only (domain-locked
+Dailymotion) and Freedom 106.5 has no official-page URL yet.

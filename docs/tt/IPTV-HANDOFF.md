@@ -307,3 +307,60 @@ Little Guyana TV, GTN Canada, NCN, DTV-8, Ignite News, Parliament of Guyana, tel
 TVJ, SkyNews, AlJazeera; opens on HGPTV (1280×720); GTN Canada plays 1280×720; NCN / DTV-8 / Ignite /
 Parliament show the off-air card with links to ncnguyana.com/live, dtv8.net, ignitenews.com and
 parliament.gov.gy respectively (none was streaming at verification time).
+
+### 9.3 Comprehensive GY/TT strips (2026-10-18, late)
+
+**Supersedes the strip tail in §9.2.** The §9.2 "Change" and "Shipped" paragraphs list teleSUR, Canal I,
+Venevisión and TVJ after the Guyana stations. Those fillers are gone from the `gy` and `tt` presets as of
+merge `f0d32c955` (they remain in the `full` variant's Caribbean region). Both strips now carry only Guyanese
+or Trinidadian sources plus the Sky / Al Jazeera backstop, and CARICOM sits in both.
+
+**Candidate sweep.** Every Guyana and T&T newsroom, public body and station with a plausible stream was
+checked against the hub's `/api/youtube/live?channel=@handle` route (handle exists AND the Streams tab shows
+past lives) or a literal `https://` HLS manifest. Accepted entries get a `handle` for YouTube auto-detect and
+an `officialLiveUrl` so the off-air card links to the station's own page; nothing is framed or proxied.
+
+| Station | Finding | Result |
+|---|---|---|
+| News Room Guyana | `@NewsRoomGuyana`, nightly newscast streamed 1 d ago | added `newsroom-guyana` |
+| DPI Guyana | `@dpiguyana`, government press events | added `dpi-guyana` |
+| Kaieteur News | `@KaieteurNews` exists, no past live streams | added `kaieteur-news` (weaker; link) |
+| INews Guyana | `@InewsGuyana` exists, no past live streams | added `inews-guyana` (weaker; link) |
+| Stabroek News | `@stabroeknews` exists, no past live streams | kept `stabroek-news` (weaker; link) |
+| Guyana Learning Channel | `@GuyanaLearningChannel`, education.gov.gy | kept `glc-guyana` |
+| HGPTV | Dacast HLS 403 overnight (iptv-org: Not 24/7) | `officialLiveUrl` hgptv.com added |
+| MTV Guyana | HLS 404 overnight; plays daytime | `officialLiveUrl` mtvgy.com/live added |
+| Newsday (T&T) | `@newsday`, newsroom lives | added `newsday-tt` |
+| TT Police Service | `@TTPoliceService`, press briefings | added `ttps` |
+| Freedom 106.5 FM | `@FREEDOM106.5FM`, radio visual stream | added `freedom-1065` (no official URL) |
+| THA | `@THAInfoDept`, streamed 4 d ago | kept `tha-tobago` |
+| CARICOM | `@caricomorg`, heads-of-government sessions | added `caricom` to both strips |
+| Sankhya TV, Scorch TV | existing literal HLS defs | added to `tt` strip |
+| Tobago Channel 5 | existing def | added to `tt` strip |
+| teleSUR, Canal I, Venevisión, TVJ | not GY/TT | removed from `gy` / `tt` |
+
+**Change (`06f50a498` on the worktree, `f0d32c955` merge).** `src/components/LiveNewsPanel.ts` gains the
+eight definitions above and the two `officialLiveUrl` fields; `src/config/live-channel-defaults.ts` rewrites
+both presets. Served order — `gy`: HGPTV, MTV Guyana, Little Guyana TV, GTN Canada, NCN, News Room Guyana,
+DTV-8, Ignite News, DPI, Parliament, Kaieteur, INews, Stabroek, Learning Channel, CARICOM, Sky, Al Jazeera
+(17). `tt`: TTT, IETV, Synergy, Gayelle, Bizz, Sankhya, Scorch, CNC3, TV6, Parliament, THA, Tobago Updates,
+Tobago Channel 5, Newsday, TTPS, Freedom 106.5, CARICOM, CBC TV8, ZIZ, Sky, Al Jazeera (21). Gates: tsc
+clean; `sync-locale-keys --check` 24/24; `enforce-premium-fetch` clean; `tests/live-news-hls.test.mjs` 80/80
+(new assertions that every GY/TT preset id resolves to a definition and no Venezuelan/TVJ id remains);
+`validate-live-channels` 6/8 (HGPTV 403, MTV Guyana 404 at the overnight run). The WORKLOG alignment-pass
+facts (12 TegoTV stations listed by the hub, validator 51/68 that evening) still hold and are not restated.
+
+**Shipped and verified on `127.0.0.1:3100`** (service pid 18627, serving `f0d32c955`). Restart sequence
+`build:full` → `build-sidecar-handlers` → `tt-install-service.sh restart`; the first `/healthz` curl returned
+`000` during the launchd restart race, the second 200, `/api/tego/channels` 200. The built chunk
+`dist/assets/panels-news-*.js` contains all eight new ids. Headless sweep (Playwright with the already
+installed `channel: 'chrome'`, no browser download; 60 s `waitForSelector('.dashboard-tab-label')`; tab
+switched by force-clicking the label with a JS `closest('button,[role=tab],a').click()` fallback after the
+xpath-ancestor click timed out at 30 s; 8 s settle; scoped to `[data-panel="live-news"]`): Guyana strip 17
+buttons, active "HGPTV (Guyana)"; Trinidad strip 21 buttons, active "TTT Live Online"; tabs
+`Main / Trinidad & Tobago / Guyana / Chips & AI`; zero matches for `canal-i|venevision-int|telesur-english|
+tvj-hls`. At the 8 s snapshot no `<video>`/`<iframe>` was mounted — the panel is click-to-play, so the sweep
+verifies strip composition, not playback. Browserbase was unusable for this (page reverts to `about:blank`
+between calls). Click paths: `http://127.0.0.1:3100/` → **Guyana** tab → Live News → station button →
+"Play live feed"; same via the **Trinidad & Tobago** tab. Off-air stations show "Watch on {host}" linking
+to their official page.
