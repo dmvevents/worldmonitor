@@ -173,6 +173,39 @@ async function serveTego(res, url) {
   }
 }
 
+// WM Analyst chat (api/chat-analyst.ts) is a Vercel edge function the sidecar does not bundle
+// ("No local handler"). The front door runs it from the esbuild bundle written by
+// scripts/build-sidecar-handlers.mjs; entitlement is the instance operator key, the LLM is the
+// configured generic provider (Claude shim), quota/rate state lives in Upstash like the rest.
+let chatAnalystHandler = null;
+async function serveChatAnalyst(req, res, url) {
+  try {
+    if (!chatAnalystHandler) chatAnalystHandler = (await import(path.join(DIST, 'hub', 'chat-analyst.js'))).default;
+    const headers = new Headers();
+    for (const [k, v] of Object.entries(req.headers)) if (typeof v === 'string') headers.set(k, v);
+    if (OPERATOR_KEY && !headers.has('x-worldmonitor-key')) headers.set('x-worldmonitor-key', OPERATOR_KEY);
+    const chunks = [];
+    for await (const chunk of req) chunks.push(chunk);
+    const body = Buffer.concat(chunks);
+    const request = new Request(`http://${HOST}:${PORT}${url.pathname}${url.search}`, {
+      method: req.method, headers, body: req.method === 'GET' || req.method === 'HEAD' ? undefined : body,
+    });
+    const response = await chatAnalystHandler(request);
+    const out = {};
+    response.headers.forEach((v, k) => { if (k !== 'content-encoding' && k !== 'transfer-encoding' && k !== 'content-length') out[k] = v; });
+    res.writeHead(response.status, out);
+    if (!response.body) return res.end();
+    const { Readable } = await import('node:stream');
+    const stream = Readable.fromWeb(response.body);
+    stream.on('error', () => { if (!res.destroyed) res.destroy(); });
+    res.on('close', () => stream.destroy());
+    stream.pipe(res);
+  } catch (err) {
+    if (!res.headersSent) res.writeHead(502, { 'content-type': 'application/json' });
+    res.end(JSON.stringify({ error: 'chat analyst failed', detail: String(err?.message || err).slice(0, 200) }));
+  }
+}
+
 let youtubeLiveHandler = null;
 async function serveYoutubeLive(req, res, url) {
   try {
@@ -195,6 +228,7 @@ const server = http.createServer((req, res) => {
   const url = new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`);
   if (url.pathname === '/api/youtube/live') return void serveYoutubeLive(req, res, url);
   if (url.pathname === '/api/iptv-proxy') return void serveIptvProxy(res, url);
+  if (url.pathname === '/api/chat-analyst') return void serveChatAnalyst(req, res, url);
   if (url.pathname === '/api/tego/stream' || url.pathname === '/api/tego/channels') return void serveTego(res, url);
   if (url.pathname.startsWith('/api/')) return proxyApi(req, res);
   if (url.pathname === '/healthz') { let egress = null; try { if (process.env.NODE_USE_ENV_PROXY === '1' && process.env.HTTPS_PROXY) egress = new URL(process.env.HTTPS_PROXY).host; } catch {} res.writeHead(200, { 'content-type': 'application/json' }); return res.end(JSON.stringify({ ok: true, dist: existsSync(path.join(DIST, 'dashboard.html')), sidecarPort: SIDECAR_PORT, iptvEgress: egress })); }

@@ -48,6 +48,24 @@ try {
     alias: { '@': path.join(ROOT, 'src') },
   });
 
+  // Hub front door (scripts/tt-hub-server.mjs) serves the WM Analyst chat locally: bundle the edge
+  // function the same way, into dist/ (ignored, rebuilt with the handlers) rather than next to its
+  // source so the edge-function test and the sebuf contract lint never see it.
+  const chatAnalystEntry = path.join(apiDir, 'chat-analyst.ts');
+  if (existsSync(chatAnalystEntry)) {
+    await build({
+      entryPoints: [chatAnalystEntry],
+      outfile: path.join(ROOT, 'dist', 'hub', 'chat-analyst.js'),
+      bundle: true,
+      format: 'esm',
+      platform: 'node',
+      target: 'node20',
+      treeShaking: true,
+      alias: { '@': path.join(ROOT, 'src') },
+    });
+    console.log('build:sidecar-handlers  hub chat-analyst → dist/hub/chat-analyst.js');
+  }
+
   // Report results
   let totalKB = 0;
   for (const entry of entries) {
