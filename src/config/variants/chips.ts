@@ -11,6 +11,7 @@ export * from './base';
 export const DEFAULT_PANELS: Record<string, PanelConfig> = {
   map: { name: 'AI Compute: Data Centres, Fabs and Cloud Regions', enabled: true, priority: 1 },
   'live-news': { name: 'Live Business News', enabled: true, priority: 1 },
+  'chips-gtc': { name: 'GTC Berlin & NVIDIA Events', enabled: true, priority: 1 },
   'chips-semis': { name: 'Semiconductors and Accelerators', enabled: true, priority: 1 },
   'chips-datacenters': { name: 'Data Centres, Power and Hyperscalers', enabled: true, priority: 1 },
   'chips-ailabs': { name: 'AI Labs and Research', enabled: true, priority: 1 },

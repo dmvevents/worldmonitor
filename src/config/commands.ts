@@ -141,6 +141,7 @@ export const COMMANDS: Command[] = [
   { id: 'panel:tt-energy', keywords: ['trinidad energy', 'lng', 'atlantic lng', 'ngc', 'point lisas', 'petrochemical'], label: 'Panel: Energy & LNG (T&T)', icon: '\u{1F525}', category: 'panels' },
   { id: 'panel:tt-education', keywords: ['education', 'ministry of education', 'student laptops', 'laptop programme', 'schools', 'sea', 'csec'], label: 'Panel: Education & Student Laptops', icon: '\u{1F393}', category: 'panels' },
   { id: 'panel:tt-telecoms', keywords: ['telecoms', 'tstt', 'digicel', 'tatt', 'bmobile', 'spectrum'], label: 'Panel: Telecoms (TSTT, Digicel, TATT)', icon: '\u{1F4F6}', category: 'panels' },
+  { id: 'panel:chips-gtc', keywords: ['gtc', 'gtc berlin', 'nvidia', 'nvidia gtc', 'jensen huang', 'physical ai'], label: 'Panel: GTC Berlin & NVIDIA Events', icon: '\u{1F7E2}', category: 'panels' },
   { id: 'panel:tt-public-it', keywords: ['public sector it', 'procurement', 'igovtt', 'digital transformation', 'tenders', 'e-government'], label: 'Panel: Public-Sector IT & Procurement', icon: '\u{1F5A5}\uFE0F', category: 'panels' },
   { id: 'panel:tt-safety', keywords: ['crime', 'public safety', 'ttps', 'state of emergency', 'odpm', 'courts'], label: 'Panel: Crime & Public Safety', icon: '\u{1F6A8}', category: 'panels' },
   { id: 'panel:tt-weather', keywords: ['weather', 'hurricane', 'tropical storm', 'met office', 'nhc', 'outages', 't&tec', 'wasa'], label: 'Panel: Weather, Hurricanes & Outages', icon: '\u{1F300}', category: 'panels' },

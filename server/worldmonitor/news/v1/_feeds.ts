@@ -656,6 +656,14 @@ export const VARIANT_FEEDS: Record<string, Record<string, ServerFeed[]>> = {
 
   // ── AI Compute & Semiconductors variant (mirrors src/config/feeds.ts CHIPS_FEEDS) ──
   chips: {
+    'chips-gtc': [
+      { name: 'NVIDIA Newsroom', url: 'https://nvidianews.nvidia.com/releases.xml' },
+      { name: 'NVIDIA Blog', url: 'https://blogs.nvidia.com/feed/' },
+      { name: 'NVIDIA Developer Blog', url: 'https://developer.nvidia.com/blog/feed' },
+      { name: 'GTC Berlin Wire', url: gn('("GTC Berlin" OR "GTC Europe" OR "Nvidia GTC") when:14d') },
+      { name: 'NVIDIA Europe Wire', url: gn('Nvidia (Berlin OR Germany OR "sovereign AI" OR "industrial AI" OR "Jensen Huang" Europe) when:3d') },
+      { name: 'GTC Berlin (DE)', url: gnLocale('"GTC Berlin" OR "Nvidia GTC"', 'de', 'DE', 'DE:de'), lang: 'de' },
+    ],
     'chips-semis': [
       { name: 'NVIDIA Blog', url: 'https://blogs.nvidia.com/feed/' },
       { name: 'NVIDIA Newsroom', url: 'https://nvidianews.nvidia.com/releases.xml' },

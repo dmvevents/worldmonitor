@@ -42,6 +42,7 @@ export const DEFAULT_PANELS: Record<string, PanelConfig> = {
   latam: { name: 'Latin America', enabled: true, priority: 2 },
   politics: { name: 'World News', enabled: true, priority: 2 },
   energy: { name: 'Global Energy & Resources', enabled: true, priority: 2 },
+  'chips-gtc': { name: 'GTC Berlin & NVIDIA Events', enabled: true, priority: 2 },
   'energy-complex': { name: 'Oil & Gas Complex (WTI, Brent, NatGas)', enabled: true, priority: 2 },
   commodities: { name: 'Metals & Materials', enabled: false, priority: 2 },
   polymarket: { name: 'Predictions', enabled: false, priority: 2 },

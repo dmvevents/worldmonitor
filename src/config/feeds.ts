@@ -120,6 +120,7 @@ export const SOURCE_TYPES: Record<string, SourceType> = {
   // AI Compute & Semiconductors variant
   'NVIDIA Blog': 'tech',
   'NVIDIA Newsroom': 'tech',
+  'NVIDIA Developer Blog': 'tech',
   'SemiAnalysis': 'tech',
   'SemiWiki': 'tech',
   'EE Times': 'tech',
@@ -1233,6 +1234,16 @@ const GY_FEEDS: Record<string, Feed[]> = {
 // Publisher and vendor RSS verified 2026-10-15; Google News topic queries fill the gaps (AMD, Intel, TSMC and ASML
 // newsrooms publish no RSS). Mirror: server/worldmonitor/news/v1/_feeds.ts
 const CHIPS_FEEDS: Record<string, Feed[]> = {
+  // NVIDIA GTC Berlin (Oct 2026) and NVIDIA event coverage: vendor newsroom/blogs plus Google News aggregates
+  // in the US and German editions. Public sources only, topic level. Verified 2026-10-23.
+  'chips-gtc': [
+    { name: 'NVIDIA Newsroom', url: rss('https://nvidianews.nvidia.com/releases.xml') },
+    { name: 'NVIDIA Blog', url: rss('https://blogs.nvidia.com/feed/') },
+    { name: 'NVIDIA Developer Blog', url: rss('https://developer.nvidia.com/blog/feed') },
+    { name: 'GTC Berlin Wire', url: rss('https://news.google.com/rss/search?q=("GTC+Berlin"+OR+"GTC+Europe"+OR+"Nvidia+GTC")+when:14d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'NVIDIA Europe Wire', url: rss('https://news.google.com/rss/search?q=Nvidia+(Berlin+OR+Germany+OR+"sovereign+AI"+OR+"industrial+AI"+OR+"Jensen+Huang"+Europe)+when:3d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'GTC Berlin (DE)', url: rss('https://news.google.com/rss/search?q="GTC+Berlin"+OR+"Nvidia+GTC"&hl=de&gl=DE&ceid=DE:de'), lang: 'de' },
+  ],
   'chips-semis': [
     { name: 'NVIDIA Blog', url: rss('https://blogs.nvidia.com/feed/') },
     { name: 'NVIDIA Newsroom', url: rss('https://nvidianews.nvidia.com/releases.xml') },
@@ -1355,7 +1366,7 @@ export const SOURCE_REGION_MAP: Record<string, { labelKey: string; feedKeys: str
   caribbean: { labelKey: 'header.sourceRegionCaribbean', feedKeys: ['caribbean'] },
 
   // AI Compute & Semiconductors variant regions
-  chipsCompute: { labelKey: 'header.sourceRegionChipsCompute', feedKeys: ['chips-semis', 'chips-datacenters', 'chips-markets'] },
+  chipsCompute: { labelKey: 'header.sourceRegionChipsCompute', feedKeys: ['chips-gtc', 'chips-semis', 'chips-datacenters', 'chips-markets'] },
   chipsAi: { labelKey: 'header.sourceRegionChipsAi', feedKeys: ['chips-ailabs', 'chips-policy'] },
 
   // Guyana variant regions

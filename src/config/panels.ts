@@ -1116,6 +1116,7 @@ const TT_PANELS: Record<string, PanelConfig> = {
   'tt-social': { name: 'Street Pulse (social & trends)', enabled: true, priority: 1 },
   'chat-analyst': { name: 'WM Analyst', enabled: true, priority: 1, premium: 'locked' as const },
   // Wider context (existing feeds / data panels)
+  'chips-gtc': { name: 'GTC Berlin & NVIDIA Events', enabled: true, priority: 2 },
   latam: { name: 'Latin America', enabled: true, priority: 2 },
   politics: { name: 'World News', enabled: true, priority: 2 },
   energy: { name: 'Global Energy & Resources', enabled: true, priority: 2 },
@@ -1411,6 +1412,7 @@ const GY_MOBILE_MAP_LAYERS: MapLayers = {
 const CHIPS_PANELS: Record<string, PanelConfig> = {
   map: { name: 'AI Compute: Data Centres, Fabs and Cloud Regions', enabled: true, priority: 1 },
   'live-news': { name: 'Live Business News', enabled: true, priority: 1 },
+  'chips-gtc': { name: 'GTC Berlin & NVIDIA Events', enabled: true, priority: 1 },
   'chips-semis': { name: 'Semiconductors and Accelerators', enabled: true, priority: 1 },
   'chips-datacenters': { name: 'Data Centres, Power and Hyperscalers', enabled: true, priority: 1 },
   'chips-ailabs': { name: 'AI Labs and Research', enabled: true, priority: 1 },
@@ -1964,7 +1966,7 @@ export const PANEL_CATEGORY_MAP: Record<string, { labelKey: string; panelKeys: s
   },
   ttContext: {
     labelKey: 'header.panelCatTTContext',
-    panelKeys: ['energy', 'commodities', 'energy-complex', 'polymarket', 'insights', 'climate', 'disease-outbreaks', 'monitors', 'world-clock'],
+    panelKeys: ['chips-gtc', 'energy', 'commodities', 'energy-complex', 'polymarket', 'insights', 'climate', 'disease-outbreaks', 'monitors', 'world-clock'],
     variants: ['tt'],
   },
 
@@ -1988,7 +1990,7 @@ export const PANEL_CATEGORY_MAP: Record<string, { labelKey: string; panelKeys: s
   // AI Compute & Semiconductors variant
   chipsNews: {
     labelKey: 'header.panelCatChipsNews',
-    panelKeys: ['chips-semis', 'chips-datacenters', 'chips-markets', 'hardware', 'cloud'],
+    panelKeys: ['chips-gtc', 'chips-semis', 'chips-datacenters', 'chips-markets', 'hardware', 'cloud'],
     variants: ['chips'],
   },
   chipsAi: {
