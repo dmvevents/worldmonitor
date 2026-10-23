@@ -111,7 +111,7 @@ News feeds are resolved through `CANONICAL_FEEDS` (same set across all variants)
 - `TT_FEEDS`: tt-news, tt-gov, tt-energy, tt-education, tt-telecoms, tt-public-it, tt-safety, tt-weather, caribbean
 - `GY_FEEDS`: gy-news, gy-gov, gy-oil-gas, gy-essequibo, gy-economy, gy-safety, gy-weather, caribbean
 
-- `CHIPS_FEEDS`: chips-semis, chips-datacenters, chips-ai-labs, chips-policy, chips-markets
+- `CHIPS_FEEDS`: chips-gtc (GTC Berlin & NVIDIA events, added 2026-10-23; also on the T&T tab), chips-semis, chips-datacenters, chips-ailabs, chips-policy, chips-markets
 
 The digest endpoint `/api/news/v1/list-feed-digest?variant=tt` loads `VARIANT_FEEDS.tt`, but a preset tab in the `full` variant still resolves Guyana feeds through `CANONICAL_FEEDS`, so the hub's Guyana tab shows up-to-date Guyana news.
 

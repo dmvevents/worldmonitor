@@ -481,3 +481,17 @@ profile; final take 54 s at 1080p. What it took eleven takes to learn, so nobody
   launchd still said running; `tt-hub-serve.sh` now relaunches it. Three service restarts today, each with its
   reason in the demo folder's SERVICES.md.
 - Pick the newest recording by mtime: Playwright names files by hash, and a lexical sort returned a stale take.
+
+## Round 20 — 2026-10-23: GTC Berlin lane
+
+Anton, mid-session: "Happened in GTC Berlin as well. Can you add that to the monitor? I want to see updates and
+news from that." GTC Berlin 2026 is running this week (NVIDIA Blog live-updates post, Google Cloud / Dassault /
+TÜV SÜD announcements in the first Google News page). Added `chips-gtc` as a feed category + news panel:
+`src/config/feeds.ts` (CHIPS_FEEDS, SOURCE_TYPES, SOURCE_REGION_MAP.chipsCompute), `server/.../_feeds.ts` chips
+mirror, `src/config/panels.ts` (CHIPS_PANELS, TT_PANELS, PANEL_CATEGORIES chipsNews/ttContext), the two variant
+mirrors, `commands.ts`, `docs/data-sources.mdx`. Feed URLs curl-verified: newsroom/blog RSS, developer blog Atom
+(100 entries), the three Google News queries (100/100/57 items). Checks: tsc frontend + api clean, Biome clean,
+`news-feed-key-parity` 4/4, `dashboard-tab-presets` 9/9, `news-digest-methodology-parity` 19/19 after bumping
+the inventory count. Rebuilt `dist/` + sidecar handler bundles; the static panel needs no service restart (front
+door serves dist/ live). The server-side digest mirror only matters for `list-feed-digest?variant=chips`, which
+nothing on the hub calls, so no restart was taken; it lands at the next scheduled restart.

@@ -172,3 +172,14 @@ reload applies the re-seed once and switches Main to the default above.
   `getVariantEnabledPanelKeys()` reads `panels.ts`. Editing only the variant file builds a bundle without the panel.
 - Existing profiles: `healPresetTabs` re-applies a preset whose stored enabled set is a strict subset of the new
   one, so the panel appears on the next load without a reset.
+
+## 6. Addendum 2026-10-23 — GTC Berlin lane
+
+- Anton asked for GTC Berlin updates on the monitor. New feed category `chips-gtc` ("GTC Berlin & NVIDIA Events")
+  in `CHIPS_FEEDS` and the server mirror: NVIDIA Newsroom, NVIDIA Blog, NVIDIA Developer Blog (Atom), plus Google
+  News aggregates for "GTC Berlin"/"GTC Europe"/"Nvidia GTC" (14d), NVIDIA in Europe (3d) and the German edition
+  (`lang: de`). All public vendor/press sources, topic level.
+- Panel registered in `CHIPS_PANELS` (priority 1, `chipsNews` group) and in `TT_PANELS` (priority 2, `ttContext`
+  group) so it shows on both the Chips and T&T tabs; `healPresetTabs` surfaces it on existing profiles at next load.
+- Mirrors kept in sync: `variants/chips.ts`, `variants/tt.ts`, `commands.ts` (`panel:chips-gtc`),
+  `docs/data-sources.mdx` inventory row (parity test count 89 → 90).
